@@ -218,3 +218,26 @@ body{
   background-position: center !important;
   background-repeat: no-repeat !important;
 }
+/* =========================
+   SYNC RELATED CARD LAYOUT
+   ========================= */
+
+/* card dùng chung */
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* tiêu đề chiếm chiều cao cố định */
+.card h3 {
+  min-height: 36px;
+}
+
+/* view luôn nằm đáy card */
+.card-views,
+.related-views {
+  margin-top: auto;
+  font-size: 12px;
+  color: #f5c542;
+  padding: 0 8px 8px;
+}
