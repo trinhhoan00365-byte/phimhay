@@ -2,36 +2,33 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>TRAINGON</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+  <title>Traingon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="header">
-  <a href="index.html" class="logo">
-    <img src="assets/logo.png">
-    <span>TRAINGON</span>
-  </a>
+  <div class="logo">TRAINGON</div>
+  <input id="search" placeholder="Tìm kiếm video...">
 </header>
 
-<main class="container">
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="new"> Mới nhất</button>
+  <button class="filter-btn" data-filter="view"> Xem nhiều</button>
+</div>
 
-  <input
-    type="text"
-    id="search"
-    class="search"
-    placeholder="Tìm kiếm video..."
-  >
+<!-- VIDEO GRID -->
+<div id="video-grid" class="grid"></div>
 
-  <div id="video-grid" class="grid two-col"></div>
-  <div id="pagination" class="pagination"></div>
+<!-- PAGINATION -->
+<div id="pagination" class="pagination"></div>
 
-</main>
-
-<script src="js/main.js"></script>
-  <footer class="footer">
+<footer class="footer">
   © 2025 Traingon.top - All rights reserved.
 </footer>
+
+<script src="main.js"></script>
 </body>
 </html>
