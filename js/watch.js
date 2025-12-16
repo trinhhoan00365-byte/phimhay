@@ -14,7 +14,7 @@ if (!video) {
   document.getElementById("title").textContent = "Video không tồn tại";
 } else {
   document.getElementById("title").textContent = video.title;
-  durationEl.textContent = "⏱ Thời lượng: " + video.duration;
+  durationEl.textContent = "⏱: " + video.duration;
   
   // ⚠️ QUAN TRỌNG: iframe CHƯA có src
   iframe.src = "";
