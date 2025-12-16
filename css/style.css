@@ -2,217 +2,67 @@ body {
   margin: 0;
   background: #0b0b14;
   color: #fff;
-  font-family: Arial, sans-serif;
+  font-family: system-ui;
 }
 
-/* HEADER */
 .header {
-  background: linear-gradient(90deg,#6a5cff,#9b7bff);
-  padding: 16px 24px;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 20px;
   font-weight: bold;
-  color: #fff;
-  text-decoration: none;
 }
 
-.logo img {
-  width: 32px;
-}
-
-/* LAYOUT */
-.container,
-.watch-container {
-  padding: 24px;
-  padding-bottom: 70px; 
-}
-
-.grid {
-  display: grid;
-  gap: 20px;
-}
-
-.grid.two-col {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-/* SEARCH */
-.search {
-  width: 100%;
-  padding: 8px 10px;   
+#search {
+  flex: 1;
+  padding: 8px;
   border-radius: 6px;
   border: none;
-  margin-bottom: 16px;
-  font-size: 13px;    
 }
 
-/* CARD */
-.card {
-  background: #141423;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.thumb-wrap {
-  position: relative;
-}
-
-.thumb {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  display: block;
-}
-
-.duration {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  background: rgba(0,0,0,0.8);
-  padding: 3px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-.card h3 {
-  padding: 10px;
-  font-size: 14px;
-}
-
-/* PAGINATION */
-.pagination {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #0b0b14;
-  padding: 10px 0;
-  text-align: center;
-  border-top: 1px solid #1f1f35;
-  z-index: 10;
-}
-
-.pagination button {
-  background: #1f1f35;
-  border: none;
-  color: #fff;
-  padding: 8px 12px;
-  margin: 4px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.pagination button.active {
-  background: #6a5cff;
-}
-
-/* PLAYER */
-.player-wrapper {
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%;
-  border-radius: 12px;
-  overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.player-wrapper iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.player-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.25); /* MỜ – KHÔNG ĐEN */
+/* FILTER */
+.filter-bar {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 2;
-}
-.play-btn {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-}
-
-.section-title {
-  margin: 30px 0 15px;
-}
-.download-btn {
-  display: inline-block;
-  margin: 10px 0 18px;
-  padding: 8px 14px;   
-  background: linear-gradient(90deg,#6a5cff,#9b7bff);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 8px; 
-  font-weight: 600;
-  font-size: 13px;    
-}
-.download-btn:hover {
-  opacity: 0.85;
-}
-.video-duration {
-  margin: 6px 0 14px;
-  font-size: 14px;
-  color: #ccc;
-}
-.footer {
-  margin-top: 40px;
-  padding: 20px 10px;
-  text-align: center;
-  font-size: 13px;
-  color: #888;
-  border-top: 1px solid #1f1f35;
-}
-.watch-container h2 {
-  font-size: 18px;   
-  line-height: 1.3;
-  margin-bottom: 6px;
-}
-.video-views {
-  font-size: 13px;
-  color: #aaa;
-  margin-bottom: 10px;
-}
-.card-views {
-  font-size: 12px;
-  color: #aaa;
+  gap: 10px;
   padding: 0 10px 10px;
 }
-/* =========================
-   CARD VIDEO – FIX ĐỀU HÀNG
-   ========================= */
 
-/* Card container */
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #333;
+  background: #1b1b2e;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.filter-btn.active {
+  background: #ff9800;
+  color: #000;
+  border-color: #ff9800;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  padding: 10px;
+}
+
 .card {
   background: #141423;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-
   display: flex;
   flex-direction: column;
 }
 
-/* Thumbnail */
 .thumb-wrap {
   position: relative;
 }
@@ -222,7 +72,6 @@ body {
   display: block;
 }
 
-/* Duration badge */
 .duration {
   position: absolute;
   bottom: 6px;
@@ -233,39 +82,55 @@ body {
   border-radius: 4px;
 }
 
-/* Video title (cố định 2 dòng) */
 .card h3 {
   padding: 8px 10px;
   font-size: 13px;
   line-height: 1.4;
-  color: #fff;
-
-  height: 36px;              /* 👈 luôn 2 dòng */
+  height: 36px;
   overflow: hidden;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
 }
 
-/* View count – luôn cùng 1 vị trí */
 .card-views {
-  font-size: 12px;
-  color: #aaa;
-  padding: 0 10px 10px;
-  margin-top: auto;          /* 👈 đẩy xuống đáy card */
-}
-
-/* Hover nhẹ cho đẹp */
-.card:hover {
-  transform: translateY(-2px);
-  transition: 0.2s;
-}
-.card-views {
-  color: #f5c542; /* 👈 màu vàng */
-}
-.related-views {
   font-size: 12px;
   color: #f5c542;
-  margin: 4px 0 8px;
+  padding: 0 10px 10px;
+  margin-top: auto;
+}
+
+/* HOT */
+.hot-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: linear-gradient(90deg, #ff9800, #ff5722);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+/* PAGINATION */
+.pagination {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding: 15px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #ff9800;
+}
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  padding: 15px;
 }
