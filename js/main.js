@@ -20,9 +20,6 @@ function render() {
     <span class="duration">${v.duration}</span>
   </div>
   <h3>${v.title}</h3>
-  <div class="card-views" id="view-${v.id}">
-     0 view
-  </div>
 `;
     card.onclick = () => location.href = `watch.html?id=${v.id}`;
     grid.appendChild(card);
