@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Xem video</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="logo">
+    <img src="assets/logo.png">
+    <span>TRAINGON</span>
+  </a>
+</header>
+
+<main class="watch-container">
+
+  <div class="player-wrapper">
+    <div class="player-overlay" id="playerOverlay">
+      <div class="play-btn">▶</div>
+    </div>
+    <iframe id="player"
+      frameborder="0"
+      allowfullscreen
+      allow="autoplay; fullscreen">
+    </iframe>
+  </div>
+
+  <h2 id="title"></h2>
+
+  <h3 class="section-title">Video khác</h3>
+  <div id="related" class="grid two-col"></div>
+
+</main>
+
+<script src="js/data.js"></script>
+<script src="js/watch.js"></script>
+</body>
+</html>
