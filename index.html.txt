@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>TRAINGON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html" class="logo">
+    <img src="assets/logo.png">
+    <span>TRAINGON</span>
+  </a>
+</header>
+
+<main class="container">
+
+  <input
+    type="text"
+    id="search"
+    class="search"
+    placeholder="Tìm kiếm video..."
+  >
+
+  <div id="video-grid" class="grid two-col"></div>
+  <div id="pagination" class="pagination"></div>
+
+</main>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+  <footer class="footer">
+  © 2025 Traingon.top - All rights reserved.
+</footer>
+</body>
+</html>
