@@ -5,13 +5,45 @@
 <title>Admin - Video Manager</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-body{background:#0b0b14;color:#fff;font-family:system-ui;padding:15px}
-input,button{width:100%;padding:10px;margin:5px 0;border-radius:6px;border:none}
-button{background:#ff9800;font-weight:600}
-.video{border:1px solid #333;padding:10px;margin:10px 0;border-radius:8px}
-.small{font-size:12px;color:#aaa}
-.row{display:flex;gap:6px}
-.row button{flex:1}
+body{
+  background:#0b0b14;
+  color:#fff;
+  font-family:system-ui;
+  padding:15px
+}
+h2,h3{margin:10px 0}
+input,button{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+  border-radius:6px;
+  border:none;
+  font-size:14px
+}
+button{
+  background:#ff9800;
+  color:#000;
+  font-weight:600
+}
+.video{
+  border:1px solid #333;
+  padding:10px;
+  margin:10px 0;
+  border-radius:8px
+}
+.small{
+  font-size:12px;
+  color:#aaa;
+  margin-top:4px
+}
+.row{
+  display:flex;
+  gap:6px;
+  margin-top:6px
+}
+.row button{
+  flex:1
+}
 </style>
 </head>
 <body>
@@ -20,53 +52,66 @@ button{background:#ff9800;font-weight:600}
 
 <input id="pass" placeholder="Admin password">
 
+<input id="search" placeholder="🔍 Search video (title / id)">
+
 <h3>➕ Add Video</h3>
 <input id="title" placeholder="Title">
 <input id="thumb" placeholder="Thumb URL">
 <input id="embed" placeholder="Embed URL">
-<input id="duration" placeholder="Duration">
+<input id="duration" placeholder="Duration (mm:ss)">
 <input id="download" placeholder="Download URL">
-<button onclick="add()">ADD</button>
+<button onclick="add()">ADD VIDEO</button>
 
 <h3>📋 Video List</h3>
 <div id="list"></div>
 
 <script>
+/* 🔴 ĐỔI URL WORKER CỦA BẠN TẠI ĐÂY */
 const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
+
+let allVideos = [];
 
 function api(path, data) {
   return fetch(WORKER_URL + path, {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   }).then(r => r.json());
 }
 
+/* LOAD VIDEO LIST */
 function load() {
   fetch(WORKER_URL + "/videos")
     .then(r => r.json())
     .then(videos => {
-      list.innerHTML = "";
-      videos.forEach(v => {
-        const div = document.createElement("div");
-        div.className = "video";
-        div.innerHTML = `
-          <input value="${v.title}" id="t${v.id}">
-          <input value="${v.thumb}" id="th${v.id}">
-          <input value="${v.embed}" id="e${v.id}">
-          <input value="${v.duration}" id="d${v.id}">
-          <input value="${v.download||""}" id="dl${v.id}">
-          <div class="small">ID: ${v.id}</div>
-          <div class="row">
-            <button onclick="edit(${v.id})">✏️ Edit</button>
-            <button onclick="del(${v.id})">🗑 Delete</button>
-          </div>
-        `;
-        list.appendChild(div);
-      });
+      allVideos = videos;
+      render(videos);
     });
 }
 
+/* RENDER LIST */
+function render(videos) {
+  list.innerHTML = "";
+  videos.forEach(v => {
+    const div = document.createElement("div");
+    div.className = "video";
+    div.innerHTML = `
+      <input value="${v.title}" id="t${v.id}">
+      <input value="${v.thumb}" id="th${v.id}">
+      <input value="${v.embed}" id="e${v.id}">
+      <input value="${v.duration}" id="d${v.id}">
+      <input value="${v.download || ""}" id="dl${v.id}">
+      <div class="small">ID: ${v.id}</div>
+      <div class="row">
+        <button onclick="edit(${v.id})">✏️ Edit</button>
+        <button onclick="del(${v.id})">🗑 Delete</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+/* ADD VIDEO */
 function add() {
   api("/admin/add", {
     password: pass.value,
@@ -77,9 +122,13 @@ function add() {
       duration: duration.value,
       download: download.value
     }
-  }).then(load);
+  }).then(() => {
+    title.value = thumb.value = embed.value = duration.value = download.value = "";
+    load();
+  });
 }
 
+/* EDIT VIDEO */
 function edit(id) {
   api("/admin/edit", {
     password: pass.value,
@@ -94,10 +143,24 @@ function edit(id) {
   }).then(() => alert("✅ Saved"));
 }
 
+/* DELETE VIDEO */
 function del(id) {
   if (!confirm("Delete video?")) return;
-  api("/admin/delete", { password: pass.value, id }).then(load);
+  api("/admin/delete", {
+    password: pass.value,
+    id
+  }).then(load);
 }
+
+/* SEARCH VIDEO */
+search.oninput = () => {
+  const key = search.value.toLowerCase().trim();
+  const filtered = allVideos.filter(v =>
+    v.title.toLowerCase().includes(key) ||
+    String(v.id).includes(key)
+  );
+  render(filtered);
+};
 
 load();
 </script>
