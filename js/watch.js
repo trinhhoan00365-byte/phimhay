@@ -43,7 +43,7 @@ function initWatch() {
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
     .then(d => {
-      viewsEl.textContent = "👁 " + formatView(d.views) + " view";
+      viewsEl.textContent = " " + formatView(d.views) + " view";
     });
 
   wrapper.style.backgroundImage = `url(${video.thumb})`;
@@ -56,7 +56,7 @@ function initWatch() {
       .then(() => fetch(WORKER_URL + "/view?id=" + video.id))
       .then(r => r.json())
       .then(d => {
-        viewsEl.textContent = "👁 " + formatView(d.views) + " view";
+        viewsEl.textContent = " " + formatView(d.views) + " view";
       });
 
     iframe.src = video.embed;
@@ -91,7 +91,7 @@ function initWatch() {
       .then(r => r.json())
       .then(d => {
         const el = document.getElementById("related-view-" + v.id);
-        if (el) el.textContent = "👁 " + formatView(d.views) + " view";
+        if (el) el.textContent = " " + formatView(d.views) + " view";
       });
   });
 }
