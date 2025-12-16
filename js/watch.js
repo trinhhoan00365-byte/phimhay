@@ -16,7 +16,7 @@ if (!video) {
 } else {
   document.getElementById("title").textContent = video.title;
   durationEl.textContent = "⏱  " + video.duration;
-  fetch("https://dl.traingon.top/view?id=" + video.id)
+  fetch("https://traingonn.trinhhoan00365.workers.dev/view?id=" + video.id)
   .then(res => res.json())
   .then(data => {
     viewsEl.textContent = "" + data.views + " View";
@@ -31,7 +31,7 @@ if (!video) {
   overlay.onclick = () => {
   // 1️⃣ Mở tab affiliate (KHÔNG BỊ BLOCK)
   window.open(AFF_LINK, "_blank");
-      fetch("https://dl.traingon.top/view?id=" + video.id + "&inc=1");
+      fetch("https://traingonn.trinhhoan00365.workers.dev/view?id=" + video.id + "&inc=1");
 
   // 2️⃣ Chạy video
   iframe.src = video.embed;
