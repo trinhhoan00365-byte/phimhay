@@ -2,53 +2,48 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Xem video</title>
+  <title>Watch</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header class="header">
-  <a href="index.html" class="logo">
-    <img src="assets/logo.png">
-    <span>TRAINGON</span>
-  </a>
+  <div class="logo">TRAINGON</div>
 </header>
 
-<main class="watch-container">
+<main class="container">
 
+  <!-- VIDEO PLAYER -->
   <div class="player-wrapper">
-    <div class="player-overlay" id="playerOverlay">
-      <div class="play-btn">▶</div>
+    <div id="playerOverlay" class="player-overlay">
+      ▶ Play
     </div>
-    <iframe id="player"
-      frameborder="0"
-      allowfullscreen
-      allow="autoplay; fullscreen">
-    </iframe>
+    <iframe id="player" allowfullscreen></iframe>
   </div>
 
-  <h2 id="title"></h2>
+  <!-- VIDEO INFO -->
+  <h1 id="title" class="watch-title"></h1>
 
-<div id="duration" class="video-duration">
-  ⏱: --
-</div>
-<div id="views" class="video-views">
-   0 View
-</div>
+  <div class="watch-meta">
+    <span id="views"> 0 view</span>
+    <span id="duration">⏱ 00:00</span>
+  </div>
 
-<a id="downloadBtn" class="download-btn" target="_blank">
-  ⬇ Download Video
-</a>
+  <a id="downloadBtn" class="download-btn" target="_blank">
+    ⬇ Download
+  </a>
 
-  <h3 class="section-title">Related Videos</h3>
+  <!-- RELATED -->
+  <h2 class="section-title">Video khác</h2>
   <div id="related" class="grid two-col"></div>
 
 </main>
 
-<script src="js/watch.js"></script>
-  <footer class="footer">
+<footer class="footer">
   © 2025 Traingon.top - All rights reserved.
 </footer>
+
+<script src="js/watch.js" defer></script>
 </body>
 </html>
