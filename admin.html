@@ -1,73 +1,105 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin - Add Video</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      background:#0b0b14;
-      color:#fff;
-      font-family:system-ui;
-      padding:20px;
-    }
-    h2 { margin-bottom: 10px; }
-    input, button {
-      width:100%;
-      padding:12px;
-      margin:6px 0;
-      border-radius:8px;
-      border:none;
-      font-size:14px;
-    }
-    button {
-      background:#ff9800;
-      color:#000;
-      font-weight:600;
-    }
-    #msg {
-      margin-top:10px;
-      font-size:14px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Admin - Video Manager</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{background:#0b0b14;color:#fff;font-family:system-ui;padding:15px}
+input,button{width:100%;padding:10px;margin:5px 0;border-radius:6px;border:none}
+button{background:#ff9800;font-weight:600}
+.video{border:1px solid #333;padding:10px;margin:10px 0;border-radius:8px}
+.small{font-size:12px;color:#aaa}
+.row{display:flex;gap:6px}
+.row button{flex:1}
+</style>
 </head>
 <body>
 
-<h2>➕ Add Video</h2>
+<h2>🎬 Video Manager</h2>
 
 <input id="pass" placeholder="Admin password">
+
+<h3>➕ Add Video</h3>
 <input id="title" placeholder="Title">
 <input id="thumb" placeholder="Thumb URL">
 <input id="embed" placeholder="Embed URL">
-<input id="duration" placeholder="Duration (mm:ss)">
+<input id="duration" placeholder="Duration">
 <input id="download" placeholder="Download URL">
+<button onclick="add()">ADD</button>
 
-<button onclick="addVideo()">ADD VIDEO</button>
-<div id="msg"></div>
+<h3>📋 Video List</h3>
+<div id="list"></div>
 
 <script>
-const API = "https://traingonn.trinhhoan00365.workers.dev"; // 🔴 ĐỔI
+const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 
-function addVideo() {
-  fetch(API + "/admin/add", {
+function api(path, data) {
+  return fetch(WORKER_URL + path, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      password: document.getElementById("pass").value,
-      video: {
-        title: title.value,
-        thumb: thumb.value,
-        embed: embed.value,
-        duration: duration.value,
-        download: download.value
-      }
-    })
-  })
-  .then(r => r.json())
-  .then(d => {
-    msg.textContent = d.success ? "✅ Thêm video thành công" : "❌ Sai mật khẩu";
-  });
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(data)
+  }).then(r => r.json());
 }
+
+function load() {
+  fetch(WORKER_URL + "/videos")
+    .then(r => r.json())
+    .then(videos => {
+      list.innerHTML = "";
+      videos.forEach(v => {
+        const div = document.createElement("div");
+        div.className = "video";
+        div.innerHTML = `
+          <input value="${v.title}" id="t${v.id}">
+          <input value="${v.thumb}" id="th${v.id}">
+          <input value="${v.embed}" id="e${v.id}">
+          <input value="${v.duration}" id="d${v.id}">
+          <input value="${v.download||""}" id="dl${v.id}">
+          <div class="small">ID: ${v.id}</div>
+          <div class="row">
+            <button onclick="edit(${v.id})">✏️ Edit</button>
+            <button onclick="del(${v.id})">🗑 Delete</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    });
+}
+
+function add() {
+  api("/admin/add", {
+    password: pass.value,
+    video: {
+      title: title.value,
+      thumb: thumb.value,
+      embed: embed.value,
+      duration: duration.value,
+      download: download.value
+    }
+  }).then(load);
+}
+
+function edit(id) {
+  api("/admin/edit", {
+    password: pass.value,
+    video: {
+      id,
+      title: document.getElementById("t"+id).value,
+      thumb: document.getElementById("th"+id).value,
+      embed: document.getElementById("e"+id).value,
+      duration: document.getElementById("d"+id).value,
+      download: document.getElementById("dl"+id).value
+    }
+  }).then(() => alert("✅ Saved"));
+}
+
+function del(id) {
+  if (!confirm("Delete video?")) return;
+  api("/admin/delete", { password: pass.value, id }).then(load);
+}
+
+load();
 </script>
 
 </body>
