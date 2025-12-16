@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Add Video</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background:#0b0b14;
+      color:#fff;
+      font-family:system-ui;
+      padding:20px;
+    }
+    h2 { margin-bottom: 10px; }
+    input, button {
+      width:100%;
+      padding:12px;
+      margin:6px 0;
+      border-radius:8px;
+      border:none;
+      font-size:14px;
+    }
+    button {
+      background:#ff9800;
+      color:#000;
+      font-weight:600;
+    }
+    #msg {
+      margin-top:10px;
+      font-size:14px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>➕ Add Video</h2>
+
+<input id="pass" placeholder="Admin password">
+<input id="title" placeholder="Title">
+<input id="thumb" placeholder="Thumb URL">
+<input id="embed" placeholder="Embed URL">
+<input id="duration" placeholder="Duration (mm:ss)">
+<input id="download" placeholder="Download URL">
+
+<button onclick="addVideo()">ADD VIDEO</button>
+<div id="msg"></div>
+
+<script>
+const API = "https://TEN-WORKER.workers.dev"; // 🔴 ĐỔI
+
+function addVideo() {
+  fetch(API + "/admin/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      password: document.getElementById("pass").value,
+      video: {
+        title: title.value,
+        thumb: thumb.value,
+        embed: embed.value,
+        duration: duration.value,
+        download: download.value
+      }
+    })
+  })
+  .then(r => r.json())
+  .then(d => {
+    msg.textContent = d.success ? "✅ Thêm video thành công" : "❌ Sai mật khẩu";
+  });
+}
+</script>
+
+</body>
+</html>
