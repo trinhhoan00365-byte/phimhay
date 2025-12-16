@@ -264,3 +264,8 @@ body {
 .card-views {
   color: #f5c542; /* 👈 màu vàng */
 }
+.related-views {
+  font-size: 12px;
+  color: #f5c542;
+  margin: 4px 0 8px;
+}
