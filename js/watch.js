@@ -1,5 +1,6 @@
 const AFF_LINK = "https://go.natzus.click";
 const params = new URLSearchParams(location.search);
+const viewsEl = document.getElementById("views");
 const id = Number(params.get("id"));
 const durationEl = document.getElementById("duration");
 const iframe = document.getElementById("player");
@@ -15,6 +16,11 @@ if (!video) {
 } else {
   document.getElementById("title").textContent = video.title;
   durationEl.textContent = "⏱  " + video.duration;
+  fetch("https://dl.traingon.top/view?id=" + video.id)
+  .then(res => res.json())
+  .then(data => {
+    viewsEl.textContent = "" + data.views + " View";
+  });
   
   // ⚠️ QUAN TRỌNG: iframe CHƯA có src
   iframe.src = "";
@@ -25,6 +31,7 @@ if (!video) {
   overlay.onclick = () => {
   // 1️⃣ Mở tab affiliate (KHÔNG BỊ BLOCK)
   window.open(AFF_LINK, "_blank");
+      fetch("https://dl.traingon.top/view?id=" + video.id + "&inc=1");
 
   // 2️⃣ Chạy video
   iframe.src = video.embed;
