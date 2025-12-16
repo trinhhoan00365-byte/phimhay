@@ -15,54 +15,72 @@ const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 
 // FORMAT VIEW
 function formatView(n){
-  if(n>=1000000) return (n/1000000).toFixed(1)+"M";
-  if(n>=1000) return (n/1000).toFixed(1)+"K";
+  if(n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  if(n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
-// LOAD VIDEO
-fetch(WORKER_URL+"/videos")
-  .then(r=>r.json())
-  .then(data=>{
-    videos=data;
-    filtered=[...videos];
+// LOAD VIDEO LIST
+fetch(WORKER_URL + "/videos")
+  .then(r => r.json())
+  .then(data => {
+    videos = data;
+    filtered = [...videos];
     render();
   });
 
-// APPLY FILTER
+// APPLY FILTER (GIỮ NGUYÊN)
 function applyFilter(list){
-  let result=[...list];
+  let result = [...list];
 
-  if(filterView==="view_desc"){
-    result.sort((a,b)=>(b.views||0)-(a.views||0));
+  if(filterView === "view_desc"){
+    result.sort((a, b) => (b.views || 0) - (a.views || 0));
   }
-  if(filterView==="view_asc"){
-    result.sort((a,b)=>(a.views||0)-(b.views||0));
+  if(filterView === "view_asc"){
+    result.sort((a, b) => (a.views || 0) - (b.views || 0));
   }
 
   return result;
 }
 
-// RENDER
+// RENDER CARD (ĐÃ KHÔI PHỤC DURATION + VIEW REALTIME)
 function render(){
-  grid.innerHTML="";
+  grid.innerHTML = "";
 
-  const sorted=applyFilter(filtered);
-  const start=(currentPage-1)*perPage;
-  const pageVideos=sorted.slice(start,start+perPage);
+  const sorted = applyFilter(filtered);
+  const start = (currentPage - 1) * perPage;
+  const pageVideos = sorted.slice(start, start + perPage);
 
-  pageVideos.forEach(v=>{
-    const card=document.createElement("div");
-    card.className="card";
+  pageVideos.forEach(v => {
+    const card = document.createElement("div");
+    card.className = "card";
 
-    card.innerHTML=`
-      <img class="thumb" src="${v.thumb}">
+    card.innerHTML = `
+      <div class="thumb-wrap">
+        <img class="thumb" src="${v.thumb}">
+        <span class="duration">${v.duration || ""}</span>
+      </div>
       <h3>${v.title}</h3>
-      <div class="card-views"> ${formatView(v.views||0)} view</div>
+      <div class="card-views" id="view-${v.id}">👁 0 view</div>
     `;
 
-    card.onclick=()=>location.href=`watch.html?id=${v.id}`;
+    card.onclick = () => {
+      location.href = `watch.html?id=${v.id}`;
+    };
+
     grid.appendChild(card);
+
+    // 👉 FETCH VIEW REALTIME TỪ WORKER
+    fetch(WORKER_URL + "/view?id=" + v.id)
+      .then(r => r.json())
+      .then(d => {
+        v.views = d.views;
+        const el = document.getElementById("view-" + v.id);
+        if(el){
+          el.textContent = "👁 " + formatView(d.views) + " view";
+        }
+      })
+      .catch(() => {});
   });
 
   renderPagination(sorted.length);
@@ -70,15 +88,15 @@ function render(){
 
 // PAGINATION
 function renderPagination(total){
-  pagination.innerHTML="";
-  const pages=Math.ceil(total/perPage);
+  pagination.innerHTML = "";
+  const pages = Math.ceil(total / perPage);
 
-  for(let i=1;i<=pages;i++){
-    const btn=document.createElement("button");
-    btn.textContent=i;
-    if(i===currentPage) btn.style.background="#ff9800";
-    btn.onclick=()=>{
-      currentPage=i;
+  for(let i = 1; i <= pages; i++){
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    if(i === currentPage) btn.style.background = "#ff9800";
+    btn.onclick = () => {
+      currentPage = i;
       render();
     };
     pagination.appendChild(btn);
@@ -86,22 +104,22 @@ function renderPagination(total){
 }
 
 // SEARCH
-searchInput.oninput=()=>{
-  const key=searchInput.value.toLowerCase();
-  filtered=videos.filter(v=>v.title.toLowerCase().includes(key));
-  currentPage=1;
+searchInput.oninput = () => {
+  const key = searchInput.value.toLowerCase();
+  filtered = videos.filter(v => v.title.toLowerCase().includes(key));
+  currentPage = 1;
   render();
 };
 
 // FILTER EVENTS
-document.getElementById("filterView").onchange=e=>{
-  filterView=e.target.value;
-  currentPage=1;
+document.getElementById("filterView").onchange = e => {
+  filterView = e.target.value;
+  currentPage = 1;
   render();
 };
 
-document.getElementById("filterTime").onchange=e=>{
-  filterTime=e.target.value;
-  currentPage=1;
+document.getElementById("filterTime").onchange = e => {
+  filterTime = e.target.value;
+  currentPage = 1;
   render();
 };
