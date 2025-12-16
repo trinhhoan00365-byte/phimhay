@@ -149,13 +149,14 @@ body {
 }
 .download-btn {
   display: inline-block;
-  margin: 12px 0 20px;
-  padding: 12px 18px;
+  margin: 10px 0 18px;
+  padding: 8px 14px;   
   background: linear-gradient(90deg,#6a5cff,#9b7bff);
   color: #fff;
   text-decoration: none;
-  border-radius: 10px;
-  font-weight: bold;
+  border-radius: 8px; 
+  font-weight: 600;
+  font-size: 13px;    
 }
 .download-btn:hover {
   opacity: 0.85;
