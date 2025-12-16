@@ -1,7 +1,7 @@
 const AFF_LINK = "https://go.natzus.click";
 const params = new URLSearchParams(location.search);
 const id = Number(params.get("id"));
-
+const durationEl = document.getElementById("duration");
 const iframe = document.getElementById("player");
 const overlay = document.getElementById("playerOverlay");
 const related = document.getElementById("related");
@@ -14,7 +14,8 @@ if (!video) {
   document.getElementById("title").textContent = "Video không tồn tại";
 } else {
   document.getElementById("title").textContent = video.title;
-
+  durationEl.textContent = "⏱ Thời lượng: " + video.duration;
+  
   // ⚠️ QUAN TRỌNG: iframe CHƯA có src
   iframe.src = "";
 
