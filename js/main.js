@@ -12,20 +12,40 @@ let filtered = [];
 const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 const HOT_VIEW = 100;
 
+// format view: 1.2K / 1.3M
 function formatView(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
+// ===== INIT FILTER BUTTON (SAFE) =====
+function initFilter() {
+  const buttons = document.querySelectorAll(".filter-btn");
+  if (!buttons.length) return;
+
+  buttons.forEach(btn => {
+    btn.onclick = () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentFilter = btn.dataset.filter;
+      currentPage = 1;
+      render();
+    };
+  });
+}
+
+// ===== LOAD VIDEO =====
 fetch(WORKER_URL + "/videos")
   .then(r => r.json())
   .then(data => {
     videos = data;
     filtered = [...videos];
+    initFilter();
     render();
   });
 
+// ===== SORT =====
 function applyFilter(list) {
   if (currentFilter === "new") {
     return [...list].sort((a, b) => b.id - a.id);
@@ -36,6 +56,7 @@ function applyFilter(list) {
   return list;
 }
 
+// ===== RENDER =====
 function render() {
   grid.innerHTML = "";
 
@@ -82,6 +103,7 @@ function render() {
   renderPagination(sorted.length);
 }
 
+// ===== PAGINATION =====
 function renderPagination(totalItems) {
   pagination.innerHTML = "";
   const total = Math.ceil(totalItems / perPage);
@@ -98,21 +120,10 @@ function renderPagination(totalItems) {
   }
 }
 
+// ===== SEARCH =====
 searchInput.oninput = () => {
   const key = searchInput.value.toLowerCase();
   filtered = videos.filter(v => v.title.toLowerCase().includes(key));
   currentPage = 1;
   render();
 };
-
-document.querySelectorAll(".filter-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll(".filter-btn")
-      .forEach(b => b.classList.remove("active"));
-
-    btn.classList.add("active");
-    currentFilter = btn.dataset.filter;
-    currentPage = 1;
-    render();
-  };
-});
