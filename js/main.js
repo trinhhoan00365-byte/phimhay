@@ -15,14 +15,24 @@ function render() {
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
-      <div class="thumb-wrap">
-        <img class="thumb" src="${v.thumb}">
-        <span class="duration">${v.duration}</span>
-      </div>
-      <h3>${v.title}</h3>
-    `;
+  <div class="thumb-wrap">
+    <img class="thumb" src="${v.thumb}">
+    <span class="duration">${v.duration}</span>
+  </div>
+  <h3>${v.title}</h3>
+  <div class="card-views" id="view-${v.id}">
+     0 view
+  </div>
+`;
     card.onclick = () => location.href = `watch.html?id=${v.id}`;
     grid.appendChild(card);
+    fetch("https://traingonn.trinhhoan00365.workers.dev/view?id=" + v.id)
+  .then(res => res.json())
+  .then(data => {
+    const viewEl = document.getElementById("view-" + v.id);
+    if (viewEl) {
+      viewEl.textContent = "" + data.views + " view";
+    }
   });
 
   renderPagination();
