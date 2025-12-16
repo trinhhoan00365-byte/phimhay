@@ -8,6 +8,7 @@ const related = document.getElementById("related");
 const wrapper = document.querySelector(".player-wrapper");
 
 const video = videos.find(v => v.id === id);
+const downloadBtn = document.getElementById("downloadBtn");
 
 if (!video) {
   document.getElementById("title").textContent = "Video không tồn tại";
@@ -29,6 +30,11 @@ if (!video) {
   overlay.style.display = "none";
   wrapper.style.backgroundImage = "none";
 };
+if (video.download) {
+  downloadBtn.href = video.download;
+} else {
+  downloadBtn.style.display = "none";
+}
 }
 
 // VIDEO KHÁC
