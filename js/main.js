@@ -1,7 +1,15 @@
 const grid = document.getElementById("video-grid");
 const pagination = document.getElementById("pagination");
 const searchInput = document.getElementById("search");
-
+function formatView(n) {
+  if (n >= 1000000) {
+    return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  }
+  if (n >= 1000) {
+    return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  }
+  return n;
+}
 const perPage = 14;
 let currentPage = 1;
 let filtered = [...videos];
@@ -33,7 +41,7 @@ function render() {
       .then(data => {
         const viewEl = document.getElementById("view-" + v.id);
         if (viewEl) {
-          viewEl.textContent = "" + data.views + " view";
+          viewEl.textContent = "" + formatView(data.views) + " view";
         }
       })
       .catch(err => console.log("view error", err));
