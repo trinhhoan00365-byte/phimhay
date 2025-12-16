@@ -49,15 +49,25 @@ function initWatch() {
   wrapper.style.backgroundImage = `url(${video.thumb})`;
   iframe.src = "";
 
-  overlay.onclick = () => {
-    window.open(AFF_LINK, "_blank");
+  let playClick = 0;
 
+overlay.onclick = () => {
+  playClick++;
+
+  
+  window.open(AFF_LINK, "_blank");
+
+  if (playClick >= 2) {
+
+    // tăng view (chỉ 1 lần)
     fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1")
-      .then(() => fetch(WORKER_URL + "/view?id=" + video.id))
-      .then(r => r.json())
-      .then(d => {
-        viewsEl.textContent = " " + formatView(d.views) + " view";
-      });
+      .catch(() => {});
+
+    iframe.src = video.embed;
+    overlay.style.display = "none";
+    wrapper.style.backgroundImage = "none";
+  }
+};
 
     iframe.src = video.embed;
     overlay.style.display = "none";
