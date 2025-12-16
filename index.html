@@ -9,10 +9,7 @@
 <body>
 
 <header class="header">
-  <a href="index.html" class="logo">
-    <img src="assets/logo.png">
-    <span>TRAINGON</span>
-  </a>
+  <div class="logo">TRAINGON</div>
 </header>
 
 <main class="container">
@@ -24,14 +21,31 @@
     placeholder="Tìm kiếm video..."
   >
 
+  <!-- FILTER BAR -->
+  <div class="filter-row">
+    <span class="filter-label">Filter</span>
+
+    <select id="filterView" class="filter-select">
+      <option value="view_desc">Views: Highest</option>
+      <option value="view_asc">Views: Lowest</option>
+    </select>
+
+    <select id="filterTime" class="filter-select">
+      <option value="all">Time: All</option>
+      <option value="7">Last 7 days</option>
+      <option value="30">Last 30 days</option>
+    </select>
+  </div>
+
   <div id="video-grid" class="grid two-col"></div>
   <div id="pagination" class="pagination"></div>
 
 </main>
 
-<script src="js/main.js"></script>
-  <footer class="footer">
+<footer class="footer">
   © 2025 Traingon.top - All rights reserved.
 </footer>
+
+<script src="js/main.js" defer></script>
 </body>
 </html>
