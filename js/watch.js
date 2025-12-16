@@ -29,11 +29,19 @@ if (!video) {
   wrapper.style.backgroundImage = `url(${video.thumb})`;
 
   overlay.onclick = () => {
-  // 1️⃣ Mở tab affiliate (KHÔNG BỊ BLOCK)
+  // mở affiliate
   window.open(AFF_LINK, "_blank");
-  fetch("https://traingonn.trinhhoan00365.workers.dev/view?id=" + video.id + "&inc=1");
 
-  // 2️⃣ Chạy video
+  fetch("https://traingonn.trinhhoan00365.workers.dev/view?id=" + video.id + "&inc=1")
+    .then(() => {
+      // lấy lại view mới để cập nhật giao diện
+      return fetch("https://traingonn.trinhhoan00365.workers.dev/view?id=" + video.id);
+    })
+    .then(res => res.json())
+    .then(data => {
+      viewsEl.textContent = data.views + " View";
+    });
+
   iframe.src = video.embed;
   overlay.style.display = "none";
   wrapper.style.backgroundImage = "none";
