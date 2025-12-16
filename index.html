@@ -2,33 +2,48 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Traingon</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TRAINGON</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header class="header">
-  <div class="logo">TRAINGON</div>
-  <input id="search" placeholder="Tìm kiếm video...">
+  <a href="index.html" class="logo">
+    <img src="assets/logo.png">
+    <span>TRAINGON</span>
+  </a>
 </header>
 
-<!-- FILTER BAR -->
-<div class="filter-bar">
-  <button class="filter-btn active" data-filter="new"> Mới nhất</button>
-  <button class="filter-btn" data-filter="view"> Xem nhiều</button>
-</div>
+<main class="container">
 
-<!-- VIDEO GRID -->
-<div id="video-grid" class="grid"></div>
+  <input
+    type="text"
+    id="search"
+    class="search"
+    placeholder="Tìm kiếm video..."
+  >
 
-<!-- PAGINATION -->
-<div id="pagination" class="pagination"></div>
+  <!-- FILTER BAR (CHỈ THÊM, KHÔNG PHÁ GIAO DIỆN) -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="new">Mới nhất</button>
+    <button class="filter-btn" data-filter="view">Xem nhiều</button>
+  </div>
+
+  <div id="video-grid" class="grid two-col"></div>
+  <div id="pagination" class="pagination"></div>
+
+</main>
 
 <footer class="footer">
   © 2025 Traingon.top - All rights reserved.
 </footer>
 
-<script src="main.js"></script>
+<!-- ❌ BỎ data.js -->
+<!-- <script src="js/data.js"></script> -->
+
+<!-- ✅ GIỮ main.js + thêm defer -->
+<script src="js/main.js" defer></script>
+
 </body>
 </html>
