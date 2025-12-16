@@ -21,7 +21,7 @@ function render() {
         <span class="duration">${v.duration}</span>
       </div>
       <h3>${v.title}</h3>
-      <div class="card-views" id="view-${v.id}">👁 0 view</div>
+      <div class="card-views" id="view-${v.id}"> 0 view</div>
     `;
 
     card.onclick = () => location.href = `watch.html?id=${v.id}`;
@@ -33,7 +33,7 @@ function render() {
       .then(data => {
         const viewEl = document.getElementById("view-" + v.id);
         if (viewEl) {
-          viewEl.textContent = "👁 " + data.views + " view";
+          viewEl.textContent = "" + data.views + " view";
         }
       })
       .catch(err => console.log("view error", err));
