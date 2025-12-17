@@ -286,3 +286,22 @@ body {
 
   text-decoration: none;
 }
+/* ===== PAGINATION COLOR = DOWNLOAD COLOR ===== */
+
+/* nút số trang bình thường */
+.pagination button {
+  background: #1e1e2f;   /* nền tối */
+  color: #ccc;
+}
+
+/* nút đang ở trang hiện tại */
+.pagination button.active {
+  background: #CC99FF;   /* GIỐNG MÀU DOWNLOAD */
+  color: #000;
+}
+
+/* hover cho đẹp */
+.pagination button:hover {
+  background: #b78cff;
+  color: #000;
+}
