@@ -2,50 +2,59 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Watch</title>
+  <title>Xem video | Traingon.top</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header class="header">
-  <a href="index.html" class="logo-link">
-    <div class="logo">TRAINGON</div>
-  </a>
-</header>
+  <!-- TOP PANEL (GIỐNG TRANG CHÍNH) -->
+  <div class="top-panel">
+    <header class="header">
+      <a href="index.html" class="logo-link">
+        <div class="logo">TRAINGON</div>
+      </a>
+    </header>
+  </div>
+  <!-- END TOP PANEL -->
 
-<main class="container">
+  <!-- MAIN CONTENT -->
+  <main class="container">
 
-  <!-- VIDEO PLAYER -->
-  <div class="player-wrapper">
-    <div id="playerOverlay" class="player-overlay">
-      ▶ Play
+    <!-- VIDEO PLAYER -->
+    <div class="player-wrapper" id="player"></div>
+
+    <!-- VIDEO INFO -->
+    <h1 class="watch-title" id="video-title"></h1>
+
+    <div class="watch-meta">
+      <span id="video-view"> 0 view</span>
+      <span id="video-duration">⏱</span>
     </div>
-    <iframe id="player" allowfullscreen></iframe>
-  </div>
 
-  <!-- VIDEO INFO -->
-  <h1 id="title" class="watch-title"></h1>
+    <!-- DOWNLOAD -->
+    <a
+      id="download-btn"
+      class="download-btn"
+      href="#"
+      target="_blank"
+      rel="nofollow noopener"
+    >
+      Download
+    </a>
 
-  <div class="watch-meta">
-    <span id="views"> 0 view</span>
-    <span id="duration">⏱ 00:00</span>
-  </div>
+    <!-- RELATED VIDEOS -->
+    <h2 class="section-title">Video khác</h2>
+    <div id="related-grid" class="grid"></div>
 
-  <a id="downloadBtn" class="download-btn" target="_blank">
-    ⬇ Download
-  </a>
+  </main>
 
-  <!-- RELATED -->
-  <h2 class="section-title">Video khác</h2>
-  <div id="related" class="grid two-col"></div>
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2025 Traingon.top - All rights reserved.
+  </footer>
 
-</main>
-
-<footer class="footer">
-  © 2025 Traingon.top - All rights reserved.
-</footer>
-
-<script src="js/watch.js" defer></script>
+  <script src="js/watch.js"></script>
 </body>
 </html>
