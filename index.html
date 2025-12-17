@@ -2,52 +2,61 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>TRAINGON</title>
+  <title>Traingon.top</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="header">
-  <a href="index.html" class="logo-link">
-    <div class="logo">TRAINGON</div>
-  </a>
-</header>
+  <!-- TOP PANEL: LOGO + SEARCH + FILTER -->
+  <div class="top-panel">
 
-<main class="container">
+    <header class="header">
+      <a href="index.html" class="logo-link">
+        <div class="logo">TRAINGON</div>
+      </a>
+    </header>
 
-  <input
-    type="text"
-    id="search"
-    class="search"
-    placeholder="Tìm kiếm video..."
-  >
+    <input
+      type="text"
+      id="search"
+      class="search"
+      placeholder="Tìm kiếm video..."
+    >
 
-  <!-- FILTER BAR -->
-  <div class="filter-row">
-    <span class="filter-label">Filter</span>
+    <div class="filter-row">
+      <span class="filter-label">Filter</span>
 
-    <select id="filterView" class="filter-select">
-      <option value="view_desc">Views: Highest</option>
-      <option value="view_asc">Views: Lowest</option>
-    </select>
+      <select id="filterView" class="filter-select">
+        <option value="view_desc">Views: Highest</option>
+        <option value="view_asc">Views: Lowest</option>
+      </select>
 
-    <select id="filterTime" class="filter-select">
-      <option value="all">Time: All</option>
-      <option value="7">Last 7 days</option>
-      <option value="30">Last 30 days</option>
-    </select>
+      <select id="filterTime" class="filter-select">
+        <option value="all">Time: All</option>
+        <option value="7">Last 7 days</option>
+        <option value="30">Last 30 days</option>
+      </select>
+    </div>
+
   </div>
+  <!-- END TOP PANEL -->
 
-  <div id="video-grid" class="grid two-col"></div>
-  <div id="pagination" class="pagination"></div>
+  <!-- MAIN CONTENT -->
+  <main class="container">
 
-</main>
+    <div id="video-grid" class="grid"></div>
 
-<footer class="footer">
-  © 2025 Traingon.top - All rights reserved.
-</footer>
+    <div id="pagination" class="pagination"></div>
 
-<script src="js/main.js" defer></script>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2025 Traingon.top - All rights reserved.
+  </footer>
+
+  <script src="main.js"></script>
 </body>
 </html>
