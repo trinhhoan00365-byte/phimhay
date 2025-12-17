@@ -320,3 +320,33 @@ body {
   top: 0;
   z-index: 100;
 }
+/* =========================
+   SEARCH + FILTER PANEL
+   ========================= */
+
+/* nền riêng cho ô tìm kiếm */
+.search {
+  background: #1e1630;
+  color: #fff;
+  border: 1px solid #3a2a55;
+}
+
+/* nền riêng cho hàng filter */
+.filter-row {
+  background: #1e1630;
+  border: 1px solid #3a2a55;
+  padding: 8px;
+  border-radius: 12px;
+}
+
+/* dropdown filter đồng bộ */
+.filter-select {
+  background: #141423;
+  border: 1px solid #3a2a55;
+  color: #fff;
+}
+
+/* label filter dịu hơn */
+.filter-label {
+  color: #d6c9ff;
+}
