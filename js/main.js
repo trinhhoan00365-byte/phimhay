@@ -29,7 +29,7 @@ fetch(WORKER_URL + "/videos")
     render();
   });
 
-// APPLY FILTER (GIỮ NGUYÊN)
+// APPLY FILTER
 function applyFilter(list){
   let result = [...list];
 
@@ -43,7 +43,7 @@ function applyFilter(list){
   return result;
 }
 
-// RENDER CARD (ĐÃ KHÔI PHỤC DURATION + VIEW REALTIME)
+// RENDER CARD
 function render(){
   grid.innerHTML = "";
 
@@ -70,7 +70,7 @@ function render(){
 
     grid.appendChild(card);
 
-    // 👉 FETCH VIEW REALTIME TỪ WORKER
+    // VIEW realtime
     fetch(WORKER_URL + "/view?id=" + v.id)
       .then(r => r.json())
       .then(d => {
@@ -86,7 +86,7 @@ function render(){
   renderPagination(sorted.length);
 }
 
-// PAGINATION
+// PAGINATION (ĐÃ FIX – DÙNG CLASS active)
 function renderPagination(total){
   pagination.innerHTML = "";
   const pages = Math.ceil(total / perPage);
@@ -94,11 +94,16 @@ function renderPagination(total){
   for(let i = 1; i <= pages; i++){
     const btn = document.createElement("button");
     btn.textContent = i;
-    if(i === currentPage) btn.style.background = "#ff9800";
+
+    if(i === currentPage){
+      btn.classList.add("active");   // ⭐ QUAN TRỌNG
+    }
+
     btn.onclick = () => {
       currentPage = i;
       render();
     };
+
     pagination.appendChild(btn);
   }
 }
