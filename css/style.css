@@ -279,3 +279,19 @@ body {
   justify-content: center;
   gap: 6px;
 }
+/* ===== COMPACT CARD HEIGHT ===== */
+
+/* giảm chiều cao tiêu đề */
+.card h3 {
+  min-height: 30px;       /* trước là ~36px */
+  margin: 6px 8px 4px;    /* giảm khoảng trên/dưới */
+  line-height: 1.35;
+}
+
+/* kéo view lên gần tiêu đề hơn */
+.card-views,
+.related-views {
+  margin-top: 2px;        /* thay vì auto quá xa */
+  padding: 0 8px 6px;     /* giảm padding đáy */
+  font-size: 12px;
+}
