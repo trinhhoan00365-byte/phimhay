@@ -305,3 +305,18 @@ body {
   background: #b78cff;
   color: #000;
 }
+/* =========================
+   HEADER SEPARATE COLOR
+   ========================= */
+.header {
+  padding: 12px;
+  font-size: 20px;
+  font-weight: bold;
+
+  background: #1e1630;              /* nền header riêng */
+  border-bottom: 1px solid #3a2a55; /* viền nhẹ tách trang */
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
