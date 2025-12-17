@@ -267,3 +267,22 @@ body {
   background-position: center !important;
   background-repeat: no-repeat !important;
 }
+/* ===== FIX DOWNLOAD BUTTON SIZE ===== */
+.download-btn {
+  display: inline-flex;        /* KHÔNG full width */
+  align-items: center;
+  gap: 6px;
+
+  width: auto;                /* quan trọng */
+  max-width: fit-content;
+
+  background: #ff9800;
+  color: #000;
+
+  padding: 6px 14px;          /* gọn lại */
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+
+  text-decoration: none;
+}
