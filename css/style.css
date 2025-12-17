@@ -1,5 +1,5 @@
 /* =========================
-   BASE
+   RESET & BASE
    ========================= */
 * {
   box-sizing: border-box;
@@ -21,12 +21,21 @@ body {
 }
 
 /* =========================
-   HEADER
+   TOP PANEL (LOGO + SEARCH + FILTER)
+   ========================= */
+.top-panel {
+  background: #1e1630;
+  border-bottom: 1px solid #3a2a55;
+  padding: 12px 10px 14px;
+}
+
+/* =========================
+   HEADER / LOGO
    ========================= */
 .header {
-  padding: 12px;
   font-size: 20px;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .logo-link {
@@ -39,23 +48,15 @@ body {
 }
 
 /* =========================
-   LAYOUT
-   ========================= */
-.container {
-  padding: 10px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* =========================
    SEARCH
    ========================= */
 .search {
   width: 100%;
   padding: 10px;
-  border-radius: 8px;
-  border: none;
+  border-radius: 10px;
+  border: 1px solid #3a2a55;
+  background: #141423;
+  color: #fff;
   outline: none;
   margin-bottom: 10px;
 }
@@ -67,22 +68,36 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 14px;
   flex-wrap: wrap;
+
+  border: 1px solid #3a2a55;
+  border-radius: 12px;
+  padding: 8px;
+  background: #141423;
 }
 
 .filter-label {
   font-size: 14px;
-  color: #ccc;
+  color: #d6c9ff;
 }
 
 .filter-select {
-  background: #141423;
+  background: #0b0b14;
   color: #fff;
-  border: 1px solid #2a2a44;
+  border: 1px solid #3a2a55;
   border-radius: 10px;
   padding: 6px 12px;
   font-size: 13px;
+}
+
+/* =========================
+   MAIN LAYOUT
+   ========================= */
+.container {
+  padding: 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* =========================
@@ -95,13 +110,13 @@ body {
 }
 
 /* =========================
-   CARD (FINAL – INDEX = RELATED)
+   CARD (INDEX = RELATED)
    ========================= */
 .card {
   background: #141423;
   border-radius: 12px;
   overflow: hidden;
-  display: block;              /* QUAN TRỌNG: không flex */
+  display: block;
 }
 
 /* thumbnail */
@@ -119,7 +134,7 @@ body {
   object-fit: cover;
 }
 
-/* duration badge */
+/* duration */
 .thumb-wrap .duration {
   position: absolute;
   right: 6px;
@@ -133,13 +148,13 @@ body {
   white-space: nowrap;
 }
 
-/* title – gọn như related */
+/* title */
 .card h3 {
   font-size: 13px;
   line-height: 1.3;
   margin: 4px 8px 2px;
   padding: 0;
-  height: 34px;                /* CHUẨN HOÁ CHIỀU CAO */
+  height: 34px;
   overflow: hidden;
 }
 
@@ -164,10 +179,22 @@ body {
 }
 
 .pagination button {
-  padding: 5px 10px;
-  border-radius: 6px;
+  background: #1e1e2f;
+  color: #ccc;
   border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 13px;
+}
+
+.pagination button:hover {
+  background: #2a2a44;
+}
+
+.pagination button.active {
+  background: #CC99FF;   /* GIỐNG MÀU DOWNLOAD */
+  color: #000;
 }
 
 /* =========================
@@ -215,138 +242,27 @@ body {
   margin-bottom: 10px;
 }
 
+/* download button */
 .download-btn {
-  display: inline-block;
-  margin-bottom: 16px;
-  background: #ff9800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #CC99FF;
   color: #000;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 13px;
+  font-weight: 500;
   text-decoration: none;
-}
-
-.section-title {
-  font-size: 15px;
-  margin: 10px 0;
+  margin-bottom: 16px;
 }
 
 /* =========================
-   FOOTER (STICKY)
+   FOOTER
    ========================= */
 .footer {
   text-align: center;
   font-size: 12px;
   color: #888;
   padding: 15px 0;
-}
-/* =========================
-   FIX WATCH THUMBNAIL SIZE
-   ========================= */
-
-/* khung player giữ tỉ lệ giống thumbnail */
-.player-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9; /* giống thum trang chính */
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-/* iframe video */
-.player-wrapper iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-/* thumbnail nền trước khi play */
-.player-wrapper {
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-}
-/* ===== FIX DOWNLOAD BUTTON SIZE ===== */
-.download-btn {
-  display: inline-flex;        /* KHÔNG full width */
-  align-items: center;
-  gap: 6px;
-
-  width: auto;                /* quan trọng */
-  max-width: fit-content;
-
-  background: #CC99FF;
-  color: #000;
-
-  padding: 6px 14px;          /* gọn lại */
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-
-  text-decoration: none;
-}
-/* ===== PAGINATION COLOR = DOWNLOAD COLOR ===== */
-
-/* nút số trang bình thường */
-.pagination button {
-  background: #1e1e2f;   /* nền tối */
-  color: #ccc;
-}
-
-/* nút đang ở trang hiện tại */
-.pagination button.active {
-  background: #CC99FF;   /* GIỐNG MÀU DOWNLOAD */
-  color: #000;
-}
-
-/* hover cho đẹp */
-.pagination button:hover {
-  background: #b78cff;
-  color: #000;
-}
-/* =========================
-   HEADER SEPARATE COLOR
-   ========================= */
-.header {
-  padding: 12px;
-  font-size: 20px;
-  font-weight: bold;
-
-  background: #1e1630;              /* nền header riêng */
-  border-bottom: 1px solid #3a2a55; /* viền nhẹ tách trang */
-
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-/* =========================
-   SEARCH + FILTER PANEL
-   ========================= */
-
-/* nền riêng cho ô tìm kiếm */
-.search {
-  background: #1e1630;
-  color: #fff;
-  border: 1px solid #3a2a55;
-}
-
-/* nền riêng cho hàng filter */
-.filter-row {
-  background: #1e1630;
-  border: 1px solid #3a2a55;
-  padding: 8px;
-  border-radius: 12px;
-}
-
-/* dropdown filter đồng bộ */
-.filter-select {
-  background: #141423;
-  border: 1px solid #3a2a55;
-  color: #fff;
-}
-
-/* label filter dịu hơn */
-.filter-label {
-  color: #d6c9ff;
 }
