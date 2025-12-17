@@ -4,13 +4,12 @@ const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 const params = new URLSearchParams(location.search);
 const id = Number(params.get("id"));
 
-const viewsEl = document.getElementById("views");
-const durationEl = document.getElementById("duration");
-const iframe = document.getElementById("player");
-const overlay = document.getElementById("playerOverlay");
-const related = document.getElementById("related");
-const wrapper = document.querySelector(".player-wrapper");
-const downloadBtn = document.getElementById("downloadBtn");
+const player = document.getElementById("player");
+const titleEl = document.getElementById("video-title");
+const viewsEl = document.getElementById("video-view");
+const durationEl = document.getElementById("video-duration");
+const relatedGrid = document.getElementById("related-grid");
+const downloadBtn = document.getElementById("download-btn");
 
 let videos = [];
 
@@ -25,54 +24,54 @@ function formatView(n) {
 fetch(WORKER_URL + "/videos")
   .then(res => res.json())
   .then(data => {
+    if (!Array.isArray(data)) return;
     videos = data;
     initWatch();
-  });
+  })
+  .catch(err => console.error("Video load error:", err));
 
 function initWatch() {
   const video = videos.find(v => v.id === id);
 
   if (!video) {
-    document.getElementById("title").textContent = "Video không tồn tại";
+    titleEl.textContent = "Video không tồn tại";
     return;
   }
 
-  document.getElementById("title").textContent = video.title;
+  // TITLE + DURATION
+  titleEl.textContent = video.title;
   durationEl.textContent = "⏱ " + video.duration;
 
-  // lấy view hiện tại
+  // VIEW
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
     .then(d => {
       viewsEl.textContent = " " + formatView(d.views) + " view";
     });
 
-  wrapper.style.backgroundImage = `url(${video.thumb})`;
-  iframe.src = "";
+  // PLAYER OVERLAY (2 CLICK AFF)
+  player.innerHTML = `
+    <div class="player-overlay" id="playerOverlay">▶</div>
+    <iframe src="" allowfullscreen></iframe>
+  `;
 
-  // ===== PLAY LOGIC (2 CLICK AFF) =====
+  const iframe = player.querySelector("iframe");
+  const overlay = document.getElementById("playerOverlay");
+
   let playClick = 0;
   let viewed = false;
 
   overlay.onclick = () => {
     playClick++;
-
-    // mỗi click đều mở AFF
     window.open(AFF_LINK, "_blank");
 
-    // click lần 2 mới cho chạy video
     if (playClick === 2) {
-
-      // tăng view đúng 1 lần
       if (!viewed) {
         viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1")
-          .catch(() => {});
+        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
       }
-
       iframe.src = video.embed;
       overlay.style.display = "none";
-      wrapper.style.backgroundImage = "none";
     }
   };
 
@@ -83,7 +82,9 @@ function initWatch() {
     downloadBtn.style.display = "none";
   }
 
-  // ===== VIDEO KHÁC =====
+  // RELATED VIDEOS
+  relatedGrid.innerHTML = "";
+
   videos.filter(v => v.id !== id).forEach(v => {
     const card = document.createElement("div");
     card.className = "card";
@@ -94,11 +95,11 @@ function initWatch() {
         <span class="duration">${v.duration}</span>
       </div>
       <h3>${v.title}</h3>
-      <div class="related-views" id="related-view-${v.id}"> 0 view</div>
+      <div class="related-views" id="related-view-${v.id}">👁 0 view</div>
     `;
 
     card.onclick = () => location.href = `watch.html?id=${v.id}`;
-    related.appendChild(card);
+    relatedGrid.appendChild(card);
 
     fetch(WORKER_URL + "/view?id=" + v.id)
       .then(r => r.json())
