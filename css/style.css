@@ -311,3 +311,61 @@ body {
   font-size: 48px;
   cursor: pointer;
 }
+/* =========================
+   CUSTOM PLAY BUTTON (WATCH)
+   ========================= */
+
+/* overlay đã có */
+.player-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* nút tròn cam */
+.play-btn {
+  width: 96px;
+  height: 96px;
+  background: rgba(255, 120, 80, 0.9);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+/* tam giác trắng */
+.play-btn::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-40%, -50%);
+  width: 0;
+  height: 0;
+  border-left: 26px solid #fff;
+  border-top: 16px solid transparent;
+  border-bottom: 16px solid transparent;
+}
+
+/* hover */
+.player-overlay:hover .play-btn {
+  transform: scale(1.08);
+  background: rgba(255, 140, 100, 0.95);
+}
+
+/* mobile nhỏ hơn chút */
+@media (max-width: 480px) {
+  .play-btn {
+    width: 72px;
+    height: 72px;
+  }
+
+  .play-btn::before {
+    border-left: 20px solid #fff;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+  }
+}
