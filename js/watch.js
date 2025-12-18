@@ -18,19 +18,18 @@ const containerEl = document.getElementById("watch-container");
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 let videos = [];
 
-/* ===== SHOW IOS FULLSCREEN BUTTON EARLY ===== */
-if (iosBtn && isIOS) {
-  iosBtn.style.display = "flex";
-}
-
-/* ===== FORMAT VIEW ===== */
+/* ======================
+   FORMAT VIEW
+====================== */
 function formatView(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+  if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
-/* ===== LOAD VIDEOS ===== */
+/* ======================
+   LOAD VIDEO LIST
+====================== */
 fetch(WORKER_URL + "/videos")
   .then(r => r.json())
   .then(data => {
@@ -39,7 +38,9 @@ fetch(WORKER_URL + "/videos")
   })
   .catch(() => showContent());
 
-/* ===== INIT ===== */
+/* ======================
+   INIT WATCH PAGE
+====================== */
 function initWatch() {
   const video = videos.find(v => v.id === id);
   if (!video) {
@@ -48,19 +49,31 @@ function initWatch() {
     return;
   }
 
+  /* TITLE & META */
   titleEl.textContent = video.title;
-  durationEl.textContent = "⏱ " + (video.duration || "");
+  durationEl.textContent = video.duration ? "⏱ " + video.duration : "";
 
+  /* VIEW */
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
-    .then(d => viewsEl.textContent = formatView(d.views) + " view");
+    .then(d => {
+      viewsEl.textContent = formatView(d.views) + " view";
+    });
 
-  player.insertAdjacentHTML("beforeend", `
-    <div class="player-overlay" id="playerOverlay" style="background-image:url('${video.thumb}')">
+  /* PLAYER */
+  player.innerHTML = `
+    <div class="player-overlay" id="playerOverlay"
+      style="background-image:url('${video.thumb}')">
       <div class="play-btn"></div>
     </div>
-    <iframe class="player-iframe" src="" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
-  `);
+    <iframe
+      class="player-iframe"
+      src=""
+      allowfullscreen
+      webkitallowfullscreen
+      mozallowfullscreen
+    ></iframe>
+  `;
 
   const overlay = document.getElementById("playerOverlay");
   const iframe = player.querySelector("iframe");
@@ -68,10 +81,10 @@ function initWatch() {
   let click = 0;
   let viewed = false;
 
-  /* iOS fullscreen click */
+  /* iOS FULLSCREEN BUTTON (BELOW TITLE) */
   if (iosBtn && isIOS) {
-    iosBtn.onclick = (e) => {
-      e.stopPropagation();
+    iosBtn.style.display = "inline-block";
+    iosBtn.onclick = () => {
       if (!viewed) {
         viewed = true;
         fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
@@ -80,10 +93,11 @@ function initWatch() {
     };
   }
 
-  /* Play overlay */
+  /* PLAY OVERLAY */
   overlay.onclick = () => {
     click++;
     window.open(AFF_LINK, "_blank");
+
     if (click === 2) {
       if (!viewed) {
         viewed = true;
@@ -94,17 +108,19 @@ function initWatch() {
     }
   };
 
+  /* DOWNLOAD */
   if (video.download) {
     downloadBtn.href = video.download;
   } else {
     downloadBtn.style.display = "none";
   }
 
+  /* RELATED VIDEOS */
   relatedGrid.innerHTML = "";
   videos.filter(v => v.id !== id).forEach(v => {
-    const c = document.createElement("div");
-    c.className = "card";
-    c.innerHTML = `
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
       <div class="thumb-wrap">
         <img class="thumb" src="${v.thumb}">
         <span class="duration">${v.duration || ""}</span>
@@ -112,8 +128,8 @@ function initWatch() {
       <h3>${v.title}</h3>
       <div class="related-views" id="rv-${v.id}">0 view</div>
     `;
-    c.onclick = () => location.href = `watch.html?id=${v.id}`;
-    relatedGrid.appendChild(c);
+    card.onclick = () => location.href = `watch.html?id=${v.id}`;
+    relatedGrid.appendChild(card);
 
     fetch(WORKER_URL + "/view?id=" + v.id)
       .then(r => r.json())
@@ -126,7 +142,9 @@ function initWatch() {
   showContent();
 }
 
-/* ===== SHOW CONTENT ===== */
+/* ======================
+   SHOW CONTENT
+====================== */
 function showContent() {
   if (loadingEl) loadingEl.style.display = "none";
   if (containerEl) containerEl.classList.remove("hidden");
