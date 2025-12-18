@@ -282,3 +282,32 @@ body {
   color: #888;
   padding: 15px 0;
 }
+/* =========================
+   FIX THUMB VIDEO CHÍNH (WATCH)
+   ========================= */
+
+/* khung player */
+.player-wrapper {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+/* overlay thumb trước khi play */
+.player-overlay {
+  position: absolute;
+  inset: 0;
+
+  /* 🔥 CĂN GIỮA + PHỦ KÍN */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #fff;
+  font-size: 48px;
+  cursor: pointer;
+}
