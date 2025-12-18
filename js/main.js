@@ -2,7 +2,7 @@ const grid = document.getElementById("video-grid");
 const pagination = document.getElementById("pagination");
 const searchInput = document.getElementById("search");
 
-const perPage = 20;
+let perPage = 4; // mặc định mobile
 let currentPage = 1;
 let isLoading = false;
 
@@ -13,6 +13,20 @@ let videos = [];
 let filtered = [];
 
 const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
+
+/* =========================
+   CALC PER PAGE (ROWS)
+   ========================= */
+function calcPerPage() {
+  // PC: 4 cột × 4 hàng = 16
+  if (window.innerWidth >= 768) {
+    perPage = 16;
+  } 
+  // Mobile: 2 cột × 2 hàng = 4
+  else {
+    perPage = 4;
+  }
+}
 
 /* =========================
    GET PAGE FROM URL
@@ -36,6 +50,7 @@ fetch(WORKER_URL + "/videos")
   .then(data => {
     videos = data;
     filtered = [...videos];
+    calcPerPage();
     render();
   });
 
@@ -99,7 +114,7 @@ function renderContent(){
     `;
 
     card.onclick = () => {
-      location.href = `watch.html?id=${v.id}`;
+      location.href = \`watch.html?id=\${v.id}\`;
     };
 
     grid.appendChild(card);
@@ -137,7 +152,6 @@ function renderPagination(total){
 
       currentPage = i;
 
-      // update URL without reload
       const url = new URL(window.location);
       url.searchParams.set("page", i);
       window.history.pushState({}, "", url);
@@ -184,3 +198,16 @@ document.getElementById("filterTime").onchange = e => {
   currentPage = 1;
   render();
 };
+
+/* =========================
+   HANDLE RESIZE
+   ========================= */
+window.addEventListener("resize", () => {
+  const old = perPage;
+  calcPerPage();
+
+  if (old !== perPage) {
+    currentPage = 1;
+    render();
+  }
+});
