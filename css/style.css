@@ -377,3 +377,48 @@ body {
     font-size: 12px;
   }
 }
+/* =========================
+   PC: THU NHỎ CARD + THUMBNAIL
+   ========================= */
+@media (min-width: 768px) {
+
+  /* grid giữ 4 cột như cũ */
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  /* card gọn lại */
+  .card {
+    padding: 6px;
+  }
+
+  /* 🔥 THU NHỎ THUMBNAIL (QUAN TRỌNG NHẤT) */
+  .thumb-wrap {
+    aspect-ratio: 16 / 10; /* thấp hơn 16/9 */
+  }
+
+  .thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* tiêu đề nhỏ lại */
+  .card h3 {
+    font-size: 13px;
+    line-height: 1.25;
+    margin: 4px 0 3px;
+  }
+
+  /* view gọn */
+  .card-views {
+    font-size: 12px;
+  }
+
+  /* duration gọn */
+  .duration {
+    font-size: 11px;
+    padding: 2px 4px;
+  }
+}
