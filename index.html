@@ -4,55 +4,48 @@
   <meta charset="UTF-8">
   <title>Traingon.top</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- TOP PANEL: LOGO + SEARCH + FILTER -->
-  <div class="top-panel">
-
-    <header class="header">
+  <!-- ===== HEADER GLASS ===== -->
+  <div class="top-panel glass">
+    <div class="header-row">
       <a href="index.html" class="logo-link">
         <div class="logo">TRAINGON</div>
       </a>
-    </header>
-
-    <input
-      type="text"
-      id="search"
-      class="search"
-      placeholder="Tìm kiếm video..."
-    >
-
-    <div class="filter-row">
-      <span class="filter-label">Filter</span>
-
-      <select id="filterView" class="filter-select">
-        <option value="view_desc">Views: Highest</option>
-        <option value="view_asc">Views: Lowest</option>
-      </select>
-
-      <select id="filterTime" class="filter-select">
-        <option value="all">Time: All</option>
-        <option value="7">Last 7 days</option>
-        <option value="30">Last 30 days</option>
-      </select>
     </div>
 
+    <div class="search-filter-box">
+      <input
+        type="text"
+        id="search"
+        class="search"
+        placeholder="Tìm kiếm video..."
+      >
+
+      <div class="filter-row">
+        <select id="filterView" class="filter-select">
+          <option value="view_desc">🔥 Nhiều view</option>
+          <option value="view_asc">⬇ Ít view</option>
+        </select>
+
+        <select id="filterTime" class="filter-select">
+          <option value="all">⏱ Tất cả</option>
+          <option value="7">7 ngày</option>
+          <option value="30">30 ngày</option>
+        </select>
+      </div>
+    </div>
   </div>
-  <!-- END TOP PANEL -->
 
-  <!-- MAIN CONTENT -->
+  <!-- ===== MAIN ===== -->
   <main class="container">
-
     <div id="video-grid" class="grid"></div>
-
     <div id="pagination" class="pagination"></div>
-
   </main>
 
-  <!-- FOOTER -->
+  <!-- ===== FOOTER ===== -->
   <footer class="footer">
     © 2025 Traingon.top - All rights reserved.
   </footer>
