@@ -18,18 +18,14 @@ const containerEl = document.getElementById("watch-container");
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 let videos = [];
 
-/* ======================
-   FORMAT VIEW
-====================== */
+/* ===== FORMAT VIEW ===== */
 function formatView(n) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
   if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
-/* ======================
-   LOAD VIDEO LIST
-====================== */
+/* ===== LOAD VIDEO LIST ===== */
 fetch(WORKER_URL + "/videos")
   .then(r => r.json())
   .then(data => {
@@ -38,9 +34,7 @@ fetch(WORKER_URL + "/videos")
   })
   .catch(() => showContent());
 
-/* ======================
-   INIT WATCH PAGE
-====================== */
+/* ===== INIT WATCH ===== */
 function initWatch() {
   const video = videos.find(v => v.id === id);
   if (!video) {
@@ -49,7 +43,6 @@ function initWatch() {
     return;
   }
 
-  /* TITLE & META */
   titleEl.textContent = video.title;
   durationEl.textContent = video.duration ? "⏱ " + video.duration : "";
 
@@ -81,16 +74,22 @@ function initWatch() {
   let click = 0;
   let viewed = false;
 
-  /* iOS FULLSCREEN BUTTON (BELOW TITLE) */
-  if (iosBtn && isIOS) {
-    iosBtn.style.display = "inline-block";
-    iosBtn.onclick = () => {
-      if (!viewed) {
-        viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-      }
-      window.open(video.embed, "_blank");
-    };
+  /* ===== iOS FULLSCREEN BUTTON ===== */
+  if (iosBtn) {
+    if (isIOS) {
+      iosBtn.style.display = "inline-block";
+      iosBtn.textContent = "⤢ Xem toàn màn hình";
+      iosBtn.onclick = () => {
+        if (!viewed) {
+          viewed = true;
+          fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+        }
+        window.open(video.embed, "_blank");
+      };
+    } else {
+      // Android / PC: ẩn hẳn
+      iosBtn.style.display = "none";
+    }
   }
 
   /* PLAY OVERLAY */
@@ -115,7 +114,7 @@ function initWatch() {
     downloadBtn.style.display = "none";
   }
 
-  /* RELATED VIDEOS */
+  /* RELATED */
   relatedGrid.innerHTML = "";
   videos.filter(v => v.id !== id).forEach(v => {
     const card = document.createElement("div");
@@ -142,9 +141,7 @@ function initWatch() {
   showContent();
 }
 
-/* ======================
-   SHOW CONTENT
-====================== */
+/* ===== SHOW CONTENT ===== */
 function showContent() {
   if (loadingEl) loadingEl.style.display = "none";
   if (containerEl) containerEl.classList.remove("hidden");
