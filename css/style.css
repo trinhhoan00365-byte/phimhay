@@ -420,9 +420,11 @@ body {
   border-bottom: 16px solid transparent;
 }
 /* iOS fullscreen button (below title – safe click) */
+/* =========================
+   iOS FULLSCREEN BUTTON (FINAL)
+   ========================= */
 .ios-fullscreen-btn {
   margin: 10px 0 6px;
-
   padding: 8px 14px;
   border-radius: 12px;
 
@@ -432,7 +434,7 @@ body {
 
   font-size: 13px;
   font-weight: 600;
-
-  display: inline-block; /* ✅ LUÔN HIỆN */
   cursor: pointer;
+
+  display: none; /* ❗ CSS LUÔN ẨN – JS SẼ BẬT */
 }
