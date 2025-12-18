@@ -419,3 +419,24 @@ body {
   border-top: 16px solid transparent;
   border-bottom: 16px solid transparent;
 }
+/* iOS fullscreen button (small & clean) */
+.ios-fullscreen-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 6;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+
+  background: rgba(0,0,0,.55);
+  color: #fff;
+  border: 0;
+  font-size: 14px;
+  line-height: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
