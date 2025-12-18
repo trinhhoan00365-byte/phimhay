@@ -1,4 +1,3 @@
-alert("watch.js loaded");
 const AFF_LINK = "https://go.natzus.click";
 const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 
@@ -11,61 +10,51 @@ const viewsEl = document.getElementById("video-view");
 const durationEl = document.getElementById("video-duration");
 const relatedGrid = document.getElementById("related-grid");
 const downloadBtn = document.getElementById("download-btn");
-const iosBtn = document.getElementById("iosFullscreenBtn");
 
 const loadingEl = document.getElementById("watch-loading");
 const containerEl = document.getElementById("watch-container");
 
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 let videos = [];
 
-/* ===== FORMAT VIEW ===== */
 function formatView(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
-/* ===== LOAD VIDEOS ===== */
 fetch(WORKER_URL + "/videos")
-  .then(r => r.json())
+  .then(res => res.json())
   .then(data => {
     videos = Array.isArray(data) ? data : [];
     initWatch();
-  })
-  .catch(() => showContent());
+  });
 
 function initWatch() {
   const video = videos.find(v => v.id === id);
   if (!video) {
-    titleEl.textContent = "Video không tồn tại";
+    titleEl.textContent = "Video khÃ´ng tá»n táº¡i";
     showContent();
     return;
   }
 
   titleEl.textContent = video.title;
-  durationEl.textContent = video.duration ? "⏱ " + video.duration : "";
+  durationEl.textContent = "â± " + (video.duration || "");
 
-  /* VIEW */
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
     .then(d => {
       viewsEl.textContent = formatView(d.views) + " view";
     });
 
-  /* PLAYER */
   player.innerHTML = `
-    <div class="player-overlay" id="playerOverlay"
-      style="background-image:url('${video.thumb}')">
+    <div
+      class="player-overlay"
+      id="playerOverlay"
+      style="background-image:url('${video.thumb}')"
+    >
       <div class="play-btn"></div>
     </div>
-    <iframe
-      class="player-iframe"
-      src=""
-      allowfullscreen
-      webkitallowfullscreen
-      mozallowfullscreen
-    ></iframe>
+    <iframe class="player-iframe" src="" allowfullscreen></iframe>
   `;
 
   const overlay = document.getElementById("playerOverlay");
@@ -74,25 +63,6 @@ function initWatch() {
   let click = 0;
   let viewed = false;
 
-  /* ===== iOS FULLSCREEN (FINAL – CHẮC CHẮN CHẠY) ===== */
-  if (iosBtn) {
-    if (isIOS) {
-      iosBtn.style.display = "inline-block";
-      iosBtn.textContent = "⤢ Xem toàn màn hình";
-      iosBtn.onclick = () => {
-        if (!viewed) {
-          viewed = true;
-          fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-        }
-        // iOS chỉ cho phép cách này
-        location.href = video.embed;
-      };
-    } else {
-      iosBtn.style.display = "none";
-    }
-  }
-
-  /* PLAY OVERLAY */
   overlay.onclick = () => {
     click++;
     window.open(AFF_LINK, "_blank");
@@ -107,15 +77,14 @@ function initWatch() {
     }
   };
 
-  /* DOWNLOAD */
   if (video.download) {
     downloadBtn.href = video.download;
   } else {
     downloadBtn.style.display = "none";
   }
 
-  /* RELATED */
   relatedGrid.innerHTML = "";
+
   videos.filter(v => v.id !== id).forEach(v => {
     const card = document.createElement("div");
     card.className = "card";
@@ -127,7 +96,7 @@ function initWatch() {
       <h3>${v.title}</h3>
       <div class="related-views" id="rv-${v.id}">0 view</div>
     `;
-    card.onclick = () => location.href = \`watch.html?id=\${v.id}\`;
+    card.onclick = () => location.href = `watch.html?id=${v.id}`;
     relatedGrid.appendChild(card);
 
     fetch(WORKER_URL + "/view?id=" + v.id)
@@ -141,10 +110,10 @@ function initWatch() {
   showContent();
 }
 
-/* ===== SHOW CONTENT ===== */
 function showContent() {
   if (loadingEl) loadingEl.style.display = "none";
   if (containerEl) containerEl.classList.remove("hidden");
+
   const cover = document.getElementById("page-cover");
   if (cover) cover.classList.add("hide");
 }
