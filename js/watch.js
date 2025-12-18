@@ -15,34 +15,33 @@ const iosBtn = document.getElementById("iosFullscreenBtn");
 const loadingEl = document.getElementById("watch-loading");
 const containerEl = document.getElementById("watch-container");
 
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 let videos = [];
 
-/* =========================
-   FORMAT VIEW
-   ========================= */
+/* ===== SHOW IOS FULLSCREEN BUTTON EARLY ===== */
+if (iosBtn && isIOS) {
+  iosBtn.style.display = "flex";
+}
+
+/* ===== FORMAT VIEW ===== */
 function formatView(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
-/* =========================
-   LOAD VIDEO LIST
-   ========================= */
+/* ===== LOAD VIDEOS ===== */
 fetch(WORKER_URL + "/videos")
-  .then(res => res.json())
+  .then(r => r.json())
   .then(data => {
     videos = Array.isArray(data) ? data : [];
     initWatch();
   })
   .catch(() => showContent());
 
-/* =========================
-   INIT WATCH
-   ========================= */
+/* ===== INIT ===== */
 function initWatch() {
   const video = videos.find(v => v.id === id);
-
   if (!video) {
     titleEl.textContent = "Video không tồn tại";
     showContent();
@@ -52,29 +51,15 @@ function initWatch() {
   titleEl.textContent = video.title;
   durationEl.textContent = "⏱ " + (video.duration || "");
 
-  /* VIEW */
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
-    .then(d => {
-      viewsEl.textContent = formatView(d.views) + " view";
-    });
+    .then(d => viewsEl.textContent = formatView(d.views) + " view");
 
-  /* PLAYER */
   player.insertAdjacentHTML("beforeend", `
-    <div
-      class="player-overlay"
-      id="playerOverlay"
-      style="background-image:url('${video.thumb}')"
-    >
+    <div class="player-overlay" id="playerOverlay" style="background-image:url('${video.thumb}')">
       <div class="play-btn"></div>
     </div>
-    <iframe
-      class="player-iframe"
-      src=""
-      allowfullscreen
-      webkitallowfullscreen
-      mozallowfullscreen
-    ></iframe>
+    <iframe class="player-iframe" src="" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
   `);
 
   const overlay = document.getElementById("playerOverlay");
@@ -82,34 +67,23 @@ function initWatch() {
 
   let click = 0;
   let viewed = false;
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  /* =========================
-     iOS FULLSCREEN BUTTON
-     ========================= */
-  if (iosBtn) {
-    if (isIOS) {
-      iosBtn.style.display = "flex"; // 🔥 BẮT BUỘC
-      iosBtn.onclick = (e) => {
-        e.stopPropagation();
-        if (!viewed) {
-          viewed = true;
-          fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-        }
-        window.open(video.embed, "_blank");
-      };
-    } else {
-      iosBtn.style.display = "none";
-    }
+  /* iOS fullscreen click */
+  if (iosBtn && isIOS) {
+    iosBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (!viewed) {
+        viewed = true;
+        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+      }
+      window.open(video.embed, "_blank");
+    };
   }
 
-  /* =========================
-     PLAY OVERLAY
-     ========================= */
+  /* Play overlay */
   overlay.onclick = () => {
     click++;
     window.open(AFF_LINK, "_blank");
-
     if (click === 2) {
       if (!viewed) {
         viewed = true;
@@ -120,19 +94,17 @@ function initWatch() {
     }
   };
 
-  /* DOWNLOAD */
   if (video.download) {
     downloadBtn.href = video.download;
   } else {
     downloadBtn.style.display = "none";
   }
 
-  /* RELATED */
   relatedGrid.innerHTML = "";
   videos.filter(v => v.id !== id).forEach(v => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
+    const c = document.createElement("div");
+    c.className = "card";
+    c.innerHTML = `
       <div class="thumb-wrap">
         <img class="thumb" src="${v.thumb}">
         <span class="duration">${v.duration || ""}</span>
@@ -140,8 +112,8 @@ function initWatch() {
       <h3>${v.title}</h3>
       <div class="related-views" id="rv-${v.id}">0 view</div>
     `;
-    card.onclick = () => location.href = `watch.html?id=${v.id}`;
-    relatedGrid.appendChild(card);
+    c.onclick = () => location.href = `watch.html?id=${v.id}`;
+    relatedGrid.appendChild(c);
 
     fetch(WORKER_URL + "/view?id=" + v.id)
       .then(r => r.json())
@@ -154,21 +126,10 @@ function initWatch() {
   showContent();
 }
 
-/* =========================
-   SHOW CONTENT
-   ========================= */
+/* ===== SHOW CONTENT ===== */
 function showContent() {
   if (loadingEl) loadingEl.style.display = "none";
   if (containerEl) containerEl.classList.remove("hidden");
-
   const cover = document.getElementById("page-cover");
   if (cover) cover.classList.add("hide");
 }
-
-/* =========================
-   SAFETY FALLBACK (ANTI KẸT)
-   ========================= */
-window.addEventListener("load", () => {
-  const cover = document.getElementById("page-cover");
-  if (cover) cover.classList.add("hide");
-});
