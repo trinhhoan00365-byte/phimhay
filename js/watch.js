@@ -73,7 +73,7 @@ function initWatch() {
   >
     <div class="play-btn"></div>
   </div>
-  <iframe src="" allowfullscreen></iframe>
+  <iframe class="player-iframe" src="" allowfullscreen></iframe>
 `;
 
   const iframe = player.querySelector("iframe");
