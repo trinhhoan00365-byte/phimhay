@@ -62,19 +62,19 @@ function initWatch() {
 
   /* PLAYER (2 CLICK AFF) */
   player.innerHTML = `
-    <div
-      class="player-overlay"
-      id="playerOverlay"
-      style="
-        background-image: url('${video.thumb}');
-        background-size: cover;
-        background-position: center;
-      "
-    >
-      ▶
-    </div>
-    <iframe src="" allowfullscreen></iframe>
-  `;
+  <div
+    class="player-overlay"
+    id="playerOverlay"
+    style="
+      background-image: url('${video.thumb}');
+      background-size: cover;
+      background-position: center;
+    "
+  >
+    <div class="play-btn"></div>
+  </div>
+  <iframe src="" allowfullscreen></iframe>
+`;
 
   const iframe = player.querySelector("iframe");
   const overlay = document.getElementById("playerOverlay");
