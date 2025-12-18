@@ -1,9 +1,7 @@
 /* =========================
    RESET & BASE
    ========================= */
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
@@ -12,7 +10,7 @@ html, body {
 }
 
 body {
-  background: #0b0b14;
+  background: radial-gradient(1200px 600px at top, #141024, #0b0b14);
   color: #fff;
   font-family: system-ui, -apple-system, BlinkMacSystemFont,
                "Segoe UI", Roboto, Arial, sans-serif;
@@ -21,21 +19,31 @@ body {
 }
 
 /* =========================
-   TOP PANEL
+   GLASS HEADER
    ========================= */
-.top-panel {
-  background: #1e1630;
-  border-bottom: 1px solid #3a2a55;
-  padding: 12px 10px 14px;
+.top-panel.glass {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(14px);
+  background: linear-gradient(
+    180deg,
+    rgba(40,30,70,0.85),
+    rgba(20,15,40,0.75)
+  );
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 12px;
 }
 
 /* =========================
-   HEADER / LOGO
+   LOGO
    ========================= */
-.header {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #a78bfa;
+  text-shadow: 0 0 12px rgba(167,139,250,0.35);
 }
 
 .logo-link {
@@ -44,38 +52,45 @@ body {
 }
 
 /* =========================
-   SEARCH
+   SEARCH + FILTER BOX
    ========================= */
+.search-filter-box {
+  margin-top: 10px;
+  background: rgba(15,12,30,0.8);
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid rgba(167,139,250,0.25);
+}
+
+/* search */
 .search {
   width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #3a2a55;
-  background: #141423;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(167,139,250,0.25);
+  background: #0e0b1f;
   color: #fff;
   outline: none;
   margin-bottom: 10px;
 }
 
-/* =========================
-   FILTER
-   ========================= */
+.search::placeholder {
+  color: #aaa;
+}
+
+/* filter */
 .filter-row {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
-  border: 1px solid #3a2a55;
-  border-radius: 12px;
-  padding: 8px;
-  background: #141423;
 }
 
 .filter-select {
+  flex: 1;
   background: #0b0b14;
   color: #fff;
-  border: 1px solid #3a2a55;
-  border-radius: 10px;
-  padding: 6px 12px;
+  border: 1px solid rgba(167,139,250,0.25);
+  border-radius: 12px;
+  padding: 8px 12px;
   font-size: 13px;
 }
 
@@ -83,10 +98,8 @@ body {
    MAIN
    ========================= */
 .container {
-  padding: 10px;
+  padding: 14px;
   flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 /* =========================
@@ -95,23 +108,29 @@ body {
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 14px;
 }
 
 /* =========================
-   CARD (INDEX + RELATED)
+   CARD VIDEO
    ========================= */
 .card {
-  background: #141423;
-  border-radius: 12px;
+  background: linear-gradient(180deg, #1a1633, #0f0c1f);
+  border-radius: 16px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-/* thumbnail */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(0,0,0,.55);
+}
+
+/* thumb */
 .thumb-wrap {
   position: relative;
   aspect-ratio: 16 / 9;
-  background: #000;
   overflow: hidden;
 }
 
@@ -119,36 +138,38 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  transition: transform .25s ease;
+}
+
+.card:hover .thumb {
+  transform: scale(1.06);
 }
 
 /* duration */
 .duration {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
-  background: rgba(0,0,0,0.75);
-  color: #fff;
+  right: 8px;
+  bottom: 8px;
+  background: rgba(0,0,0,.7);
+  padding: 3px 8px;
   font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 /* title */
 .card h3 {
   font-size: 13px;
   line-height: 1.3;
-  margin: 6px 8px 4px;
+  margin: 8px 10px 4px;
   height: 34px;
   overflow: hidden;
 }
 
 /* views */
-.card-views,
-.related-views {
+.card-views {
   font-size: 12px;
   color: #f5c542;
-  margin: 0 8px 8px;
+  margin: 0 10px 10px;
 }
 
 /* =========================
@@ -157,120 +178,21 @@ body {
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 6px;
-  margin-top: auto;
-  padding: 10px 0;
+  gap: 8px;
+  margin-top: 16px;
 }
 
 .pagination button {
-  background: #1e1e2f;
-  color: #ccc;
+  background: rgba(167,139,250,0.15);
+  color: #ddd;
   border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 10px;
 }
 
 .pagination button.active {
-  background: #CC99FF;
+  background: #a78bfa;
   color: #000;
-}
-
-/* =========================
-   WATCH PAGE
-   ========================= */
-.player-wrapper {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.player-wrapper iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.watch-title {
-  font-size: 16px;
-  margin: 10px 0 6px;
-}
-
-.watch-meta {
-  font-size: 13px;
-  color: #ccc;
-  margin-bottom: 10px;
-}
-
-/* download */
-.download-btn {
-  display: inline-flex;
-  background: #CC99FF;
-  color: #000;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  text-decoration: none;
-  margin-bottom: 16px;
-}
-
-/* =========================
-   LOADING / SKELETON
-   ========================= */
-.hidden { display: none; }
-
-.watch-loading {
-  padding: 16px;
-}
-
-.video-skeleton {
-  aspect-ratio: 16 / 9;
-  background: #222;
-  border-radius: 8px;
-  margin-bottom: 12px;
-}
-
-.text-skeleton {
-  width: 60%;
-  height: 18px;
-  background: #222;
-  margin-bottom: 16px;
-}
-
-.list-skeleton {
-  height: 220px;
-  background: #1e1e1e;
-  border-radius: 8px;
-}
-
-/* =========================
-   PC OPTIMIZE
-   ========================= */
-@media (min-width: 768px) {
-
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-
-  /* 🔥 PC thumbnail thấp hơn */
-  .thumb-wrap {
-    aspect-ratio: 16 / 10;
-  }
-
-  .card h3 {
-    font-size: 13px;
-    line-height: 1.25;
-    margin: 4px 6px;
-  }
-
-  .card-views {
-    font-size: 12px;
-    margin-bottom: 6px;
-  }
 }
 
 /* =========================
@@ -279,93 +201,19 @@ body {
 .footer {
   text-align: center;
   font-size: 12px;
-  color: #888;
-  padding: 15px 0;
+  color: #aaa;
+  padding: 16px 0;
 }
+
 /* =========================
-   FIX THUMB VIDEO CHÍNH (WATCH)
+   PC OPTIMIZE
    ========================= */
-
-/* khung player */
-.player-wrapper {
-  position: relative;
-  overflow: hidden;
-  background: #000;
-}
-
-/* overlay thumb trước khi play */
-.player-overlay {
-  position: absolute;
-  inset: 0;
-
-  /* 🔥 CĂN GIỮA + PHỦ KÍN */
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #fff;
-  font-size: 48px;
-  cursor: pointer;
-}
-/* =========================
-   CUSTOM PLAY BUTTON (WATCH)
-   ========================= */
-
-/* overlay đã có */
-.player-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-/* nút tròn cam */
-.play-btn {
-  width: 96px;
-  height: 96px;
-  background: rgba(255, 120, 80, 0.9);
-  border-radius: 50%;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-/* tam giác trắng */
-.play-btn::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-40%, -50%);
-  width: 0;
-  height: 0;
-  border-left: 26px solid #fff;
-  border-top: 16px solid transparent;
-  border-bottom: 16px solid transparent;
-}
-
-/* hover */
-.player-overlay:hover .play-btn {
-  transform: scale(1.08);
-  background: rgba(255, 140, 100, 0.95);
-}
-
-/* mobile nhỏ hơn chút */
-@media (max-width: 480px) {
-  .play-btn {
-    width: 72px;
-    height: 72px;
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 
-  .play-btn::before {
-    border-left: 20px solid #fff;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
+  .thumb-wrap {
+    aspect-ratio: 16 / 10;
   }
 }
