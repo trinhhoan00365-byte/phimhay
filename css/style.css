@@ -329,8 +329,8 @@ body {
 
 /* nút play tròn */
 .play-btn {
-  width: 96px;
-  height: 96px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: rgba(255,120,80,0.92);
   box-shadow: 0 12px 35px rgba(0,0,0,.45);
