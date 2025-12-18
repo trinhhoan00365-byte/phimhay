@@ -74,7 +74,7 @@ function initWatch() {
   let click = 0;
   let viewed = false;
 
-  /* ===== iOS FULLSCREEN BUTTON ===== */
+  /* ===== iOS FULLSCREEN BUTTON (FIXED) ===== */
   if (iosBtn) {
     if (isIOS) {
       iosBtn.style.display = "inline-block";
@@ -84,10 +84,10 @@ function initWatch() {
           viewed = true;
           fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
         }
-        window.open(video.embed, "_blank");
+        // ✅ CÁCH DUY NHẤT IOS CHO PHÉP
+        location.href = video.embed;
       };
     } else {
-      // Android / PC: ẩn hẳn
       iosBtn.style.display = "none";
     }
   }
