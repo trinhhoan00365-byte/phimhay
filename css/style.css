@@ -403,8 +403,8 @@ body {
 
 /* ===== PLAY BUTTON ===== */
 .play-btn {
-  width: 96px;
-  height: 96px;
+  width: 64px;
+  height: 64px;
   background: rgba(255,120,80,.92);
   border-radius: 50%;
   position: relative;
