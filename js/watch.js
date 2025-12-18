@@ -25,7 +25,7 @@ function formatView(n) {
   return n;
 }
 
-/* ===== LOAD VIDEO LIST ===== */
+/* ===== LOAD VIDEOS ===== */
 fetch(WORKER_URL + "/videos")
   .then(r => r.json())
   .then(data => {
@@ -34,7 +34,6 @@ fetch(WORKER_URL + "/videos")
   })
   .catch(() => showContent());
 
-/* ===== INIT WATCH ===== */
 function initWatch() {
   const video = videos.find(v => v.id === id);
   if (!video) {
@@ -74,7 +73,7 @@ function initWatch() {
   let click = 0;
   let viewed = false;
 
-  /* ===== iOS FULLSCREEN BUTTON (FIXED) ===== */
+  /* ===== iOS FULLSCREEN (FINAL – CHẮC CHẮN CHẠY) ===== */
   if (iosBtn) {
     if (isIOS) {
       iosBtn.style.display = "inline-block";
@@ -84,7 +83,7 @@ function initWatch() {
           viewed = true;
           fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
         }
-        // ✅ CÁCH DUY NHẤT IOS CHO PHÉP
+        // iOS chỉ cho phép cách này
         location.href = video.embed;
       };
     } else {
@@ -127,7 +126,7 @@ function initWatch() {
       <h3>${v.title}</h3>
       <div class="related-views" id="rv-${v.id}">0 view</div>
     `;
-    card.onclick = () => location.href = `watch.html?id=${v.id}`;
+    card.onclick = () => location.href = \`watch.html?id=\${v.id}\`;
     relatedGrid.appendChild(card);
 
     fetch(WORKER_URL + "/view?id=" + v.id)
