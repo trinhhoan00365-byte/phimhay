@@ -217,3 +217,85 @@ body {
     aspect-ratio: 16 / 10;
   }
 }
+/* =========================
+   WATCH PAGE – UI V2
+   ========================= */
+
+/* panel bao video */
+.watch-panel {
+  background: linear-gradient(180deg, #1a1633, #0f0c1f);
+  border-radius: 20px;
+  padding: 14px;
+  margin-bottom: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.55);
+}
+
+/* player */
+.player-wrapper {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+}
+
+/* info */
+.watch-info {
+  margin-top: 12px;
+}
+
+.watch-title {
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 8px 0;
+}
+
+.watch-meta {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+  color: #ccc;
+  margin-bottom: 12px;
+}
+
+/* download */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(90deg, #a78bfa, #c4b5fd);
+  color: #000;
+  padding: 8px 18px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* related */
+.related-panel {
+  margin-top: 10px;
+}
+
+.section-title {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+/* related card view color */
+.related-views {
+  font-size: 12px;
+  color: #f5c542;
+  margin: 0 10px 10px;
+}
+
+/* PC spacing */
+@media (min-width: 768px) {
+  .watch-panel {
+    padding: 18px;
+  }
+
+  .watch-title {
+    font-size: 18px;
+  }
+}
