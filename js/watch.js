@@ -10,6 +10,7 @@ const viewsEl = document.getElementById("video-view");
 const durationEl = document.getElementById("video-duration");
 const relatedGrid = document.getElementById("related-grid");
 const downloadBtn = document.getElementById("download-btn");
+const fullscreenBtn = document.getElementById("openFullscreenBtn");
 
 const loadingEl = document.getElementById("watch-loading");
 const containerEl = document.getElementById("watch-container");
@@ -64,18 +65,28 @@ function initWatch() {
   let viewed = false;
 
   overlay.onclick = () => {
-    click++;
-    window.open(AFF_LINK, "_blank");
+  click++;
+  window.open(AFF_LINK, "_blank");
 
-    if (click === 2) {
-      if (!viewed) {
-        viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-      }
-      iframe.src = video.embed;
-      overlay.style.display = "none";
+  if (click === 2) {
+    if (!viewed) {
+      viewed = true;
+      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
     }
-  };
+
+    iframe.src = video.embed;
+    overlay.style.display = "none";
+
+    // 👉 HIỆN NÚT FULLSCREEN SAU 2 CLICK
+    if (fullscreenBtn) {
+      fullscreenBtn.style.display = "inline-block";
+      fullscreenBtn.onclick = () => {
+        // iOS bắt buộc dùng cách này
+        location.href = video.embed;
+      };
+    }
+  }
+};
 
   if (video.download) {
     downloadBtn.href = video.download;
