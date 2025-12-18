@@ -105,7 +105,7 @@ function initWatch() {
         <span class="duration">${v.duration}</span>
       </div>
       <h3>${v.title}</h3>
-      <div class="related-views" id="related-view-${v.id}">👁 0 view</div>
+      <div class="related-views" id="related-view-${v.id}"> 0 view</div>
     `;
 
     card.onclick = () => location.href = `watch.html?id=${v.id}`;
