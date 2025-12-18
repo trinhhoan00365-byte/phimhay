@@ -9,7 +9,7 @@
 </head>
 <body>
 
-  <!-- TOP PANEL (GIỐNG TRANG CHÍNH) -->
+  <!-- TOP PANEL -->
   <div class="top-panel">
     <header class="header">
       <a href="index.html" class="logo-link">
@@ -17,10 +17,16 @@
       </a>
     </header>
   </div>
-  <!-- END TOP PANEL -->
 
-  <!-- MAIN CONTENT -->
-  <main class="container">
+  <!-- ===== LOADING ===== -->
+  <div id="watch-loading" class="watch-loading">
+    <div class="video-skeleton"></div>
+    <div class="text-skeleton"></div>
+    <div class="list-skeleton"></div>
+  </div>
+
+  <!-- ===== REAL CONTENT (ẨN BAN ĐẦU) ===== -->
+  <main class="container hidden" id="watch-container">
 
     <!-- VIDEO PLAYER -->
     <div class="player-wrapper" id="player"></div>
@@ -29,7 +35,7 @@
     <h1 class="watch-title" id="video-title"></h1>
 
     <div class="watch-meta">
-      <span id="video-view"> 0 view</span>
+      <span id="video-view">0 view</span>
       <span id="video-duration">⏱</span>
     </div>
 
@@ -50,7 +56,6 @@
 
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     © 2025 Traingon.top - All rights reserved.
   </footer>
