@@ -2,11 +2,7 @@ const grid = document.getElementById("video-grid");
 const pagination = document.getElementById("pagination");
 const searchInput = document.getElementById("search");
 
-if (!grid || !pagination || !searchInput) {
-  console.error("Missing required DOM elements");
-}
-
-let perPage = 20; // mobile: 2 cột × 2 hàng
+const perPage = 20;
 let currentPage = 1;
 let isLoading = false;
 
@@ -19,17 +15,6 @@ let filtered = [];
 const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 
 /* =========================
-   CALC PER PAGE
-   ========================= */
-function calcPerPage() {
-  if (window.innerWidth >= 768) {
-    perPage = 20; // PC: 4 cột × 4 hàng
-  } else {
-    perPage = 4; // mobile
-  }
-}
-
-/* =========================
    GET PAGE FROM URL
    ========================= */
 const urlParams = new URLSearchParams(window.location.search);
@@ -39,9 +24,9 @@ if (!isNaN(pageParam) && pageParam > 0) {
 }
 
 // FORMAT VIEW
-function formatView(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+function formatView(n){
+  if(n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  if(n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
@@ -49,32 +34,28 @@ function formatView(n) {
 fetch(WORKER_URL + "/videos")
   .then(r => r.json())
   .then(data => {
-    videos = Array.isArray(data) ? data : [];
+    videos = data;
     filtered = [...videos];
-    calcPerPage();
     render();
-  })
-  .catch(err => {
-    console.error("Load video failed", err);
   });
 
 // APPLY FILTER
-function applyFilter(list) {
+function applyFilter(list){
   let result = [...list];
 
-  if (filterView === "view_desc") {
+  if(filterView === "view_desc"){
     result.sort((a, b) => (b.views || 0) - (a.views || 0));
   }
-  if (filterView === "view_asc") {
+  if(filterView === "view_asc"){
     result.sort((a, b) => (a.views || 0) - (b.views || 0));
   }
 
   return result;
 }
 
-// MAIN RENDER
-function render() {
-  if (isLoading || !grid) return;
+// MAIN RENDER (WITH LOADING EFFECT)
+function render(){
+  if(isLoading) return;
   isLoading = true;
 
   grid.classList.add("fade-out");
@@ -82,7 +63,8 @@ function render() {
   setTimeout(() => {
     grid.innerHTML = "";
 
-    for (let i = 0; i < perPage; i++) {
+    // skeleton loading
+    for(let i = 0; i < perPage; i++){
       const sk = document.createElement("div");
       sk.className = "skeleton";
       grid.appendChild(sk);
@@ -95,8 +77,8 @@ function render() {
   }, 150);
 }
 
-// RENDER CONTENT
-function renderContent() {
+// RENDER REAL CONTENT
+function renderContent(){
   grid.innerHTML = "";
 
   const sorted = applyFilter(filtered);
@@ -126,29 +108,36 @@ function renderContent() {
       .then(r => r.json())
       .then(d => {
         const el = document.getElementById("view-" + v.id);
-        if (el) el.textContent = formatView(d.views) + " view";
-      });
+        if(el){
+          el.textContent = formatView(d.views) + " view";
+        }
+      })
+      .catch(() => {});
   });
 
   renderPagination(sorted.length);
   isLoading = false;
 }
 
-// PAGINATION
-function renderPagination(total) {
-  if (!pagination) return;
+// PAGINATION (UPDATE URL)
+function renderPagination(total){
   pagination.innerHTML = "";
-
   const pages = Math.ceil(total / perPage);
-  for (let i = 1; i <= pages; i++) {
+
+  for(let i = 1; i <= pages; i++){
     const btn = document.createElement("button");
     btn.textContent = i;
-    if (i === currentPage) btn.classList.add("active");
+
+    if(i === currentPage){
+      btn.classList.add("active");
+    }
 
     btn.onclick = () => {
-      if (isLoading || i === currentPage) return;
+      if(i === currentPage || isLoading) return;
+
       currentPage = i;
 
+      // update URL without reload
       const url = new URL(window.location);
       url.searchParams.set("page", i);
       window.history.pushState({}, "", url);
@@ -161,7 +150,9 @@ function renderPagination(total) {
   }
 }
 
-// BACK / FORWARD
+/* =========================
+   HANDLE BACK / FORWARD
+   ========================= */
 window.onpopstate = () => {
   const p = parseInt(new URLSearchParams(location.search).get("page"));
   currentPage = !isNaN(p) && p > 0 ? p : 1;
@@ -169,40 +160,27 @@ window.onpopstate = () => {
 };
 
 // SEARCH
-if (searchInput) {
-  searchInput.oninput = () => {
-    const key = searchInput.value.toLowerCase();
-    filtered = videos.filter(v => v.title.toLowerCase().includes(key));
-    currentPage = 1;
-    render();
-  };
-}
+searchInput.oninput = () => {
+  const key = searchInput.value.toLowerCase();
+  filtered = videos.filter(v => v.title.toLowerCase().includes(key));
+  currentPage = 1;
 
-// FILTER SAFE
-const filterViewEl = document.getElementById("filterView");
-if (filterViewEl) {
-  filterViewEl.onchange = e => {
-    filterView = e.target.value;
-    currentPage = 1;
-    render();
-  };
-}
+  const url = new URL(window.location);
+  url.searchParams.delete("page");
+  window.history.pushState({}, "", url);
 
-const filterTimeEl = document.getElementById("filterTime");
-if (filterTimeEl) {
-  filterTimeEl.onchange = e => {
-    filterTime = e.target.value;
-    currentPage = 1;
-    render();
-  };
-}
+  render();
+};
 
-// RESIZE
-window.addEventListener("resize", () => {
-  const old = perPage;
-  calcPerPage();
-  if (old !== perPage) {
-    currentPage = 1;
-    render();
-  }
-});
+// FILTER
+document.getElementById("filterView").onchange = e => {
+  filterView = e.target.value;
+  currentPage = 1;
+  render();
+};
+
+document.getElementById("filterTime").onchange = e => {
+  filterTime = e.target.value;
+  currentPage = 1;
+  render();
+};
