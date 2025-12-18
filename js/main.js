@@ -6,7 +6,7 @@ if (!grid || !pagination || !searchInput) {
   console.error("Missing required DOM elements");
 }
 
-let perPage = 4; // mobile: 2 cột × 2 hàng
+let perPage = 20; // mobile: 2 cột × 2 hàng
 let currentPage = 1;
 let isLoading = false;
 
@@ -23,7 +23,7 @@ const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
    ========================= */
 function calcPerPage() {
   if (window.innerWidth >= 768) {
-    perPage = 16; // PC: 4 cột × 4 hàng
+    perPage = 20; // PC: 4 cột × 4 hàng
   } else {
     perPage = 4; // mobile
   }
