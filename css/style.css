@@ -433,6 +433,6 @@ body {
   font-size: 13px;
   font-weight: 600;
 
-  display: none;        /* chỉ hiện trên iOS */
+  display: inline-block; /* ✅ LUÔN HIỆN */
   cursor: pointer;
 }
