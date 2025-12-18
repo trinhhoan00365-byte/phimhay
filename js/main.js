@@ -14,6 +14,15 @@ let filtered = [];
 
 const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 
+/* =========================
+   GET PAGE FROM URL
+   ========================= */
+const urlParams = new URLSearchParams(window.location.search);
+const pageParam = parseInt(urlParams.get("page"));
+if (!isNaN(pageParam) && pageParam > 0) {
+  currentPage = pageParam;
+}
+
 // FORMAT VIEW
 function formatView(n){
   if(n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
@@ -110,7 +119,7 @@ function renderContent(){
   isLoading = false;
 }
 
-// PAGINATION
+// PAGINATION (UPDATE URL)
 function renderPagination(total){
   pagination.innerHTML = "";
   const pages = Math.ceil(total / perPage);
@@ -125,7 +134,14 @@ function renderPagination(total){
 
     btn.onclick = () => {
       if(i === currentPage || isLoading) return;
+
       currentPage = i;
+
+      // update URL without reload
+      const url = new URL(window.location);
+      url.searchParams.set("page", i);
+      window.history.pushState({}, "", url);
+
       window.scrollTo({ top: 0, behavior: "smooth" });
       render();
     };
@@ -134,11 +150,25 @@ function renderPagination(total){
   }
 }
 
+/* =========================
+   HANDLE BACK / FORWARD
+   ========================= */
+window.onpopstate = () => {
+  const p = parseInt(new URLSearchParams(location.search).get("page"));
+  currentPage = !isNaN(p) && p > 0 ? p : 1;
+  render();
+};
+
 // SEARCH
 searchInput.oninput = () => {
   const key = searchInput.value.toLowerCase();
   filtered = videos.filter(v => v.title.toLowerCase().includes(key));
   currentPage = 1;
+
+  const url = new URL(window.location);
+  url.searchParams.delete("page");
+  window.history.pushState({}, "", url);
+
   render();
 };
 
