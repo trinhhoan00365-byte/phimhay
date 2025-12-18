@@ -4,6 +4,7 @@ const searchInput = document.getElementById("search");
 
 const perPage = 20;
 let currentPage = 1;
+let isLoading = false;
 
 let filterView = "view_desc";
 let filterTime = "all";
@@ -43,8 +44,32 @@ function applyFilter(list){
   return result;
 }
 
-// RENDER CARD
+// MAIN RENDER (WITH LOADING EFFECT)
 function render(){
+  if(isLoading) return;
+  isLoading = true;
+
+  grid.classList.add("fade-out");
+
+  setTimeout(() => {
+    grid.innerHTML = "";
+
+    // skeleton loading
+    for(let i = 0; i < perPage; i++){
+      const sk = document.createElement("div");
+      sk.className = "skeleton";
+      grid.appendChild(sk);
+    }
+
+    grid.classList.remove("fade-out");
+    grid.classList.add("fade-in");
+
+    setTimeout(renderContent, 180);
+  }, 150);
+}
+
+// RENDER REAL CONTENT
+function renderContent(){
   grid.innerHTML = "";
 
   const sorted = applyFilter(filtered);
@@ -61,7 +86,7 @@ function render(){
         <span class="duration">${v.duration || ""}</span>
       </div>
       <h3>${v.title}</h3>
-      <div class="card-views" id="view-${v.id}"> 0 view</div>
+      <div class="card-views" id="view-${v.id}">0 view</div>
     `;
 
     card.onclick = () => {
@@ -70,23 +95,22 @@ function render(){
 
     grid.appendChild(card);
 
-    // VIEW realtime
     fetch(WORKER_URL + "/view?id=" + v.id)
       .then(r => r.json())
       .then(d => {
-        v.views = d.views;
         const el = document.getElementById("view-" + v.id);
         if(el){
-          el.textContent = " " + formatView(d.views) + " view";
+          el.textContent = formatView(d.views) + " view";
         }
       })
       .catch(() => {});
   });
 
   renderPagination(sorted.length);
+  isLoading = false;
 }
 
-// PAGINATION (ĐÃ FIX – DÙNG CLASS active)
+// PAGINATION
 function renderPagination(total){
   pagination.innerHTML = "";
   const pages = Math.ceil(total / perPage);
@@ -96,11 +120,13 @@ function renderPagination(total){
     btn.textContent = i;
 
     if(i === currentPage){
-      btn.classList.add("active");   // ⭐ QUAN TRỌNG
+      btn.classList.add("active");
     }
 
     btn.onclick = () => {
+      if(i === currentPage || isLoading) return;
       currentPage = i;
+      window.scrollTo({ top: 0, behavior: "smooth" });
       render();
     };
 
@@ -116,7 +142,7 @@ searchInput.oninput = () => {
   render();
 };
 
-// FILTER EVENTS
+// FILTER
 document.getElementById("filterView").onchange = e => {
   filterView = e.target.value;
   currentPage = 1;
