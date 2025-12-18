@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Xem video | Traingon.top</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+  <!-- ===== PAGE COVER (ANTI FLASH) ===== -->
+  <div id="page-cover" class="page-cover"></div>
+
+  <!-- ===== HEADER GLASS ===== -->
+  <div class="top-panel glass">
+    <a href="index.html" class="logo-link">
+      <div class="logo">TRAINGON</div>
+    </a>
+  </div>
+
+  <!-- ===== LOADING ===== -->
+  <div id="watch-loading" class="watch-loading">
+    <div class="video-skeleton"></div>
+    <div class="text-skeleton"></div>
+    <div class="list-skeleton"></div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main id="watch-container" class="container hidden">
+
+    <!-- ===== VIDEO PANEL ===== -->
+    <section class="watch-panel">
+
+      <!-- PLAYER -->
+      <div class="player-wrapper" id="player"></div>
+
+      <!-- INFO -->
+      <div class="watch-info">
+        <h1 class="watch-title" id="video-title"></h1>
+
+        <div class="watch-meta">
+          <span id="video-view">0 view</span>
+          <span id="video-duration"></span>
+        </div>
+
+        <a
+          id="download-btn"
+          class="download-btn"
+          href="#"
+          target="_blank"
+          rel="nofollow noopener"
+        >
+           Download
+        </a>
+      </div>
+
+    </section>
+
+    <!-- ===== RELATED ===== -->
+    <section class="related-panel">
+      <h2 class="section-title">Video khác</h2>
+      <div id="related-grid" class="grid"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    © 2025 Traingon.top - All rights reserved.
+  </footer>
+
+  <script src="js/watch.js"></script>
+</body>
+</html>
