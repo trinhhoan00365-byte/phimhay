@@ -17,21 +17,32 @@ const containerEl = document.getElementById("watch-container");
 
 let videos = [];
 
+/* =========================
+   FORMAT VIEW
+   ========================= */
 function formatView(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
+/* =========================
+   LOAD VIDEO LIST
+   ========================= */
 fetch(WORKER_URL + "/videos")
   .then(res => res.json())
   .then(data => {
     videos = Array.isArray(data) ? data : [];
     initWatch();
-  });
+  })
+  .catch(() => showContent());
 
+/* =========================
+   INIT WATCH
+   ========================= */
 function initWatch() {
   const video = videos.find(v => v.id === id);
+
   if (!video) {
     titleEl.textContent = "Video không tồn tại";
     showContent();
@@ -41,12 +52,14 @@ function initWatch() {
   titleEl.textContent = video.title;
   durationEl.textContent = "⏱ " + (video.duration || "");
 
+  /* VIEW */
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
     .then(d => {
       viewsEl.textContent = formatView(d.views) + " view";
     });
 
+  /* PLAYER */
   player.insertAdjacentHTML("beforeend", `
     <div
       class="player-overlay"
@@ -69,28 +82,30 @@ function initWatch() {
 
   let click = 0;
   let viewed = false;
-
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  /* iOS fullscreen button */
-if (iosBtn) {
-  if (isIOS) {
-    iosBtn.style.display = "flex"; // 🔥 BẮT BUỘC
-    iosBtn.onclick = (e) => {
-      e.stopPropagation();
-      if (!viewed) {
-        viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-      }
-      window.open(video.embed, "_blank");
-    };
-  } else {
-    iosBtn.style.display = "none";
-  }
-};
+  /* =========================
+     iOS FULLSCREEN BUTTON
+     ========================= */
+  if (iosBtn) {
+    if (isIOS) {
+      iosBtn.style.display = "flex"; // 🔥 BẮT BUỘC
+      iosBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (!viewed) {
+          viewed = true;
+          fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+        }
+        window.open(video.embed, "_blank");
+      };
+    } else {
+      iosBtn.style.display = "none";
+    }
   }
 
-  /* Play overlay */
+  /* =========================
+     PLAY OVERLAY
+     ========================= */
   overlay.onclick = () => {
     click++;
     window.open(AFF_LINK, "_blank");
@@ -105,12 +120,14 @@ if (iosBtn) {
     }
   };
 
+  /* DOWNLOAD */
   if (video.download) {
     downloadBtn.href = video.download;
   } else {
     downloadBtn.style.display = "none";
   }
 
+  /* RELATED */
   relatedGrid.innerHTML = "";
   videos.filter(v => v.id !== id).forEach(v => {
     const card = document.createElement("div");
@@ -137,6 +154,9 @@ if (iosBtn) {
   showContent();
 }
 
+/* =========================
+   SHOW CONTENT
+   ========================= */
 function showContent() {
   if (loadingEl) loadingEl.style.display = "none";
   if (containerEl) containerEl.classList.remove("hidden");
@@ -144,3 +164,11 @@ function showContent() {
   const cover = document.getElementById("page-cover");
   if (cover) cover.classList.add("hide");
 }
+
+/* =========================
+   SAFETY FALLBACK (ANTI KẸT)
+   ========================= */
+window.addEventListener("load", () => {
+  const cover = document.getElementById("page-cover");
+  if (cover) cover.classList.add("hide");
+});
