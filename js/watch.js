@@ -1,3 +1,4 @@
+alert("watch.js loaded");
 const AFF_LINK = "https://go.natzus.click";
 const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 
