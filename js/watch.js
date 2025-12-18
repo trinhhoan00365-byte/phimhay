@@ -73,19 +73,21 @@ function initWatch() {
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   /* iOS fullscreen button */
-  if (iosBtn) {
-    if (!isIOS) {
-      iosBtn.style.display = "none";
-    } else {
-      iosBtn.onclick = (e) => {
-        e.stopPropagation();
-        if (!viewed) {
-          viewed = true;
-          fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-        }
-        window.open(video.embed, "_blank");
-      };
-    }
+if (iosBtn) {
+  if (isIOS) {
+    iosBtn.style.display = "flex"; // 🔥 BẮT BUỘC
+    iosBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (!viewed) {
+        viewed = true;
+        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+      }
+      window.open(video.embed, "_blank");
+    };
+  } else {
+    iosBtn.style.display = "none";
+  }
+};
   }
 
   /* Play overlay */
