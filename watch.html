@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- ===== PAGE COVER (ANTI FLASH) ===== -->
+  <!-- ===== PAGE COVER ===== -->
   <div id="page-cover" class="page-cover"></div>
 
   <!-- ===== HEADER ===== -->
@@ -29,19 +29,20 @@
   <main id="watch-container" class="container hidden">
 
     <section class="watch-panel">
-      <div class="player-wrapper" id="player">
-        <!-- iOS fullscreen button -->
-        <button id="iosFullscreenBtn" class="ios-fullscreen-btn" title="Toàn màn hình">
-          ⤢
-        </button>
-      </div>
+      <div class="player-wrapper" id="player"></div>
 
       <div class="watch-info">
         <h1 class="watch-title" id="video-title"></h1>
+
         <div class="watch-meta">
           <span id="video-view">0 view</span>
           <span id="video-duration"></span>
         </div>
+
+        <!-- iOS fullscreen button (DƯỚI TIÊU ĐỀ) -->
+        <button id="iosFullscreenBtn" class="ios-fullscreen-btn">
+          ⤢ Xem toàn màn hình
+        </button>
 
         <a id="download-btn" class="download-btn" href="#" target="_blank" rel="nofollow noopener">
           Download
