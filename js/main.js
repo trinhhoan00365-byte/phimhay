@@ -61,7 +61,7 @@ function render(){
         <span class="duration">${v.duration || ""}</span>
       </div>
       <h3>${v.title}</h3>
-      <div class="card-views" id="view-${v.id}">👁 0 view</div>
+      <div class="card-views" id="view-${v.id}"> 0 view</div>
     `;
 
     card.onclick = () => {
@@ -77,7 +77,7 @@ function render(){
         v.views = d.views;
         const el = document.getElementById("view-" + v.id);
         if(el){
-          el.textContent = "👁 " + formatView(d.views) + " view";
+          el.textContent = " " + formatView(d.views) + " view";
         }
       })
       .catch(() => {});
