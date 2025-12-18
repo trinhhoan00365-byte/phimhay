@@ -32,7 +32,7 @@ fetch(WORKER_URL + "/videos")
 function initWatch() {
   const video = videos.find(v => v.id === id);
   if (!video) {
-    titleEl.textContent = "Video khÃ´ng tá»n táº¡i";
+    titleEl.textContent = "Video khong ton tai";
     showContent();
     return;
   }
@@ -96,7 +96,7 @@ function initWatch() {
       <h3>${v.title}</h3>
       <div class="related-views" id="rv-${v.id}">0 view</div>
     `;
-    card.onclick = () => location.href = `watch.html?id=${v.id}`;
+    card.onclick = () => location.href = "watch.html?id=${v.id}";
     relatedGrid.appendChild(card);
 
     fetch(WORKER_URL + "/view?id=" + v.id)
