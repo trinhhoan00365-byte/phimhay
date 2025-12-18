@@ -349,3 +349,31 @@ body {
   0% { background-position: 100% 0; }
   100% { background-position: -100% 0; }
 }
+/* =========================
+   PC: thu nhỏ card để hiện ~4 hàng dọc
+   ========================= */
+@media (min-width: 768px) {
+
+  /* card gọn hơn */
+  .card {
+    min-height: auto;
+    padding: 6px;
+  }
+
+  /* thumbnail thấp hơn nhưng vẫn đẹp */
+  .thumb-wrap {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* tiêu đề gọn lại */
+  .card h3 {
+    font-size: 14px;
+    line-height: 1.3;
+    margin: 6px 0 4px;
+  }
+
+  /* view gọn */
+  .card-views {
+    font-size: 12px;
+  }
+}
