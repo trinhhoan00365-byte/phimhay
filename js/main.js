@@ -2,7 +2,7 @@ const grid = document.getElementById("video-grid");
 const pagination = document.getElementById("pagination");
 const searchInput = document.getElementById("search");
 
-const perPage = 20;
+const perPage = 5;
 let currentPage = 1;
 let isLoading = false;
 
