@@ -419,3 +419,20 @@ body {
   border-top: 16px solid transparent;
   border-bottom: 16px solid transparent;
 }
+/* =========================
+   FULLSCREEN BUTTON
+   ========================= */
+.open-fullscreen-btn {
+  margin-top: 12px;
+  padding: 10px 16px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.15);
+
+  background: rgba(0,0,0,.45);
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
