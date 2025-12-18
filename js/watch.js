@@ -11,16 +11,23 @@ const durationEl = document.getElementById("video-duration");
 const relatedGrid = document.getElementById("related-grid");
 const downloadBtn = document.getElementById("download-btn");
 
+const loadingEl = document.getElementById("watch-loading");
+const containerEl = document.getElementById("watch-container");
+
 let videos = [];
 
-// format view: 1.2K / 1.3M
+/* =========================
+   FORMAT VIEW
+   ========================= */
 function formatView(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
-// LOAD VIDEOS
+/* =========================
+   LOAD VIDEO LIST
+   ========================= */
 fetch(WORKER_URL + "/videos")
   .then(res => res.json())
   .then(data => {
@@ -30,40 +37,44 @@ fetch(WORKER_URL + "/videos")
   })
   .catch(err => console.error("Video load error:", err));
 
+/* =========================
+   INIT WATCH PAGE
+   ========================= */
 function initWatch() {
   const video = videos.find(v => v.id === id);
 
   if (!video) {
     titleEl.textContent = "Video không tồn tại";
+    showContent();
     return;
   }
 
-  // TITLE + DURATION
+  /* TITLE + DURATION */
   titleEl.textContent = video.title;
-  durationEl.textContent = "⏱ " + video.duration;
+  durationEl.textContent = "⏱ " + (video.duration || "");
 
-  // VIEW
+  /* VIEW */
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
     .then(d => {
       viewsEl.textContent = " " + formatView(d.views) + " view";
     });
 
-  // PLAYER OVERLAY (2 CLICK AFF)
+  /* PLAYER (2 CLICK AFF) */
   player.innerHTML = `
-  <div
-    class="player-overlay"
-    id="playerOverlay"
-    style="
-      background-image: url('${video.thumb}');
-      background-size: cover;
-      background-position: center;
-    "
-  >
-    ▶
-  </div>
-  <iframe src="" allowfullscreen></iframe>
-`;
+    <div
+      class="player-overlay"
+      id="playerOverlay"
+      style="
+        background-image: url('${video.thumb}');
+        background-size: cover;
+        background-position: center;
+      "
+    >
+      ▶
+    </div>
+    <iframe src="" allowfullscreen></iframe>
+  `;
 
   const iframe = player.querySelector("iframe");
   const overlay = document.getElementById("playerOverlay");
@@ -85,37 +96,50 @@ function initWatch() {
     }
   };
 
-  // DOWNLOAD
+  /* DOWNLOAD */
   if (video.download) {
     downloadBtn.href = video.download;
   } else {
     downloadBtn.style.display = "none";
   }
 
-  // RELATED VIDEOS
+  /* RELATED VIDEOS */
   relatedGrid.innerHTML = "";
 
-  videos.filter(v => v.id !== id).forEach(v => {
-    const card = document.createElement("div");
-    card.className = "card";
+  videos
+    .filter(v => v.id !== id)
+    .forEach(v => {
+      const card = document.createElement("div");
+      card.className = "card";
 
-    card.innerHTML = `
-      <div class="thumb-wrap">
-        <img class="thumb" src="${v.thumb}">
-        <span class="duration">${v.duration}</span>
-      </div>
-      <h3>${v.title}</h3>
-      <div class="related-views" id="related-view-${v.id}"> 0 view</div>
-    `;
+      card.innerHTML = `
+        <div class="thumb-wrap">
+          <img class="thumb" src="${v.thumb}">
+          <span class="duration">${v.duration || ""}</span>
+        </div>
+        <h3>${v.title}</h3>
+        <div class="related-views" id="related-view-${v.id}">0 view</div>
+      `;
 
-    card.onclick = () => location.href = `watch.html?id=${v.id}`;
-    relatedGrid.appendChild(card);
+      card.onclick = () => location.href = `watch.html?id=${v.id}`;
+      relatedGrid.appendChild(card);
 
-    fetch(WORKER_URL + "/view?id=" + v.id)
-      .then(r => r.json())
-      .then(d => {
-        const el = document.getElementById("related-view-" + v.id);
-        if (el) el.textContent = " " + formatView(d.views) + " view";
-      });
-  });
+      fetch(WORKER_URL + "/view?id=" + v.id)
+        .then(r => r.json())
+        .then(d => {
+          const el = document.getElementById("related-view-" + v.id);
+          if (el) el.textContent = " " + formatView(d.views) + " view";
+        });
+    });
+
+  /* SHOW CONTENT AFTER ALL RENDER */
+  showContent();
+}
+
+/* =========================
+   SHOW CONTENT (NO FLICKER)
+   ========================= */
+function showContent() {
+  if (loadingEl) loadingEl.style.display = "none";
+  if (containerEl) containerEl.classList.remove("hidden");
 }
