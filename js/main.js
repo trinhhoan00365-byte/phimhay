@@ -12,7 +12,7 @@ let filterTime = "all";
 let videos = [];
 let filtered = [];
 
-const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
+const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
    GET PAGE FROM URL
