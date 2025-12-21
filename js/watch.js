@@ -1,18 +1,21 @@
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 const WORKER_URL = "https://go.avboy.top";
 
+/* =========================
+   GET VIDEO ID (STRING)
+   ========================= */
 let id = null;
 
-// 👉 dạng mới: /watch/abcd
+// 👉 URL mới: /watch/abcd
 const parts = location.pathname.split("/");
 if (parts.length >= 3 && parts[1] === "watch") {
-  id = Number(parts[2]);
+  id = parts[2]; // ❗ GIỮ NGUYÊN STRING
 }
 
-// 👉 fallback: watch.html?id=abcd
+// 👉 Fallback: watch.html?id=abcd
 if (!id) {
   const params = new URLSearchParams(location.search);
-  id = Number(params.get("id"));
+  id = params.get("id");
 }
 
 const player = document.getElementById("player");
@@ -28,12 +31,19 @@ const containerEl = document.getElementById("watch-container");
 
 let videos = [];
 
+/* =========================
+   HELPERS
+   ========================= */
 function formatView(n) {
+  n = Number(n) || 0;
   if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
+/* =========================
+   LOAD VIDEO LIST
+   ========================= */
 fetch(WORKER_URL + "/videos")
   .then(res => res.json())
   .then(data => {
@@ -41,8 +51,12 @@ fetch(WORKER_URL + "/videos")
     initWatch();
   });
 
+/* =========================
+   INIT WATCH
+   ========================= */
 function initWatch() {
-  const video = videos.find(v => v.id === id);
+  const video = videos.find(v => String(v.id) === String(id));
+
   if (!video) {
     titleEl.textContent = "Video không tồn tại";
     showContent();
@@ -50,14 +64,16 @@ function initWatch() {
   }
 
   titleEl.textContent = video.title;
-  durationEl.textContent = "⏱ " + (video.duration || "");
+  durationEl.textContent = video.duration ? "⏱ " + video.duration : "";
 
+  // view count
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
     .then(d => {
       viewsEl.textContent = formatView(d.views) + " view";
     });
 
+  // player
   player.innerHTML = `
     <div
       class="player-overlay"
@@ -76,62 +92,71 @@ function initWatch() {
   let viewed = false;
 
   overlay.onclick = () => {
-  click++;
-  window.open(AFF_LINK, "_blank");
+    click++;
+    window.open(AFF_LINK, "_blank");
 
-  if (click === 2) {
-    if (!viewed) {
-      viewed = true;
-      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+    if (click === 2) {
+      if (!viewed) {
+        viewed = true;
+        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+      }
+
+      iframe.src = video.embed;
+      overlay.style.display = "none";
+
+      // 👉 HIỆN NÚT FULLSCREEN SAU 2 CLICK
+      if (fullscreenBtn) {
+        fullscreenBtn.style.display = "inline-block";
+        fullscreenBtn.onclick = () => {
+          location.href = video.embed; // iOS fullscreen
+        };
+      }
     }
+  };
 
-    iframe.src = video.embed;
-    overlay.style.display = "none";
-
-    // 👉 HIỆN NÚT FULLSCREEN SAU 2 CLICK
-    if (fullscreenBtn) {
-      fullscreenBtn.style.display = "inline-block";
-      fullscreenBtn.onclick = () => {
-        // iOS bắt buộc dùng cách này
-        location.href = video.embed;
-      };
-    }
-  }
-};
-
+  // download
   if (video.download) {
     downloadBtn.href = video.download;
+    downloadBtn.style.display = "inline-block";
   } else {
     downloadBtn.style.display = "none";
   }
 
+  // related
   relatedGrid.innerHTML = "";
 
-  videos.filter(v => v.id !== id).forEach(v => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="thumb-wrap">
-        <img class="thumb" src="${v.thumb}">
-        <span class="duration">${v.duration || ""}</span>
-      </div>
-      <h3>${v.title}</h3>
-      <div class="related-views" id="rv-${v.id}">0 view</div>
-    `;
-    card.onclick = () => location.href = `watch.html?id=${v.id}`;
-    relatedGrid.appendChild(card);
+  videos
+    .filter(v => String(v.id) !== String(id))
+    .forEach(v => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="thumb-wrap">
+          <img class="thumb" src="${v.thumb}">
+          <span class="duration">${v.duration || ""}</span>
+        </div>
+        <h3>${v.title}</h3>
+        <div class="related-views" id="rv-${v.id}">0 view</div>
+      `;
+      card.onclick = () => {
+        location.href = "/watch/" + v.id; // URL ĐẸP
+      };
+      relatedGrid.appendChild(card);
 
-    fetch(WORKER_URL + "/view?id=" + v.id)
-      .then(r => r.json())
-      .then(d => {
-        const el = document.getElementById("rv-" + v.id);
-        if (el) el.textContent = formatView(d.views) + " view";
-      });
-  });
+      fetch(WORKER_URL + "/view?id=" + v.id)
+        .then(r => r.json())
+        .then(d => {
+          const el = document.getElementById("rv-" + v.id);
+          if (el) el.textContent = formatView(d.views) + " view";
+        });
+    });
 
   showContent();
 }
 
+/* =========================
+   SHOW CONTENT (ANTI-FLASH)
+   ========================= */
 function showContent() {
   if (loadingEl) loadingEl.style.display = "none";
   if (containerEl) containerEl.classList.remove("hidden");
