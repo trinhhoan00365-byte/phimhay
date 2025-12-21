@@ -99,8 +99,8 @@ function renderContent(){
     `;
 
     card.onclick = () => {
-      location.href = `watch.html?id=${v.id}`;
-    };
+  location.href = `/watch/${v.id}`;
+};
 
     grid.appendChild(card);
 
