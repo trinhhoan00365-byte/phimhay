@@ -1,166 +1,129 @@
-const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
-const WORKER_URL = "https://go.avboy.top";
+// ================= CONFIG =================
+const WORKER_URL = "https://go.avboy.top"; // domain worker của bạn
+const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173"; // 🔥 LINK AFF CỦA BẠN
 
-/* =========================
-   GET VIDEO ID (STRING)
-   ========================= */
-let id = null;
+// ================= GET VIDEO ID =================
+let videoId = null;
 
-// 👉 URL mới: /watch/abcd
-const parts = location.pathname.split("/");
-if (parts.length >= 3 && parts[1] === "watch") {
-  id = parts[2]; // ❗ GIỮ NGUYÊN STRING
-}
+// URL dạng /watch/abcd
+const match = location.pathname.match(/\/watch\/([^\/]+)/);
+if (match) videoId = match[1];
 
-// 👉 Fallback: watch.html?id=abcd
-if (!id) {
+// fallback cũ ?id=
+if (!videoId) {
   const params = new URLSearchParams(location.search);
-  id = params.get("id");
+  videoId = params.get("id");
 }
 
-const player = document.getElementById("player");
-const titleEl = document.getElementById("video-title");
-const viewsEl = document.getElementById("video-view");
-const durationEl = document.getElementById("video-duration");
-const relatedGrid = document.getElementById("related-grid");
-const downloadBtn = document.getElementById("download-btn");
-const fullscreenBtn = document.getElementById("openFullscreenBtn");
-
-const loadingEl = document.getElementById("watch-loading");
-const containerEl = document.getElementById("watch-container");
-
-let videos = [];
-
-/* =========================
-   HELPERS
-   ========================= */
-function formatView(n) {
-  n = Number(n) || 0;
-  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
-  return n;
+if (!videoId) {
+  showNotFound();
+  throw new Error("NO VIDEO ID");
 }
 
-/* =========================
-   LOAD VIDEO LIST
-   ========================= */
-fetch(WORKER_URL + "/videos")
-  .then(res => res.json())
-  .then(data => {
-    videos = Array.isArray(data) ? data : [];
-    initWatch();
-  });
+// ================= INIT =================
+initWatch();
 
-/* =========================
-   INIT WATCH
-   ========================= */
-function initWatch() {
-  const video = videos.find(v => String(v.id) === String(id));
+async function initWatch() {
+  try {
+    const res = await fetch(WORKER_URL + "/videos");
+    const videos = await res.json();
 
-  if (!video) {
-    titleEl.textContent = "Video không tồn tại";
-    showContent();
-    return;
+    if (!Array.isArray(videos)) {
+      showNotFound();
+      return;
+    }
+
+    const video = videos.find(v => String(v.id) === String(videoId));
+    if (!video) {
+      showNotFound();
+      return;
+    }
+
+    renderMain(video);
+    renderRelated(videos, video.id);
+
+  } catch (e) {
+    console.error(e);
+    showNotFound();
   }
+}
 
-  titleEl.textContent = video.title;
-  durationEl.textContent = video.duration ? "⏱ " + video.duration : "";
+// ================= RENDER MAIN =================
+function renderMain(video) {
+  const playerBox = document.getElementById("player");
+  const titleEl = document.getElementById("video-title");
+  const viewEl = document.getElementById("view-count");
 
-  // view count
-  fetch(WORKER_URL + "/view?id=" + video.id)
-    .then(r => r.json())
-    .then(d => {
-      viewsEl.textContent = formatView(d.views) + " view";
-    });
+  if (titleEl) titleEl.textContent = video.title || "";
 
-  // player
-  player.innerHTML = `
-    <div
-      class="player-overlay"
-      id="playerOverlay"
-      style="background-image:url('${video.thumb}')"
-    >
+  let clicked = 0;
+  let viewed = false;
+
+  playerBox.innerHTML = `
+    <div id="playerOverlay" class="player-overlay" style="background-image:url('${video.thumb}')">
       <div class="play-btn"></div>
     </div>
-    <iframe class="player-iframe" src="" allowfullscreen></iframe>
+    <iframe id="videoFrame" src="" allowfullscreen></iframe>
   `;
 
   const overlay = document.getElementById("playerOverlay");
-  const iframe = player.querySelector("iframe");
-
-  let click = 0;
-  let viewed = false;
+  const iframe = document.getElementById("videoFrame");
 
   overlay.onclick = () => {
-    click++;
+    clicked++;
     window.open(AFF_LINK, "_blank");
 
-    if (click === 2) {
-      if (!viewed) {
-        viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-      }
-
+    if (clicked >= 2) {
       iframe.src = video.embed;
       overlay.style.display = "none";
 
-      // 👉 HIỆN NÚT FULLSCREEN SAU 2 CLICK
-      if (fullscreenBtn) {
-        fullscreenBtn.style.display = "inline-block";
-        fullscreenBtn.onclick = () => {
-          location.href = video.embed; // iOS fullscreen
-        };
+      if (!viewed) {
+        viewed = true;
+        fetch(`${WORKER_URL}/view?id=${video.id}&inc=1`).catch(() => {});
       }
     }
   };
 
-  // download
-  if (video.download) {
-    downloadBtn.href = video.download;
-    downloadBtn.style.display = "inline-block";
-  } else {
-    downloadBtn.style.display = "none";
-  }
-
-  // related
-  relatedGrid.innerHTML = "";
-
-  videos
-    .filter(v => String(v.id) !== String(id))
-    .forEach(v => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="thumb-wrap">
-          <img class="thumb" src="${v.thumb}">
-          <span class="duration">${v.duration || ""}</span>
-        </div>
-        <h3>${v.title}</h3>
-        <div class="related-views" id="rv-${v.id}">0 view</div>
-      `;
-      card.onclick = () => {
-        location.href = "/watch/" + v.id; // URL ĐẸP
-      };
-      relatedGrid.appendChild(card);
-
-      fetch(WORKER_URL + "/view?id=" + v.id)
-        .then(r => r.json())
-        .then(d => {
-          const el = document.getElementById("rv-" + v.id);
-          if (el) el.textContent = formatView(d.views) + " view";
-        });
+  // load view
+  fetch(`${WORKER_URL}/view?id=${video.id}`)
+    .then(r => r.json())
+    .then(d => {
+      if (viewEl) viewEl.textContent = `${d.views || 0} view`;
     });
-
-  showContent();
 }
 
-/* =========================
-   SHOW CONTENT (ANTI-FLASH)
-   ========================= */
-function showContent() {
-  if (loadingEl) loadingEl.style.display = "none";
-  if (containerEl) containerEl.classList.remove("hidden");
+// ================= RELATED =================
+function renderRelated(videos, currentId) {
+  const box = document.getElementById("related-videos");
+  if (!box) return;
 
-  const cover = document.getElementById("page-cover");
-  if (cover) cover.classList.add("hide");
+  box.innerHTML = "";
+
+  videos
+    .filter(v => String(v.id) !== String(currentId))
+    .slice(0, 12)
+    .forEach(v => {
+      const a = document.createElement("a");
+      a.href = `/watch/${v.id}`;
+      a.className = "related-card";
+      a.innerHTML = `
+        <div class="thumb">
+          <img src="${v.thumb}" loading="lazy">
+        </div>
+        <div class="info">
+          <div class="title">${v.title || ""}</div>
+        </div>
+      `;
+      box.appendChild(a);
+    });
+}
+
+// ================= NOT FOUND =================
+function showNotFound() {
+  document.body.innerHTML = `
+    <div style="color:white;text-align:center;padding:40px">
+      <h2>Video không tồn tại</h2>
+      <a href="/" style="color:#c084fc">← Quay về trang chủ</a>
+    </div>
+  `;
 }
