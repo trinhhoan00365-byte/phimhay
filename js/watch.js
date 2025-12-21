@@ -1,8 +1,19 @@
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 const WORKER_URL = "https://go.avboy.top";
 
-const params = new URLSearchParams(location.search);
-const id = Number(params.get("id"));
+let id = null;
+
+// 👉 dạng mới: /watch/abcd
+const parts = location.pathname.split("/");
+if (parts.length >= 3 && parts[1] === "watch") {
+  id = Number(parts[2]);
+}
+
+// 👉 fallback: watch.html?id=abcd
+if (!id) {
+  const params = new URLSearchParams(location.search);
+  id = Number(params.get("id"));
+}
 
 const player = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
