@@ -1,146 +1,130 @@
-// ================= CONFIG =================
-const WORKER_URL = "https://go.avboy.top";
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
+const WORKER_URL = "https://go.avboy.top";
 
-// ================= GET VIDEO ID =================
-let videoId = null;
+const params = new URLSearchParams(location.search);
+const id = Number(params.get("id"));
 
-// URL dạng /watch/abcd hoặc /watch/abcd/
-const match = location.pathname.match(/\/watch\/([^\/?#]+)/);
-if (match) {
-  videoId = match[1];
-}
-
-// fallback ?id=
-if (!videoId) {
-  videoId = new URLSearchParams(location.search).get("id");
-}
-
-if (!videoId) {
-  showNotFound();
-  throw new Error("NO VIDEO ID");
-}
-
-// ================= DOM =================
-const playerBox = document.getElementById("player");
+const player = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
-const viewEl = document.getElementById("video-view");
+const viewsEl = document.getElementById("video-view");
+const durationEl = document.getElementById("video-duration");
 const relatedGrid = document.getElementById("related-grid");
 const downloadBtn = document.getElementById("download-btn");
 const fullscreenBtn = document.getElementById("openFullscreenBtn");
 
-// ================= INIT =================
-initWatch();
+const loadingEl = document.getElementById("watch-loading");
+const containerEl = document.getElementById("watch-container");
 
-async function initWatch() {
-  try {
-    const res = await fetch(WORKER_URL + "/videos");
-    const videos = await res.json();
+let videos = [];
 
-    if (!Array.isArray(videos)) {
-      showNotFound();
-      return;
-    }
-
-    const video = videos.find(v => String(v.id) === String(videoId));
-    if (!video) {
-      showNotFound();
-      return;
-    }
-
-    renderMain(video);
-    renderRelated(videos, video.id);
-
-  } catch (err) {
-    console.error(err);
-    showNotFound();
-  }
+function formatView(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  return n;
 }
 
-// ================= MAIN VIDEO =================
-function renderMain(video) {
-  titleEl.textContent = video.title || "";
+fetch(WORKER_URL + "/videos")
+  .then(res => res.json())
+  .then(data => {
+    videos = Array.isArray(data) ? data : [];
+    initWatch();
+  });
 
-  let clickCount = 0;
-  let viewed = false;
+function initWatch() {
+  const video = videos.find(v => v.id === id);
+  if (!video) {
+    titleEl.textContent = "Video không tồn tại";
+    showContent();
+    return;
+  }
 
-  playerBox.innerHTML = `
-    <div id="playerOverlay" class="player-overlay"
-      style="background-image:url('${video.thumb}')">
+  titleEl.textContent = video.title;
+  durationEl.textContent = "⏱ " + (video.duration || "");
+
+  fetch(WORKER_URL + "/view?id=" + video.id)
+    .then(r => r.json())
+    .then(d => {
+      viewsEl.textContent = formatView(d.views) + " view";
+    });
+
+  player.innerHTML = `
+    <div
+      class="player-overlay"
+      id="playerOverlay"
+      style="background-image:url('${video.thumb}')"
+    >
       <div class="play-btn"></div>
     </div>
-    <iframe id="videoFrame" allowfullscreen></iframe>
+    <iframe class="player-iframe" src="" allowfullscreen></iframe>
   `;
 
   const overlay = document.getElementById("playerOverlay");
-  const iframe = document.getElementById("videoFrame");
+  const iframe = player.querySelector("iframe");
+
+  let click = 0;
+  let viewed = false;
 
   overlay.onclick = () => {
-    clickCount++;
-    window.open(AFF_LINK, "_blank");
+  click++;
+  window.open(AFF_LINK, "_blank");
 
-    if (clickCount >= 2) {
-      iframe.src = video.embed;
-      overlay.style.display = "none";
+  if (click === 2) {
+    if (!viewed) {
+      viewed = true;
+      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+    }
 
-      if (!viewed) {
-        viewed = true;
-        fetch(`${WORKER_URL}/view?id=${video.id}&inc=1`).catch(() => {});
-      }
+    iframe.src = video.embed;
+    overlay.style.display = "none";
 
+    // 👉 HIỆN NÚT FULLSCREEN SAU 2 CLICK
+    if (fullscreenBtn) {
       fullscreenBtn.style.display = "inline-block";
       fullscreenBtn.onclick = () => {
-        window.open(video.embed, "_blank");
+        // iOS bắt buộc dùng cách này
+        location.href = video.embed;
       };
     }
-  };
+  }
+};
 
-  // view count
-  fetch(`${WORKER_URL}/view?id=${video.id}`)
-    .then(r => r.json())
-    .then(d => {
-      viewEl.textContent = (d.views || 0) + " view";
-    });
-
-  // download
   if (video.download) {
     downloadBtn.href = video.download;
-    downloadBtn.style.display = "inline-block";
   } else {
     downloadBtn.style.display = "none";
   }
-}
 
-// ================= RELATED =================
-function renderRelated(videos, currentId) {
   relatedGrid.innerHTML = "";
 
-  videos
-    .filter(v => String(v.id) !== String(currentId))
-    .slice(0, 12)
-    .forEach(v => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="thumb-wrap">
-          <img class="thumb" src="${v.thumb}">
-          <span class="duration">${v.duration || ""}</span>
-        </div>
-        <h3>${v.title}</h3>
-      `;
-      card.onclick = () => {
-        location.href = "/watch/" + v.id;
-      };
-      relatedGrid.appendChild(card);
-    });
+  videos.filter(v => v.id !== id).forEach(v => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="thumb-wrap">
+        <img class="thumb" src="${v.thumb}">
+        <span class="duration">${v.duration || ""}</span>
+      </div>
+      <h3>${v.title}</h3>
+      <div class="related-views" id="rv-${v.id}">0 view</div>
+    `;
+    card.onclick = () => location.href = `watch.html?id=${v.id}`;
+    relatedGrid.appendChild(card);
+
+    fetch(WORKER_URL + "/view?id=" + v.id)
+      .then(r => r.json())
+      .then(d => {
+        const el = document.getElementById("rv-" + v.id);
+        if (el) el.textContent = formatView(d.views) + " view";
+      });
+  });
+
+  showContent();
 }
 
-// ================= NOT FOUND =================
-function showNotFound() {
-  document.body.innerHTML = `
-    <div style="color:white;text-align:center;padding:40px">
-      <h2>Video không tồn tại</h2>
-      <a href="/" style="color:#c084fc">← Quay về trang chủ</a>
-    </div>
-  `;
+function showContent() {
+  if (loadingEl) loadingEl.style.display = "none";
+  if (containerEl) containerEl.classList.remove("hidden");
+
+  const cover = document.getElementById("page-cover");
+  if (cover) cover.classList.add("hide");
 }
