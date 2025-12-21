@@ -1,15 +1,15 @@
-// ================= CONFIG =================
-const WORKER_URL = "https://go.avboy.top"; // domain worker của bạn
-const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173"; // 🔥 LINK AFF CỦA BẠN
+// ===== CONFIG =====
+const WORKER_URL = "https://go.avboy.top";
+const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 
-// ================= GET VIDEO ID =================
+// ===== GET VIDEO ID =====
 let videoId = null;
 
-// URL dạng /watch/abcd
+// /watch/abcd
 const match = location.pathname.match(/\/watch\/([^\/]+)/);
 if (match) videoId = match[1];
 
-// fallback cũ ?id=
+// fallback ?id=
 if (!videoId) {
   const params = new URLSearchParams(location.search);
   videoId = params.get("id");
@@ -20,7 +20,15 @@ if (!videoId) {
   throw new Error("NO VIDEO ID");
 }
 
-// ================= INIT =================
+// ===== DOM =====
+const playerBox = document.getElementById("player");
+const titleEl = document.getElementById("video-title");
+const viewEl = document.getElementById("video-view");
+const relatedGrid = document.getElementById("related-grid");
+const downloadBtn = document.getElementById("download-btn");
+const fullscreenBtn = document.getElementById("openFullscreenBtn");
+
+// ===== INIT =====
 initWatch();
 
 async function initWatch() {
@@ -48,19 +56,16 @@ async function initWatch() {
   }
 }
 
-// ================= RENDER MAIN =================
+// ===== RENDER MAIN =====
 function renderMain(video) {
-  const playerBox = document.getElementById("player");
-  const titleEl = document.getElementById("video-title");
-  const viewEl = document.getElementById("view-count");
-
-  if (titleEl) titleEl.textContent = video.title || "";
+  titleEl.textContent = video.title || "";
 
   let clicked = 0;
   let viewed = false;
 
   playerBox.innerHTML = `
-    <div id="playerOverlay" class="player-overlay" style="background-image:url('${video.thumb}')">
+    <div id="playerOverlay" class="player-overlay"
+      style="background-image:url('${video.thumb}')">
       <div class="play-btn"></div>
     </div>
     <iframe id="videoFrame" src="" allowfullscreen></iframe>
@@ -81,6 +86,11 @@ function renderMain(video) {
         viewed = true;
         fetch(`${WORKER_URL}/view?id=${video.id}&inc=1`).catch(() => {});
       }
+
+      fullscreenBtn.style.display = "inline-block";
+      fullscreenBtn.onclick = () => {
+        window.open(video.embed, "_blank");
+      };
     }
   };
 
@@ -88,37 +98,43 @@ function renderMain(video) {
   fetch(`${WORKER_URL}/view?id=${video.id}`)
     .then(r => r.json())
     .then(d => {
-      if (viewEl) viewEl.textContent = `${d.views || 0} view`;
+      viewEl.textContent = (d.views || 0) + " view";
     });
+
+  // download
+  if (video.download) {
+    downloadBtn.href = video.download;
+    downloadBtn.style.display = "inline-block";
+  } else {
+    downloadBtn.style.display = "none";
+  }
 }
 
-// ================= RELATED =================
+// ===== RELATED =====
 function renderRelated(videos, currentId) {
-  const box = document.getElementById("related-videos");
-  if (!box) return;
-
-  box.innerHTML = "";
+  relatedGrid.innerHTML = "";
 
   videos
     .filter(v => String(v.id) !== String(currentId))
     .slice(0, 12)
     .forEach(v => {
-      const a = document.createElement("a");
-      a.href = `/watch/${v.id}`;
-      a.className = "related-card";
-      a.innerHTML = `
-        <div class="thumb">
-          <img src="${v.thumb}" loading="lazy">
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="thumb-wrap">
+          <img class="thumb" src="${v.thumb}">
+          <span class="duration">${v.duration || ""}</span>
         </div>
-        <div class="info">
-          <div class="title">${v.title || ""}</div>
-        </div>
+        <h3>${v.title}</h3>
       `;
-      box.appendChild(a);
+      card.onclick = () => {
+        location.href = "/watch/" + v.id;
+      };
+      relatedGrid.appendChild(card);
     });
 }
 
-// ================= NOT FOUND =================
+// ===== NOT FOUND =====
 function showNotFound() {
   document.body.innerHTML = `
     <div style="color:white;text-align:center;padding:40px">
