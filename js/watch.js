@@ -1,125 +1,130 @@
-const API_BASE = "https://avboy.top"; // nếu API videos ở domain khác thì đổi
+const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
+const WORKER_URL = "https://go.avboy.top";
 
-/* ===============================
-   LẤY SLUG TỪ URL
-   /video/abcd-xyz  ->  abcd-xyz
-   =============================== */
-const pathParts = location.pathname.split("/").filter(Boolean);
-const key = pathParts[pathParts.length - 1];
+const params = new URLSearchParams(location.search);
+const id = Number(params.get("id"));
 
-/* ===============================
-   ELEMENTS
-   =============================== */
-const playerBox = document.getElementById("player-box");
+const player = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
-const viewEl = document.getElementById("video-view");
+const viewsEl = document.getElementById("video-view");
+const durationEl = document.getElementById("video-duration");
+const relatedGrid = document.getElementById("related-grid");
 const downloadBtn = document.getElementById("download-btn");
-const relatedBox = document.getElementById("related-videos");
+const fullscreenBtn = document.getElementById("openFullscreenBtn");
 
-/* ===============================
-   LOAD VIDEO
-   =============================== */
-loadVideo();
+const loadingEl = document.getElementById("watch-loading");
+const containerEl = document.getElementById("watch-container");
 
-async function loadVideo() {
-  try {
-    const res = await fetch(API_BASE + "/videos");
-    const videos = await res.json();
+let videos = [];
 
-    if (!Array.isArray(videos)) {
-      showNotFound();
-      return;
-    }
-
-    const video = videos.find(v =>
-      v.slug === key || String(v.id) === String(key)
-    );
-
-    if (!video) {
-      showNotFound();
-      return;
-    }
-
-    renderVideo(video);
-    loadViews(video.id);
-    renderRelated(videos, video.id);
-
-  } catch (err) {
-    console.error(err);
-    showNotFound();
-  }
+function formatView(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  return n;
 }
 
-/* ===============================
-   RENDER VIDEO
-   =============================== */
-function renderVideo(video) {
-  titleEl.textContent = video.title || "Video";
+fetch(WORKER_URL + "/videos")
+  .then(res => res.json())
+  .then(data => {
+    videos = Array.isArray(data) ? data : [];
+    initWatch();
+  });
 
-  // iframe / embed
-  playerBox.innerHTML = `
-    <div class="video-wrapper">
-      ${video.embed}
+function initWatch() {
+  const video = videos.find(v => v.id === id);
+  if (!video) {
+    titleEl.textContent = "Video không tồn tại";
+    showContent();
+    return;
+  }
+
+  titleEl.textContent = video.title;
+  durationEl.textContent = "⏱ " + (video.duration || "");
+
+  fetch(WORKER_URL + "/view?id=" + video.id)
+    .then(r => r.json())
+    .then(d => {
+      viewsEl.textContent = formatView(d.views) + " view";
+    });
+
+  player.innerHTML = `
+    <div
+      class="player-overlay"
+      id="playerOverlay"
+      style="background-image:url('${video.thumb}')"
+    >
+      <div class="play-btn"></div>
     </div>
+    <iframe class="player-iframe" src="" allowfullscreen></iframe>
   `;
 
-  // download
+  const overlay = document.getElementById("playerOverlay");
+  const iframe = player.querySelector("iframe");
+
+  let click = 0;
+  let viewed = false;
+
+  overlay.onclick = () => {
+  click++;
+  window.open(AFF_LINK, "_blank");
+
+  if (click === 2) {
+    if (!viewed) {
+      viewed = true;
+      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+    }
+
+    iframe.src = video.embed;
+    overlay.style.display = "none";
+
+    // 👉 HIỆN NÚT FULLSCREEN SAU 2 CLICK
+    if (fullscreenBtn) {
+      fullscreenBtn.style.display = "inline-block";
+      fullscreenBtn.onclick = () => {
+        // iOS bắt buộc dùng cách này
+        location.href = video.embed;
+      };
+    }
+  }
+};
+
   if (video.download) {
     downloadBtn.href = video.download;
-    downloadBtn.style.display = "inline-flex";
   } else {
     downloadBtn.style.display = "none";
   }
-}
 
-/* ===============================
-   VIEW COUNT
-   =============================== */
-async function loadViews(id) {
-  try {
-    const res = await fetch(`${API_BASE}/view?id=${id}&inc=1`);
-    const data = await res.json();
-    viewEl.textContent = (data.views || 0) + " view";
-  } catch {
-    viewEl.textContent = "0 view";
-  }
-}
+  relatedGrid.innerHTML = "";
 
-/* ===============================
-   RELATED VIDEOS
-   =============================== */
-function renderRelated(videos, currentId) {
-  const list = videos
-    .filter(v => v.id !== currentId)
-    .slice(0, 12);
-
-  relatedBox.innerHTML = list.map(v => `
-    <a class="related-card" href="/video/${v.slug || v.id}">
-      <div class="thumb">
-        <img src="${v.thumb}" alt="">
+  videos.filter(v => v.id !== id).forEach(v => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="thumb-wrap">
+        <img class="thumb" src="${v.thumb}">
         <span class="duration">${v.duration || ""}</span>
       </div>
-      <div class="info">
-        <div class="title">${v.title}</div>
-        <div class="view">${formatView(v.views || 0)}</div>
-      </div>
-    </a>
-  `).join("");
+      <h3>${v.title}</h3>
+      <div class="related-views" id="rv-${v.id}">0 view</div>
+    `;
+    card.onclick = () => location.href = `watch.html?id=${v.id}`;
+    relatedGrid.appendChild(card);
+
+    fetch(WORKER_URL + "/view?id=" + v.id)
+      .then(r => r.json())
+      .then(d => {
+        const el = document.getElementById("rv-" + v.id);
+        if (el) el.textContent = formatView(d.views) + " view";
+      });
+  });
+
+  showContent();
 }
 
-/* ===============================
-   HELPERS
-   =============================== */
-function showNotFound() {
-  titleEl.textContent = "Video không tồn tại";
-  playerBox.innerHTML = "";
-  viewEl.textContent = "0 view";
-  downloadBtn.style.display = "none";
-  relatedBox.innerHTML = "";
-}
+function showContent() {
+  if (loadingEl) loadingEl.style.display = "none";
+  if (containerEl) containerEl.classList.remove("hidden");
 
-function formatView(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
-  if (n >= 1000) return (n / 1000).toFixed(1) + "K";
-  return n;
+  const cover = document.getElementById("page-cover");
+  if (cover) cover.classList.add("hide");
 }
