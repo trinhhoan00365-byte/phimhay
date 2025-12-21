@@ -1,2 +1,0 @@
-/video/:slug   /watch.html?key=:slug   200
-/watch/:id     /watch.html?id=:id      200
