@@ -99,9 +99,8 @@ function renderContent(){
     `;
 
     card.onclick = () => {
-  const slug = slugify(v.title);
-  location.href = `/video/${slug}--${v.id}`;
-};
+      location.href = `watch.html?id=${v.id}`;
+    };
 
     grid.appendChild(card);
 
@@ -185,11 +184,3 @@ document.getElementById("filterTime").onchange = e => {
   currentPage = 1;
   render();
 };
-function slugify(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
