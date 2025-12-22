@@ -3,17 +3,26 @@ const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 
 /* ===============================
    LẤY ID TỪ URL
-   /video/slug--123456789
+   HỖ TRỢ:
+   /video/slug--123
+   /watch.html (fallback)
    =============================== */
-const pathParts = location.pathname.split("/").filter(Boolean);
-const lastPart = pathParts[pathParts.length - 1];
+function getVideoId() {
+  const path = location.pathname;
 
-const videoId = lastPart && lastPart.includes("--")
-  ? lastPart.split("--").pop()
-  : null;
+  // /video/slug--123
+  const match = path.match(/--(\d+)$/);
+  if (match) return match[1];
+
+  // fallback cũ (nếu có ?id=)
+  const qs = new URLSearchParams(location.search);
+  return qs.get("id");
+}
+
+const videoId = getVideoId();
 
 /* ===============================
-   DOM ELEMENTS
+   DOM
    =============================== */
 const playerEl = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
@@ -23,30 +32,24 @@ const downloadBtn = document.getElementById("download-btn");
 const relatedGrid = document.getElementById("related-grid");
 
 /* ===============================
-   LOAD VIDEOS
+   LOAD VIDEO
    =============================== */
 if (!videoId) {
   showNotFound();
 } else {
-  fetch(WORKER_URL + "/videos")
-    .then(res => res.json())
+  fetch(`${WORKER_URL}/videos`)
+    .then(r => r.json())
     .then(videos => {
-      if (!Array.isArray(videos)) {
-        showNotFound();
-        return;
-      }
+      if (!Array.isArray(videos)) return showNotFound();
 
       const video = videos.find(v => String(v.id) === String(videoId));
-      if (!video) {
-        showNotFound();
-        return;
-      }
+      if (!video) return showNotFound();
 
       renderVideo(video);
       renderViews(video.id);
       renderRelated(videos, video.id);
     })
-    .catch(() => showNotFound());
+    .catch(showNotFound);
 }
 
 /* ===============================
@@ -63,7 +66,6 @@ function renderVideo(video) {
     </div>
     <iframe
       class="player-iframe"
-      src=""
       allow="autoplay; fullscreen"
       allowfullscreen
     ></iframe>
@@ -81,7 +83,7 @@ function renderVideo(video) {
 
     if (clickCount === 2) {
       iframe.src = video.embed || video.iframe || video.url || "";
-      overlay.style.display = "none";
+      overlay.remove();
 
       if (!viewed) {
         viewed = true;
@@ -90,7 +92,6 @@ function renderVideo(video) {
     }
   };
 
-  // download
   if (video.download) {
     downloadBtn.href = video.download;
     downloadBtn.style.display = "inline-block";
@@ -114,7 +115,7 @@ function renderViews(id) {
 }
 
 /* ===============================
-   RELATED VIDEOS
+   RELATED
    =============================== */
 function renderRelated(videos, currentId) {
   relatedGrid.innerHTML = "";
@@ -126,6 +127,8 @@ function renderRelated(videos, currentId) {
       const card = document.createElement("div");
       card.className = "card";
 
+      const slug = slugify(v.title);
+
       card.innerHTML = `
         <div class="thumb-wrap">
           <img class="thumb" src="${v.thumb || ""}">
@@ -136,7 +139,6 @@ function renderRelated(videos, currentId) {
       `;
 
       card.onclick = () => {
-        const slug = slugify(v.title);
         location.href = `/video/${slug}--${v.id}`;
       };
 
@@ -165,12 +167,12 @@ function showNotFound() {
 
 function formatView(n) {
   n = Number(n) || 0;
-  if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+  if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
-function slugify(text) {
+function slugify(text = "") {
   return text
     .toLowerCase()
     .normalize("NFD")
