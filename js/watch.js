@@ -1,6 +1,12 @@
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 const WORKER_URL = "https://go.avboy.top";
+// ===== FORCE CLEAN URL =====
+const params = new URLSearchParams(location.search);
+const idParam = params.get("id");
 
+if (idParam && location.pathname.includes("watch")) {
+  history.replaceState(null, "", `/watch/${idParam}`);
+}
 const params = new URLSearchParams(location.search);
 const id = Number(params.get("id"));
 
