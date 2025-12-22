@@ -99,8 +99,9 @@ function renderContent(){
     `;
 
     card.onclick = () => {
-      location.href = `watch.html?id=${v.id}`;
-    };
+  const slug = slugify(v.title);
+  location.href = `/video/${slug}--${v.id}`;
+};
 
     grid.appendChild(card);
 
