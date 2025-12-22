@@ -1,15 +1,35 @@
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 const WORKER_URL = "https://go.avboy.top";
-// ===== FORCE CLEAN URL =====
-const params = new URLSearchParams(location.search);
-const idParam = params.get("id");
 
-if (idParam && location.pathname.includes("watch")) {
-  history.replaceState(null, "", `/watch/${idParam}`);
+/* =========================
+   GET VIDEO ID (PATH + QUERY)
+   ========================= */
+let id = null;
+
+// CASE 1: /watch/123
+const pathMatch = location.pathname.match(/^\/watch\/(\d+)$/);
+if (pathMatch) {
+  id = Number(pathMatch[1]);
 }
-const params = new URLSearchParams(location.search);
-const id = Number(params.get("id"));
 
+// CASE 2: /watch.html?id=123
+if (!id) {
+  const params = new URLSearchParams(location.search);
+  const qid = params.get("id");
+  if (qid) {
+    id = Number(qid);
+    // ÉP URL ĐẸP
+    history.replaceState(null, "", `/watch/${qid}`);
+  }
+}
+
+if (!id) {
+  console.error("❌ Missing video ID");
+}
+
+/* =========================
+   DOM
+   ========================= */
 const player = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
 const viewsEl = document.getElementById("video-view");
@@ -29,6 +49,9 @@ function formatView(n) {
   return n;
 }
 
+/* =========================
+   LOAD VIDEOS
+   ========================= */
 fetch(WORKER_URL + "/videos")
   .then(res => res.json())
   .then(data => {
@@ -71,28 +94,26 @@ function initWatch() {
   let viewed = false;
 
   overlay.onclick = () => {
-  click++;
-  window.open(AFF_LINK, "_blank");
+    click++;
+    window.open(AFF_LINK, "_blank");
 
-  if (click === 2) {
-    if (!viewed) {
-      viewed = true;
-      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+    if (click === 2) {
+      if (!viewed) {
+        viewed = true;
+        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+      }
+
+      iframe.src = video.embed;
+      overlay.style.display = "none";
+
+      if (fullscreenBtn) {
+        fullscreenBtn.style.display = "inline-block";
+        fullscreenBtn.onclick = () => {
+          location.href = video.embed;
+        };
+      }
     }
-
-    iframe.src = video.embed;
-    overlay.style.display = "none";
-
-    // 👉 HIỆN NÚT FULLSCREEN SAU 2 CLICK
-    if (fullscreenBtn) {
-      fullscreenBtn.style.display = "inline-block";
-      fullscreenBtn.onclick = () => {
-        // iOS bắt buộc dùng cách này
-        location.href = video.embed;
-      };
-    }
-  }
-};
+  };
 
   if (video.download) {
     downloadBtn.href = video.download;
@@ -101,7 +122,6 @@ function initWatch() {
   }
 
   relatedGrid.innerHTML = "";
-
   videos.filter(v => v.id !== id).forEach(v => {
     const card = document.createElement("div");
     card.className = "card";
@@ -111,17 +131,10 @@ function initWatch() {
         <span class="duration">${v.duration || ""}</span>
       </div>
       <h3>${v.title}</h3>
-      <div class="related-views" id="rv-${v.id}">0 view</div>
+      <div class="related-views">0 view</div>
     `;
     card.onclick = () => location.href = `/watch/${v.id}`;
     relatedGrid.appendChild(card);
-
-    fetch(WORKER_URL + "/view?id=" + v.id)
-      .then(r => r.json())
-      .then(d => {
-        const el = document.getElementById("rv-" + v.id);
-        if (el) el.textContent = formatView(d.views) + " view";
-      });
   });
 
   showContent();
@@ -130,7 +143,6 @@ function initWatch() {
 function showContent() {
   if (loadingEl) loadingEl.style.display = "none";
   if (containerEl) containerEl.classList.remove("hidden");
-
   const cover = document.getElementById("page-cover");
   if (cover) cover.classList.add("hide");
 }
