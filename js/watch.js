@@ -1,11 +1,13 @@
-const WORKER_URL = "https://go.avboy.top"; // giữ nguyên domain worker của bạn
+const WORKER_URL = "https://go.avboy.top"; // worker của bạn
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 
 /* ===============================
    LẤY ID TỪ URL
    /video/slug--123456789
    =============================== */
-const lastPart = location.pathname.split("/").filter(Boolean).pop();
+const pathParts = location.pathname.split("/").filter(Boolean);
+const lastPart = pathParts[pathParts.length - 1];
+
 const videoId = lastPart && lastPart.includes("--")
   ? lastPart.split("--").pop()
   : null;
@@ -23,25 +25,29 @@ const relatedGrid = document.getElementById("related-grid");
 /* ===============================
    LOAD VIDEOS
    =============================== */
-fetch(WORKER_URL + "/videos")
-  .then(res => res.json())
-  .then(videos => {
-    if (!videoId || !Array.isArray(videos)) {
-      showNotFound();
-      return;
-    }
+if (!videoId) {
+  showNotFound();
+} else {
+  fetch(WORKER_URL + "/videos")
+    .then(res => res.json())
+    .then(videos => {
+      if (!Array.isArray(videos)) {
+        showNotFound();
+        return;
+      }
 
-    const video = videos.find(v => String(v.id) === String(videoId));
-    if (!video) {
-      showNotFound();
-      return;
-    }
+      const video = videos.find(v => String(v.id) === String(videoId));
+      if (!video) {
+        showNotFound();
+        return;
+      }
 
-    renderVideo(video);
-    renderViews(video.id);
-    renderRelated(videos, video.id);
-  })
-  .catch(() => showNotFound());
+      renderVideo(video);
+      renderViews(video.id);
+      renderRelated(videos, video.id);
+    })
+    .catch(() => showNotFound());
+}
 
 /* ===============================
    RENDER VIDEO
@@ -52,7 +58,7 @@ function renderVideo(video) {
 
   playerEl.innerHTML = `
     <div class="player-overlay" id="playerOverlay"
-      style="background-image:url('${video.thumb}')">
+      style="background-image:url('${video.thumb || ""}')">
       <div class="play-btn"></div>
     </div>
     <iframe
@@ -74,7 +80,7 @@ function renderVideo(video) {
     window.open(AFF_LINK, "_blank");
 
     if (clickCount === 2) {
-      iframe.src = video.embed;
+      iframe.src = video.embed || video.iframe || video.url || "";
       overlay.style.display = "none";
 
       if (!viewed) {
@@ -114,7 +120,7 @@ function renderRelated(videos, currentId) {
   relatedGrid.innerHTML = "";
 
   videos
-    .filter(v => v.id !== currentId)
+    .filter(v => String(v.id) !== String(currentId))
     .slice(0, 12)
     .forEach(v => {
       const card = document.createElement("div");
@@ -122,7 +128,7 @@ function renderRelated(videos, currentId) {
 
       card.innerHTML = `
         <div class="thumb-wrap">
-          <img class="thumb" src="${v.thumb}">
+          <img class="thumb" src="${v.thumb || ""}">
           <span class="duration">${v.duration || ""}</span>
         </div>
         <h3>${v.title}</h3>
