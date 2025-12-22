@@ -1,25 +1,25 @@
-const WORKER_URL = "https://go.avboy.top"; // worker của bạn
+const WORKER_URL = "https://go.avboy.top";
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 
 /* ===============================
-   LẤY ID TỪ URL
-   HỖ TRỢ:
-   /video/slug--123
-   /watch.html (fallback)
+   GET VIDEO ID (FIX)
    =============================== */
-function getVideoId() {
-  const path = location.pathname;
-
-  // /video/slug--123
-  const match = path.match(/--(\d+)$/);
-  if (match) return match[1];
-
-  // fallback cũ (nếu có ?id=)
+function getVideoInfo() {
   const qs = new URLSearchParams(location.search);
-  return qs.get("id");
+  const slug = qs.get("slug");
+
+  if (slug) {
+    const m = slug.match(/--(\d+)$/);
+    if (m) return { id: m[1], slug };
+  }
+
+  const id = qs.get("id");
+  if (id) return { id, slug: null };
+
+  return null;
 }
 
-const videoId = getVideoId();
+const info = getVideoInfo();
 
 /* ===============================
    DOM
@@ -34,7 +34,7 @@ const relatedGrid = document.getElementById("related-grid");
 /* ===============================
    LOAD VIDEO
    =============================== */
-if (!videoId) {
+if (!info) {
   showNotFound();
 } else {
   fetch(`${WORKER_URL}/videos`)
@@ -42,11 +42,14 @@ if (!videoId) {
     .then(videos => {
       if (!Array.isArray(videos)) return showNotFound();
 
-      const video = videos.find(v => String(v.id) === String(videoId));
+      const video = videos.find(v => String(v.id) === String(info.id));
       if (!video) return showNotFound();
 
+      // đảm bảo slug luôn tồn tại
+      video.slug = video.slug || `${slugify(video.title)}--${video.id}`;
+
       renderVideo(video);
-      renderViews(video.id);
+      renderViews(video);
       renderRelated(videos, video.id);
     })
     .catch(showNotFound);
@@ -87,7 +90,7 @@ function renderVideo(video) {
 
       if (!viewed) {
         viewed = true;
-        fetch(`${WORKER_URL}/view?id=${video.id}&inc=1`).catch(() => {});
+        fetch(`${WORKER_URL}/view?slug=${video.slug}&inc=1`).catch(() => {});
       }
     }
   };
@@ -103,8 +106,8 @@ function renderVideo(video) {
 /* ===============================
    VIEW COUNT
    =============================== */
-function renderViews(id) {
-  fetch(`${WORKER_URL}/view?id=${id}`)
+function renderViews(video) {
+  fetch(`${WORKER_URL}/view?slug=${video.slug}`)
     .then(r => r.json())
     .then(d => {
       viewEl.textContent = formatView(d.views) + " view";
@@ -127,7 +130,7 @@ function renderRelated(videos, currentId) {
       const card = document.createElement("div");
       card.className = "card";
 
-      const slug = slugify(v.title);
+      const slug = v.slug || `${slugify(v.title)}--${v.id}`;
 
       card.innerHTML = `
         <div class="thumb-wrap">
@@ -139,12 +142,12 @@ function renderRelated(videos, currentId) {
       `;
 
       card.onclick = () => {
-        location.href = `/video/${slug}--${v.id}`;
+        location.href = `/video/${slug}`;
       };
 
       relatedGrid.appendChild(card);
 
-      fetch(`${WORKER_URL}/view?id=${v.id}`)
+      fetch(`${WORKER_URL}/view?slug=${slug}`)
         .then(r => r.json())
         .then(d => {
           const el = document.getElementById("rv-" + v.id);
