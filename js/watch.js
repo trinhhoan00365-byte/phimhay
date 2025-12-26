@@ -81,7 +81,7 @@ function initWatch() {
        style="background-image:url('${video.thumb}')">
     <div class="play-btn"></div>
     <div class="click-hint" id="clickHint">
-      Click 0/5 times to watch video
+      Click 0/2 times to watch video
     </div>
   </div>
   <iframe class="player-iframe" src="" allowfullscreen></iframe>
@@ -91,29 +91,41 @@ function initWatch() {
   const iframe = player.querySelector("iframe");
 
   let click = 0;
-  let viewed = false;
+let viewed = false;
+const maxClick = 2;
+const hint = document.getElementById("clickHint");
 
-  overlay.onclick = () => {
-    click++;
-    window.open(AFF_LINK, "_blank");
+overlay.onclick = () => {
+  click++;
 
-    if (click === 2) {
-      if (!viewed) {
-        viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-      }
+  // popup aff (phải gắn với click)
+  window.open(AFF_LINK, "_blank");
 
-      iframe.src = video.embed;
-      overlay.style.display = "none";
+  // cập nhật text dưới nút play
+  if (hint) {
+    hint.textContent = `Click ${click}/${maxClick} times to watch video`;
+  }
 
-      if (fullscreenBtn) {
-        fullscreenBtn.style.display = "inline-block";
-        fullscreenBtn.onclick = () => {
-          location.href = video.embed;
-        };
-      }
+  // đủ số click thì mở video
+  if (click >= maxClick) {
+
+    // 🔥 tăng view CHỈ 1 LẦN
+    if (!viewed) {
+      viewed = true;
+      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
     }
-  };
+
+    iframe.src = video.embed;
+    overlay.style.display = "none";
+
+    if (fullscreenBtn) {
+      fullscreenBtn.style.display = "inline-block";
+      fullscreenBtn.onclick = () => {
+        location.href = video.embed;
+      };
+    }
+  }
+};
 
   if (video.download) {
     downloadBtn.href = video.download;
