@@ -77,15 +77,15 @@ function initWatch() {
     });
 
   player.innerHTML = `
-    <div
-      class="player-overlay"
-      id="playerOverlay"
-      style="background-image:url('${video.thumb}')"
-    >
-      <div class="play-btn"></div>
+  <div class="player-overlay" id="playerOverlay"
+       style="background-image:url('${video.thumb}')">
+    <div class="play-btn"></div>
+    <div class="click-hint" id="clickHint">
+      Click 0/5 times to watch video
     </div>
-    <iframe class="player-iframe" src="" allowfullscreen></iframe>
-  `;
+  </div>
+  <iframe class="player-iframe" src="" allowfullscreen></iframe>
+`;
 
   const overlay = document.getElementById("playerOverlay");
   const iframe = player.querySelector("iframe");
