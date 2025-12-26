@@ -122,19 +122,34 @@ function initWatch() {
   }
 
   relatedGrid.innerHTML = "";
-  videos.filter(v => v.id !== id).forEach(v => {
+  videos
+  .filter(v => v.id !== id)
+  .forEach(v => {
     const card = document.createElement("div");
     card.className = "card";
+
     card.innerHTML = `
       <div class="thumb-wrap">
         <img class="thumb" src="${v.thumb}">
         <span class="duration">${v.duration || ""}</span>
       </div>
       <h3>${v.title}</h3>
-      <div class="related-views">0 view</div>
+      <div class="related-views" id="rv-${v.id}">0 view</div>
     `;
+
     card.onclick = () => location.href = `/watch/${v.id}`;
     relatedGrid.appendChild(card);
+
+    // 👉 FETCH VIEW GIỐNG TRANG CHỦ
+    fetch(WORKER_URL + "/view?id=" + v.id)
+      .then(r => r.json())
+      .then(d => {
+        const el = document.getElementById("rv-" + v.id);
+        if (el) {
+          el.textContent = formatView(d.views) + " view";
+        }
+      })
+      .catch(() => {});
   });
 
   showContent();
