@@ -450,3 +450,10 @@ body {
   opacity: 0.9;
   text-shadow: 0 1px 3px rgba(0,0,0,.8);
 }
+/* ===== PLAYER OVERLAY FIX ALIGN ===== */
+.player-overlay {
+  display: flex;
+  flex-direction: column;   /* 🔥 XẾP DỌC */
+  align-items: center;      /* 🔥 CANH GIỮA NGANG */
+  justify-content: center;  /* 🔥 CANH GIỮA DỌC */
+}
