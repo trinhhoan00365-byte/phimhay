@@ -124,6 +124,8 @@ function initWatch() {
   relatedGrid.innerHTML = "";
   videos
   .filter(v => v.id !== id)
+  .sort((a, b) => (b.views || 0) - (a.views || 0))
+  .slice(0, 20)
   .forEach(v => {
     const card = document.createElement("div");
     card.className = "card";
@@ -140,18 +142,14 @@ function initWatch() {
     card.onclick = () => location.href = `/watch/${v.id}`;
     relatedGrid.appendChild(card);
 
-    // 👉 FETCH VIEW GIỐNG TRANG CHỦ
     fetch(WORKER_URL + "/view?id=" + v.id)
       .then(r => r.json())
       .then(d => {
         const el = document.getElementById("rv-" + v.id);
-        if (el) {
-          el.textContent = formatView(d.views) + " view";
-        }
+        if (el) el.textContent = formatView(d.views) + " view";
       })
       .catch(() => {});
   });
-
   showContent();
 }
 
