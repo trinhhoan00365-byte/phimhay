@@ -173,24 +173,3 @@ function showContent() {
   if (cover) cover.classList.add("hide");
 }
 // ===== FORCE SHOW DOWNLOAD BUTTON (FINAL FIX) =====
-document.addEventListener("DOMContentLoaded", () => {
-  const downloadBtn = document.getElementById("download-btn");
-
-  if (!downloadBtn) {
-    console.error("❌ download-btn not found");
-    return;
-  }
-
-  if (window.video && window.video.file) {
-    downloadBtn.style.display = "inline-block";
-    downloadBtn.href = window.video.file;
-    downloadBtn.setAttribute(
-      "download",
-      (window.video.title || "video") + ".mp4"
-    );
-    console.log("✅ Download button enabled");
-  } else {
-    downloadBtn.style.display = "none";
-    console.warn("⚠️ No video.file, download hidden");
-  }
-});
