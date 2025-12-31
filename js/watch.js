@@ -121,15 +121,34 @@ overlay.onclick = () => {
   }
 };
 
-  if (video.download) {
+  let downloadClick = 0;
+
+if (video.download) {
   downloadBtn.onclick = (e) => {
     e.preventDefault();
+    downloadClick++;
 
-    const url =
-      WORKER_URL + "/download?url=" +
-      encodeURIComponent(video.download);
+    // 🔥 CLICK LẦN 1
+    if (downloadClick === 1) {
+      window.open(AFF_LINK, "_blank");
 
-    window.location.href = url;
+      // đổi text để báo user
+      downloadBtn.textContent = "Click again to download ";
+      downloadBtn.style.opacity = "0.9";
+
+      return;
+    }
+
+    // 🔥 CLICK LẦN 2
+    if (downloadClick === 2) {
+      window.open(AFF_LINK, "_blank");
+
+      const url =
+        WORKER_URL + "/download?url=" +
+        encodeURIComponent(video.download);
+
+      window.location.href = url;
+    }
   };
 } else {
   downloadBtn.style.display = "none";
