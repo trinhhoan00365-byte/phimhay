@@ -122,13 +122,15 @@ overlay.onclick = () => {
 };
 
 
-if (video.file) {
-  downloadBtn.href = video.file;        
+// ===== DOWNLOAD DIRECT (B2 + CLOUDFLARE) =====
+if (video.file && downloadBtn) {
+  downloadBtn.style.display = "inline-block"; // 🔥 DÒNG QUAN TRỌNG
+  downloadBtn.href = video.file;
   downloadBtn.setAttribute(
     "download",
-    (video.title || "video") + ".mp4"   
+    (video.title || "video") + ".mp4"
   );
-} else {
+} else if (downloadBtn) {
   downloadBtn.style.display = "none";
 }
 
