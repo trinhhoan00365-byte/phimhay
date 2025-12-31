@@ -266,7 +266,7 @@ body {
 
 /* download */
 .download-btn {
-  display: inline-block;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   background: linear-gradient(90deg, #a78bfa, #c4b5fd);
