@@ -121,11 +121,16 @@ overlay.onclick = () => {
   }
 };
 
-  if (video.download) {
-    downloadBtn.href = video.download;
-  } else {
-    downloadBtn.style.display = "none";
-  }
+
+if (video.file) {
+  downloadBtn.href = video.file;        
+  downloadBtn.setAttribute(
+    "download",
+    (video.title || "video") + ".mp4"   
+  );
+} else {
+  downloadBtn.style.display = "none";
+}
 
   relatedGrid.innerHTML = "";
   videos
