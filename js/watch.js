@@ -121,18 +121,11 @@ overlay.onclick = () => {
   }
 };
 
-
-// ===== DOWNLOAD DIRECT (B2 + CLOUDFLARE) =====
-if (video.file && downloadBtn) {
-  downloadBtn.style.display = "inline-block"; // 🔥 DÒNG QUAN TRỌNG
-  downloadBtn.href = video.file;
-  downloadBtn.setAttribute(
-    "download",
-    (video.title || "video") + ".mp4"
-  );
-} else if (downloadBtn) {
-  downloadBtn.style.display = "none";
-}
+  if (video.download) {
+    downloadBtn.href = video.download;
+  } else {
+    downloadBtn.style.display = "none";
+  }
 
   relatedGrid.innerHTML = "";
   videos
@@ -172,4 +165,3 @@ function showContent() {
   const cover = document.getElementById("page-cover");
   if (cover) cover.classList.add("hide");
 }
-// ===== FORCE SHOW DOWNLOAD BUTTON (FINAL FIX) =====
