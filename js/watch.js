@@ -36,7 +36,6 @@ const viewsEl = document.getElementById("video-view");
 const durationEl = document.getElementById("video-duration");
 const relatedGrid = document.getElementById("related-grid");
 const downloadBtn = document.getElementById("download-btn");
-const fullscreenBtn = document.getElementById("openFullscreenBtn");
 
 const loadingEl = document.getElementById("watch-loading");
 const containerEl = document.getElementById("watch-container");
@@ -118,12 +117,7 @@ overlay.onclick = () => {
     iframe.src = video.embed;
     overlay.style.display = "none";
 
-    if (fullscreenBtn) {
-      fullscreenBtn.style.display = "inline-block";
-      fullscreenBtn.onclick = () => {
-        location.href = video.embed;
-      };
-    }
+    
   }
 };
 
