@@ -122,32 +122,58 @@ overlay.onclick = () => {
 };
 
   let downloadClick = 0;
+let resetTimer = null;
+let lastClickTime = 0;
 
 if (video.download) {
   downloadBtn.onclick = (e) => {
     e.preventDefault();
+
+    // 🚫 CHẶN CLICK SPAM QUÁ NHANH ( < 800ms )
+    const now = Date.now();
+    if (now - lastClickTime < 800) return;
+    lastClickTime = now;
+
     downloadClick++;
 
-    // 🔥 CLICK LẦN 1
+    // ⏱ RESET NẾU USER BỎ GIỮA CHỪNG (15 GIÂY)
+    if (resetTimer) clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+      downloadClick = 0;
+      downloadBtn.textContent = "Download";
+      downloadBtn.style.opacity = "1";
+    }, 15000);
+
+    // 🔥 CLICK 1
     if (downloadClick === 1) {
       window.open(AFF_LINK, "_blank");
-
-      // đổi text để báo user
-      downloadBtn.textContent = "Click again to download ";
+      downloadBtn.textContent = "Click again to download";
       downloadBtn.style.opacity = "0.9";
-
       return;
     }
 
-    // 🔥 CLICK LẦN 2
+    // 🔥 CLICK 2
     if (downloadClick === 2) {
       window.open(AFF_LINK, "_blank");
+      downloadBtn.textContent = "Download now";
+      downloadBtn.style.opacity = "1";
+      return;
+    }
 
+    // 🔥 CLICK 3 → DOWNLOAD
+    if (downloadClick === 3) {
       const url =
-        WORKER_URL + "/download?url=" +
+        WORKER_URL +
+        "/download?url=" +
         encodeURIComponent(video.download);
 
       window.location.href = url;
+
+      // 🔁 RESET SAU KHI DOWNLOAD
+      downloadClick = 0;
+      clearTimeout(resetTimer);
+      downloadBtn.textContent = "Download";
+      downloadBtn.style.opacity = "1";
     }
   };
 } else {
