@@ -271,3 +271,54 @@ function showContent() {
     }
   });
 })();
+/* =========================
+   FIX MOBILE FULLSCREEN BACK (IFRAME SAFE)
+   ========================= */
+(function fixFullscreenBackIframe() {
+  let justExitedFullscreen = false;
+
+  // 1️⃣ Luôn push state khi vào trang watch
+  history.replaceState(
+    { watch: true },
+    "",
+    window.location.href
+  );
+
+  history.pushState(
+    { watch: true },
+    "",
+    window.location.href
+  );
+
+  // 2️⃣ Lắng nghe fullscreen change (iOS + Android)
+  function onFsChange() {
+    const isFullscreen =
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement;
+
+    if (!isFullscreen) {
+      justExitedFullscreen = true;
+
+      // reset flag sau 1s
+      setTimeout(() => {
+        justExitedFullscreen = false;
+      }, 1000);
+    }
+  }
+
+  document.addEventListener("fullscreenchange", onFsChange);
+  document.addEventListener("webkitfullscreenchange", onFsChange);
+
+  // 3️⃣ Chặn BACK ngay sau khi thoát fullscreen
+  window.addEventListener("popstate", (e) => {
+    if (justExitedFullscreen) {
+      history.pushState(
+        { watch: true },
+        "",
+        window.location.href
+      );
+    }
+  });
+})();
