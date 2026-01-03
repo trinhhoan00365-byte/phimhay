@@ -218,3 +218,56 @@ function showContent() {
   const cover = document.getElementById("page-cover");
   if (cover) cover.classList.add("hide");
 }
+(function fixMobileFullscreenBack() {
+  const video = document.querySelector("video");
+  if (!video) return;
+
+  let historyFixed = false;
+  let justExitedFullscreen = false;
+
+  // 1️⃣ Khi play video → push lại URL hiện tại
+  video.addEventListener("play", () => {
+    if (historyFixed) return;
+
+    history.pushState(
+      { fullscreenFix: true },
+      "",
+      window.location.href
+    );
+
+    historyFixed = true;
+  });
+
+  // 2️⃣ Bắt sự kiện fullscreen change (iOS + Android)
+  const onFullscreenChange = () => {
+    const isFullscreen =
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement;
+
+    if (!isFullscreen) {
+      // vừa thoát fullscreen
+      justExitedFullscreen = true;
+
+      // reset cờ sau 1 giây
+      setTimeout(() => {
+        justExitedFullscreen = false;
+      }, 1000);
+    }
+  };
+
+  document.addEventListener("fullscreenchange", onFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+
+  // 3️⃣ Chặn browser back ngay sau khi thoát fullscreen
+  window.addEventListener("popstate", (e) => {
+    if (justExitedFullscreen) {
+      history.pushState(
+        { fullscreenFix: true },
+        "",
+        window.location.href
+      );
+    }
+  });
+})();
