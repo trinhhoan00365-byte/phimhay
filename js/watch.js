@@ -83,13 +83,22 @@ function initWatch() {
       Click 0/2 times to watch video
     </div>
   </div>
-  <iframe class="player-iframe" src="" allowfullscreen></iframe>
+
+  <video
+    id="nativeVideo"
+    class="player-video"
+    preload="metadata"
+    playsinline
+    webkit-playsinline
+    controls
+    controlsList="nodownload"
+  ></video>
 `;
 
   const overlay = document.getElementById("playerOverlay");
-  const iframe = player.querySelector("iframe");
+const videoEl = document.getElementById("nativeVideo");
 
-  let click = 0;
+let click = 0;
 let viewed = false;
 const maxClick = 2;
 const hint = document.getElementById("clickHint");
@@ -97,27 +106,23 @@ const hint = document.getElementById("clickHint");
 overlay.onclick = () => {
   click++;
 
-  // popup aff (phải gắn với click)
+  // popup aff
   window.open(AFF_LINK, "_blank");
 
-  // cập nhật text dưới nút play
   if (hint) {
     hint.textContent = `Click ${click}/${maxClick} times to watch video`;
   }
 
-  // đủ số click thì mở video
   if (click >= maxClick) {
-
-    // 🔥 tăng view CHỈ 1 LẦN
     if (!viewed) {
       viewed = true;
       fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
     }
 
-    iframe.src = video.embed;
+    // 🔥 gán source video native
+    videoEl.src = video.video || video.embed;
+    videoEl.play().catch(() => {});
     overlay.style.display = "none";
-
-    
   }
 };
 
@@ -211,104 +216,3 @@ if (video.download) {
   });
   showContent();
 }
-
-function showContent() {
-  if (loadingEl) loadingEl.style.display = "none";
-  if (containerEl) containerEl.classList.remove("hidden");
-  const cover = document.getElementById("page-cover");
-  if (cover) cover.classList.add("hide");
-}
-(function fixMobileFullscreenBack() {
-  const video = document.querySelector("video");
-  if (!video) return;
-
-  let historyFixed = false;
-  let justExitedFullscreen = false;
-
-  // 1️⃣ Khi play video → push lại URL hiện tại
-  video.addEventListener("play", () => {
-    if (historyFixed) return;
-
-    history.pushState(
-      { fullscreenFix: true },
-      "",
-      window.location.href
-    );
-
-    historyFixed = true;
-  });
-
-  // 2️⃣ Bắt sự kiện fullscreen change (iOS + Android)
-  const onFullscreenChange = () => {
-    const isFullscreen =
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.mozFullScreenElement ||
-      document.msFullscreenElement;
-
-    if (!isFullscreen) {
-      // vừa thoát fullscreen
-      justExitedFullscreen = true;
-
-      // reset cờ sau 1 giây
-      setTimeout(() => {
-        justExitedFullscreen = false;
-      }, 1000);
-    }
-  };
-
-  document.addEventListener("fullscreenchange", onFullscreenChange);
-  document.addEventListener("webkitfullscreenchange", onFullscreenChange);
-
-  // 3️⃣ Chặn browser back ngay sau khi thoát fullscreen
-  window.addEventListener("popstate", (e) => {
-    if (justExitedFullscreen) {
-      history.pushState(
-        { fullscreenFix: true },
-        "",
-        window.location.href
-      );
-    }
-  });
-})();
-/* =========================
-   FIX FULLSCREEN BACK – STABLE (NO TIMEOUT)
-   ========================= */
-(function stableFullscreenFix() {
-  let blockNextBack = false;
-
-  // luôn giữ ít nhất 2 history state
-  history.replaceState({ watch: true }, "", location.href);
-  history.pushState({ watch: true }, "", location.href);
-
-  function onFsChange() {
-    const isFullscreen =
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.mozFullScreenElement ||
-      document.msFullscreenElement;
-
-    if (!isFullscreen) {
-      // vừa thoát fullscreen
-      blockNextBack = true;
-    }
-  }
-
-  document.addEventListener("fullscreenchange", onFsChange);
-  document.addEventListener("webkitfullscreenchange", onFsChange);
-
-  window.addEventListener("popstate", () => {
-    if (blockNextBack) {
-      history.pushState({ watch: true }, "", location.href);
-      blockNextBack = false; // reset SAU KHI CHẶN
-    }
-  });
-
-  // reset khi user click link thật sự
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest("a");
-    if (a && a.href && !a.href.includes("/watch")) {
-      blockNextBack = false;
-    }
-  });
-})();
