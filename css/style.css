@@ -457,3 +457,12 @@ body {
   align-items: center;      /* 🔥 CANH GIỮA NGANG */
   justify-content: center;  /* 🔥 CANH GIỮA DỌC */
 }
+/* =========================
+   NATIVE VIDEO PLAYER
+   ========================= */
+.player-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* KHÔNG over, KHÔNG méo */
+  background: #000;
+}
