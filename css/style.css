@@ -387,7 +387,10 @@ body {
   transition: opacity .25s ease;
   pointer-events: none;
 }
-.page-cover.hide { opacity: 0; }
+.page-cover.hide {
+  opacity: 0;
+  display: none; /* 🔥 CỰC KỲ QUAN TRỌNG */
+}
 
 /* ===== PLAYER ===== */
 .player-overlay {
