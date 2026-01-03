@@ -272,25 +272,15 @@ function showContent() {
   });
 })();
 /* =========================
-   FIX MOBILE FULLSCREEN BACK (IFRAME SAFE)
+   FIX FULLSCREEN BACK – STABLE (NO TIMEOUT)
    ========================= */
-(function fixFullscreenBackIframe() {
-  let justExitedFullscreen = false;
+(function stableFullscreenFix() {
+  let blockNextBack = false;
 
-  // 1️⃣ Luôn push state khi vào trang watch
-  history.replaceState(
-    { watch: true },
-    "",
-    window.location.href
-  );
+  // luôn giữ ít nhất 2 history state
+  history.replaceState({ watch: true }, "", location.href);
+  history.pushState({ watch: true }, "", location.href);
 
-  history.pushState(
-    { watch: true },
-    "",
-    window.location.href
-  );
-
-  // 2️⃣ Lắng nghe fullscreen change (iOS + Android)
   function onFsChange() {
     const isFullscreen =
       document.fullscreenElement ||
@@ -299,26 +289,26 @@ function showContent() {
       document.msFullscreenElement;
 
     if (!isFullscreen) {
-      justExitedFullscreen = true;
-
-      // reset flag sau 1s
-      setTimeout(() => {
-        justExitedFullscreen = false;
-      }, 1000);
+      // vừa thoát fullscreen
+      blockNextBack = true;
     }
   }
 
   document.addEventListener("fullscreenchange", onFsChange);
   document.addEventListener("webkitfullscreenchange", onFsChange);
 
-  // 3️⃣ Chặn BACK ngay sau khi thoát fullscreen
-  window.addEventListener("popstate", (e) => {
-    if (justExitedFullscreen) {
-      history.pushState(
-        { watch: true },
-        "",
-        window.location.href
-      );
+  window.addEventListener("popstate", () => {
+    if (blockNextBack) {
+      history.pushState({ watch: true }, "", location.href);
+      blockNextBack = false; // reset SAU KHI CHẶN
+    }
+  });
+
+  // reset khi user click link thật sự
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if (a && a.href && !a.href.includes("/watch")) {
+      blockNextBack = false;
     }
   });
 })();
