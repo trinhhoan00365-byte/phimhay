@@ -77,7 +77,7 @@ function render(){
   }, 150);
 }
 
-// RENDER REAL CONTENT
+// RENDER REAL CONTENT (🔥 HOT VERSION)
 function renderContent(){
   grid.innerHTML = "";
 
@@ -89,9 +89,14 @@ function renderContent(){
     const card = document.createElement("div");
     card.className = "card";
 
+    // HOT badge (tạm thời – sẽ cập nhật lại sau khi fetch view)
+    const isHot = (v.views || 0) >= 20000;
+    const hotBadge = isHot ? `<span class="hot-badge">🔥 HOT</span>` : "";
+
     card.innerHTML = `
       <div class="thumb-wrap">
         <img class="thumb" src="${v.thumb}">
+        ${hotBadge}
         <span class="duration">${v.duration || ""}</span>
       </div>
       <h3>${v.title}</h3>
@@ -104,12 +109,26 @@ function renderContent(){
 
     grid.appendChild(card);
 
+    // Fetch view
     fetch(WORKER_URL + "/view?id=" + v.id)
       .then(r => r.json())
       .then(d => {
+        v.views = d.views; // lưu view để filter / sort
+
         const el = document.getElementById("view-" + v.id);
         if(el){
           el.textContent = formatView(d.views) + " view";
+        }
+
+        // Thêm HOT nếu đạt 20k
+        if(d.views >= 20000){
+          const wrap = card.querySelector(".thumb-wrap");
+          if(wrap && !wrap.querySelector(".hot-badge")){
+            wrap.insertAdjacentHTML(
+              "afterbegin",
+              `<span class="hot-badge">🔥 HOT</span>`
+            );
+          }
         }
       })
       .catch(() => {});
@@ -137,7 +156,6 @@ function renderPagination(total){
 
       currentPage = i;
 
-      // update URL without reload
       const url = new URL(window.location);
       url.searchParams.set("page", i);
       window.history.pushState({}, "", url);
