@@ -71,7 +71,7 @@ function initWatch() {
   const video = videos.find(v => v.id === id);
 
   if (!video) {
-    titleEl.textContent = "Video không tồn tại";
+    titleEl.textContent = "Video Not Found";
     hidePageCover();
     return;
   }
