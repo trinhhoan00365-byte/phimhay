@@ -96,7 +96,7 @@ function initWatch() {
          style="background-image:url('${video.thumb}')">
       <div class="play-btn"></div>
       <div class="click-hint" id="clickHint">
-        Click 0/2 times to watch video
+        
       </div>
     </div>
 
