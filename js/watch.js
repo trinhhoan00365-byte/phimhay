@@ -126,7 +126,7 @@ function initWatch() {
     window.open(AFF_LINK, "_blank");
 
     if (hint) {
-      hint.textContent = `Click ${click}/${maxClick} times to watch video`;
+      hint.textContent = ``;
     }
 
     if (click >= maxClick) {
