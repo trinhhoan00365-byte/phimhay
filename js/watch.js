@@ -80,7 +80,7 @@ function initWatch() {
   hidePageCover();
 
   titleEl.textContent = video.title;
-  durationEl.textContent = "⏱ " + (video.duration || "");
+  durationEl.textContent = "Duration: " + (video.duration || "");
 
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
