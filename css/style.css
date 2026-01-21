@@ -118,7 +118,7 @@ body {
    CARD VIDEO
    ========================= */
 .card {
-  background: linear-gradient(180deg, #1a1633, #0f0c1f);
+  background: radial-gradient(1200px 600px at top, #141024, #0b0b14);
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
