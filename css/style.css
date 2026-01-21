@@ -118,16 +118,16 @@ body {
    CARD VIDEO
    ========================= */
 .card {
-  background: radial-gradient(1200px 600px at top, #141024, #0b0b14);
+  background: transparent;   
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition: transform .2s ease;
 }
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 40px rgba(0,0,0,.55);
+
 }
 
 /* thumb */
