@@ -85,7 +85,7 @@ function initWatch() {
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
     .then(d => {
-      viewsEl.textContent = formatView(d.views) + " view";
+      viewsEl.textContent = formatView(d.views) + " views";
     });
 
   /* =========================
@@ -215,7 +215,7 @@ function initWatch() {
           <span class="duration">${v.duration || ""}</span>
         </div>
         <h3>${v.title}</h3>
-        <div class="related-views" id="rv-${v.id}">0 view</div>
+        <div class="related-views" id="rv-${v.id}">0 views</div>
       `;
 
       card.onclick = () => location.href = `/watch/${v.id}`;
@@ -225,7 +225,7 @@ function initWatch() {
         .then(r => r.json())
         .then(d => {
           const el = document.getElementById("rv-" + v.id);
-          if (el) el.textContent = formatView(d.views) + " view";
+          if (el) el.textContent = formatView(d.views) + " views";
         })
         .catch(() => {});
     });
