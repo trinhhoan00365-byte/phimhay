@@ -568,3 +568,89 @@ body {
 
   z-index: 999999;
 }
+/* CHAT BUTTON */
+#chat-fab{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  width:56px;
+  height:56px;
+  background:#a78bfa;
+  color:#000;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  cursor:pointer;
+  z-index:999999;
+  box-shadow:0 10px 25px rgba(0,0,0,.4);
+}
+
+/* OVERLAY MỜ */
+#chat-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(6px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:999998;
+}
+
+/* CHAT MODAL */
+#chat-modal{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  width:320px;
+  height:420px;
+  background:#141024;
+  border-radius:18px;
+  box-shadow:0 30px 60px rgba(0,0,0,.7);
+  display:flex;
+  flex-direction:column;
+  transform:scale(.9) translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:999999;
+}
+
+/* ACTIVE STATE */
+#chat-overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+#chat-modal.active{
+  opacity:1;
+  pointer-events:auto;
+  transform:scale(1) translateY(0);
+}
+
+/* HEADER */
+#chat-modal .chat-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  background:linear-gradient(90deg,#a78bfa,#c4b5fd);
+  color:#000;
+  font-weight:700;
+}
+
+#chat-close{
+  cursor:pointer;
+  font-size:20px;
+}
+
+/* MESSAGE */
+#chat-messages{
+  flex:1;
+  padding:10px;
+  overflow-y:auto;
+  font-size:13px;
+  color:#fff;
+}
