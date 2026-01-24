@@ -51,14 +51,26 @@
   </footer>
 
   <script src="js/main.js?v=3"></script>
-    <div id="chat-box">
-    <div class="chat-header">💬 Box Chat</div>
-    <div id="chat-messages"></div>
-    <div class="chat-input">
-      <input id="chat-text" placeholder="chat..." />
-      <button id="send-btn">➤</button>
-    </div>
+    <!-- CHAT BUTTON -->
+<div id="chat-fab">💬</div>
+
+<!-- OVERLAY -->
+<div id="chat-overlay"></div>
+
+<!-- CHAT MODAL -->
+<div id="chat-modal">
+  <div class="chat-header">
+    <span>💬 Live Chat</span>
+    <span id="chat-close">✕</span>
   </div>
+
+  <div id="chat-messages"></div>
+
+  <div class="chat-input">
+    <input id="chat-text" placeholder="chat..." />
+    <button id="send-btn">➤</button>
+  </div>
+</div>
 
   <script>
     const ws = new WebSocket("wss://box.avboy.top");
@@ -85,5 +97,25 @@
       if (e.key === "Enter") send();
     };
   </script>
+  <script>
+const fab = document.getElementById("chat-fab");
+const modal = document.getElementById("chat-modal");
+const overlay = document.getElementById("chat-overlay");
+const closeBtn = document.getElementById("chat-close");
+
+function openChat(){
+  modal.classList.add("active");
+  overlay.classList.add("active");
+}
+
+function closeChat(){
+  modal.classList.remove("active");
+  overlay.classList.remove("active");
+}
+
+fab.onclick = openChat;
+overlay.onclick = closeChat;
+closeBtn.onclick = closeChat;
+</script>
 </body>
 </html>
