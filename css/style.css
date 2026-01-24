@@ -551,3 +551,20 @@ body {
   font-weight:700;
   cursor:pointer;
 }
+#chat-box{
+  position: fixed !important;
+  bottom: 16px !important;
+  right: 16px !important;
+
+  width: 300px;
+  height: 380px;
+
+  background: #141024;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.6);
+
+  display: flex;
+  flex-direction: column;
+
+  z-index: 999999;
+}
