@@ -51,5 +51,39 @@
   </footer>
 
   <script src="js/main.js?v=3"></script>
+    <div id="chat-box">
+    <div class="chat-header">💬 Box Chat</div>
+    <div id="chat-messages"></div>
+    <div class="chat-input">
+      <input id="chat-text" placeholder="chat..." />
+      <button id="send-btn">➤</button>
+    </div>
+  </div>
+
+  <script>
+    const ws = new WebSocket("wss://box.avboy.top");
+
+    const name = "User" + Math.floor(Math.random() * 9999);
+    const box = document.getElementById("chat-messages");
+
+    ws.onmessage = (e) => {
+      const div = document.createElement("div");
+      div.textContent = e.data;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    };
+
+    function send() {
+      const input = document.getElementById("chat-text");
+      if (!input.value.trim()) return;
+      ws.send(name + ": " + input.value);
+      input.value = "";
+    }
+
+    document.getElementById("send-btn").onclick = send;
+    document.getElementById("chat-text").onkeydown = e => {
+      if (e.key === "Enter") send();
+    };
+  </script>
 </body>
 </html>
