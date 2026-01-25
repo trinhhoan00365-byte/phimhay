@@ -15,7 +15,7 @@ let filtered = [];
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
-   GET PAGE FROM URL
+   
    ========================= */
 const urlParams = new URLSearchParams(window.location.search);
 const pageParam = parseInt(urlParams.get("page"));
@@ -89,7 +89,7 @@ function renderContent(){
     const card = document.createElement("div");
     card.className = "card";
 
-    // HOT badge (tạm thời – sẽ cập nhật lại sau khi fetch view)
+    // 
     const isHot = (v.views || 0) >= 20000;
     const hotBadge = isHot ? `<span class="hot-badge">🔥 HOT</span>` : "";
 
@@ -113,14 +113,14 @@ function renderContent(){
     fetch(WORKER_URL + "/view?id=" + v.id)
       .then(r => r.json())
       .then(d => {
-        v.views = d.views; // lưu view để filter / sort
+        v.views = d.views; // 
 
         const el = document.getElementById("view-" + v.id);
         if(el){
           el.textContent = formatView(d.views) + " views";
         }
 
-        // Thêm HOT nếu đạt 20k
+        // 
         if(d.views >= 20000){
           const wrap = card.querySelector(".thumb-wrap");
           if(wrap && !wrap.querySelector(".hot-badge")){
