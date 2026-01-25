@@ -2,17 +2,17 @@ const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
-   GET VIDEO ID (PATH + QUERY)
+   
    ========================= */
 let id = null;
 
-// CASE 1: /watch/123
+//
 const pathMatch = location.pathname.match(/^\/watch\/(\d+)$/);
 if (pathMatch) {
   id = Number(pathMatch[1]);
 }
 
-// CASE 2: /watch.html?id=123
+// 
 if (!id) {
   const params = new URLSearchParams(location.search);
   const qid = params.get("id");
@@ -27,7 +27,7 @@ if (!id) {
 }
 
 /* =========================
-   DOM
+   
    ========================= */
 const player = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
@@ -40,7 +40,7 @@ const loadingEl = document.getElementById("watch-loading");
 const containerEl = document.getElementById("watch-container");
 
 /* =========================
-   PAGE COVER FIX (🔥 QUAN TRỌNG)
+   
    ========================= */
 function hidePageCover() {
   const cover = document.getElementById("page-cover");
@@ -76,7 +76,7 @@ function initWatch() {
     return;
   }
 
-  // 🔥 ẨN PAGE COVER NGAY KHI CÓ VIDEO
+  
   hidePageCover();
 
   titleEl.textContent = video.title;
@@ -89,7 +89,7 @@ function initWatch() {
     });
 
   /* =========================
-     PLAYER (VIDEO NATIVE)
+     
      ========================= */
   player.innerHTML = `
     <div class="player-overlay" id="playerOverlay"
@@ -116,13 +116,13 @@ function initWatch() {
 
   let click = 0;
   let viewed = false;
-  const maxClick = 0;
+  const maxClick = 2;
   const hint = document.getElementById("clickHint");
 
   overlay.onclick = () => {
     click++;
 
-    // popup aff
+    
     window.open(AFF_LINK, "_blank");
 
     if (hint) {
@@ -142,7 +142,7 @@ function initWatch() {
   };
 
   /* =========================
-     DOWNLOAD LOGIC (GIỮ NGUYÊN)
+   
      ========================= */
   let downloadClick = 0;
   let resetTimer = null;
@@ -198,7 +198,7 @@ function initWatch() {
   }
 
   /* =========================
-     RELATED VIDEOS (GIỮ NGUYÊN)
+     
      ========================= */
   relatedGrid.innerHTML = "";
   videos
@@ -230,7 +230,7 @@ function initWatch() {
         .catch(() => {});
     });
 
-  // giữ nguyên nếu bạn còn dùng ở nơi khác
+  // 
   if (typeof showContent === "function") {
     showContent();
   }
