@@ -1,4 +1,4 @@
-const AFF_LINK = "https://";
+const AFF_LINK = "https://videoz.pages.dev";
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
