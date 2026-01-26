@@ -1,4 +1,4 @@
-const AFF_LINK = "https://phim-9z.pages.dev";
+const AFF_LINK = "https://phim-92z.pages.dev";
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
