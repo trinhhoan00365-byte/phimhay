@@ -1,4 +1,4 @@
-const AFF_LINK = "https://s.shopee.vn/1gCNpeNd9F";
+const AFF_LINK = "https://in.avboy66s.workers.dev";
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
