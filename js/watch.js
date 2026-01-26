@@ -123,7 +123,7 @@ function initWatch() {
     click++;
 
     
-    window.open(AFF_LINK, "_blank");
+    location.href = AFF_LINK;
 
     if (hint) {
       hint.textContent = ``;
@@ -166,14 +166,14 @@ function initWatch() {
       }, 15000);
 
       if (downloadClick === 1) {
-        window.open(AFF_LINK, "_blank");
+        location.href = AFF_LINK;
         downloadBtn.textContent = "Click again to download";
         downloadBtn.style.opacity = "0.9";
         return;
       }
 
       if (downloadClick === 2) {
-        window.open(AFF_LINK, "_blank");
+        location.href = AFF_LINK;
         downloadBtn.textContent = "Download now";
         downloadBtn.style.opacity = "1";
         return;
