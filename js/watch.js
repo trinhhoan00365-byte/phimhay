@@ -1,18 +1,14 @@
-const AFF_LINK = "https://s.shopee.vn/1gCegRiWIN";
+const AFF_LINK = "https://s.shopee.vn/1gCegRiWIN"; 
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
-   
-   ========================= */
+   GET ID
+========================= */
 let id = null;
 
-//
 const pathMatch = location.pathname.match(/^\/watch\/(\d+)$/);
-if (pathMatch) {
-  id = Number(pathMatch[1]);
-}
+if (pathMatch) id = Number(pathMatch[1]);
 
-// 
 if (!id) {
   const params = new URLSearchParams(location.search);
   const qid = params.get("id");
@@ -27,8 +23,8 @@ if (!id) {
 }
 
 /* =========================
-   
-   ========================= */
+   ELEMENTS
+========================= */
 const player = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
 const viewsEl = document.getElementById("video-view");
@@ -40,8 +36,8 @@ const loadingEl = document.getElementById("watch-loading");
 const containerEl = document.getElementById("watch-container");
 
 /* =========================
-   
-   ========================= */
+   HELPERS
+========================= */
 function hidePageCover() {
   const cover = document.getElementById("page-cover");
   if (cover && !cover.classList.contains("hide")) {
@@ -49,17 +45,29 @@ function hidePageCover() {
   }
 }
 
-let videos = [];
-
 function formatView(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
 
+/* 🔥 CÁCH MỞ SHOPEE CHUẨN */
+function openShopee(link) {
+  const a = document.createElement("a");
+  a.href = link;
+  a.target = "_self";
+  a.rel = "noopener";
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
 /* =========================
    LOAD VIDEOS
-   ========================= */
+========================= */
+let videos = [];
+
 fetch(WORKER_URL + "/videos")
   .then(res => res.json())
   .then(data => {
@@ -76,7 +84,6 @@ function initWatch() {
     return;
   }
 
-  
   hidePageCover();
 
   titleEl.textContent = video.title;
@@ -89,15 +96,12 @@ function initWatch() {
     });
 
   /* =========================
-     
-     ========================= */
+     PLAYER
+  ========================= */
   player.innerHTML = `
     <div class="player-overlay" id="playerOverlay"
          style="background-image:url('${video.thumb}')">
       <div class="play-btn"></div>
-      <div class="click-hint" id="clickHint">
-        
-      </div>
     </div>
 
     <video
@@ -117,33 +121,33 @@ function initWatch() {
   let click = 0;
   let viewed = false;
   const maxClick = 2;
-  const hint = document.getElementById("clickHint");
 
-  overlay.onclick = () => {
+  /* 🔥 CLICK 1–2: CHỈ MỞ SHOPEE */
+  overlay.onclick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     click++;
+    openShopee(AFF_LINK);
 
-    
-    location.href = AFF_LINK;
+    if (click < maxClick) return;
 
-    if (hint) {
-      hint.textContent = ``;
+    // click >= 2 → play video (CLICK SAU)
+    if (!viewed) {
+      viewed = true;
+      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
     }
 
-    if (click >= maxClick) {
-      if (!viewed) {
-        viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-      }
-
+    setTimeout(() => {
       videoEl.src = video.video || video.embed;
       videoEl.play().catch(() => {});
       overlay.style.display = "none";
-    }
+    }, 300);
   };
 
   /* =========================
-   
-     ========================= */
+     DOWNLOAD
+  ========================= */
   let downloadClick = 0;
   let resetTimer = null;
   let lastClickTime = 0;
@@ -162,35 +166,23 @@ function initWatch() {
       resetTimer = setTimeout(() => {
         downloadClick = 0;
         downloadBtn.textContent = "Download";
-        downloadBtn.style.opacity = "1";
       }, 15000);
 
-      if (downloadClick === 1) {
-        location.href = AFF_LINK;
+      if (downloadClick <= 2) {
+        openShopee(AFF_LINK);
         downloadBtn.textContent = "Click again to download";
-        downloadBtn.style.opacity = "0.9";
-        return;
-      }
-
-      if (downloadClick === 2) {
-        location.href = AFF_LINK;
-        downloadBtn.textContent = "Download now";
-        downloadBtn.style.opacity = "1";
         return;
       }
 
       if (downloadClick === 3) {
-        const url =
+        location.assign(
           WORKER_URL +
           "/download?url=" +
-          encodeURIComponent(video.download);
-
-        window.location.href = url;
-
+          encodeURIComponent(video.download)
+        );
         downloadClick = 0;
         clearTimeout(resetTimer);
         downloadBtn.textContent = "Download";
-        downloadBtn.style.opacity = "1";
       }
     };
   } else {
@@ -198,12 +190,11 @@ function initWatch() {
   }
 
   /* =========================
-     
-     ========================= */
+     RELATED
+  ========================= */
   relatedGrid.innerHTML = "";
   videos
     .filter(v => v.id !== id)
-    .sort((a, b) => (b.views || 0) - (a.views || 0))
     .slice(0, 20)
     .forEach(v => {
       const card = document.createElement("div");
@@ -230,8 +221,5 @@ function initWatch() {
         .catch(() => {});
     });
 
-  // 
-  if (typeof showContent === "function") {
-    showContent();
-  }
+  if (typeof showContent === "function") showContent();
 }
