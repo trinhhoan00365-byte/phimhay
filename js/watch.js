@@ -1,4 +1,4 @@
-const AFF_LINK = "https://in.avboy66s.workers.dev";
+const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
