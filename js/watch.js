@@ -1,4 +1,4 @@
-const AFF_LINK = "https://relinkzz.pages.dev";
+const AFF_LINK = "https://ie.avboy.top";
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
