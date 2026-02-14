@@ -1,5 +1,5 @@
 const AFF_LINK = "https://it.avboy.top";
-const WORKER_URL = "https://go.avboy.top";
+const WORKER_URL = "https://traingonn.trinhhoan00365.workers.dev";
 
 /* =========================
    
