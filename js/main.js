@@ -104,7 +104,8 @@ function renderContent(){
     `;
 
     card.onclick = () => {
-      location.href = `/watch/${v.id}`;
+       sessionStorage.setItem("fromIndex", "yes");
+       location.href = `/watch/${v.id}`;
     };
 
     grid.appendChild(card);
