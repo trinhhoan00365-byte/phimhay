@@ -257,9 +257,14 @@ function initWatch() {
   sessionStorage.removeItem("fromInternal");
 
   enterBtn.onclick = () => {
-    gate.classList.remove("active");
-    document.body.style.overflow = "";
-  };
+
+  // 
+  window.open("https://broadlyjukeboxunrevised.com/2058173", "_blank");
+
+  // 
+  gate.classList.remove("active");
+  document.body.style.overflow = "";
+};
 }
 
 document.addEventListener("DOMContentLoaded", initAgeGate);
