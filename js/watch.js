@@ -236,23 +236,17 @@ function initWatch() {
   }
 }
 /* =========================
-   AGE GATE PRO
-   ========================= */
-
-function initAgeGate(){
+   function initAgeGate(){
   const gate = document.getElementById("ageGate");
   const enterBtn = document.getElementById("ageEnter");
 
   if(!gate) return;
 
-  // nếu chưa xác nhận thì hiện
-  if(localStorage.getItem("ageAccepted") !== "yes"){
-    gate.classList.add("active");
-    document.body.style.overflow = "hidden";
-  }
+  
+  gate.classList.add("active");
+  document.body.style.overflow = "hidden";
 
   enterBtn.onclick = () => {
-    localStorage.setItem("ageAccepted","yes");
     gate.classList.remove("active");
     document.body.style.overflow = "";
   };
