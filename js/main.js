@@ -104,7 +104,7 @@ function renderContent(){
     `;
 
     card.onclick = () => {
-       sessionStorage.setItem("fromIndex", "yes");
+       sessionStorage.setItem("fromInternal", "yes");
        location.href = `/watch/${v.id}`;
     };
 
