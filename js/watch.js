@@ -235,7 +235,7 @@ function initWatch() {
     showContent();
   }
 }
-/* =========================
+//
    function initAgeGate(){
   const gate = document.getElementById("ageGate");
   const enterBtn = document.getElementById("ageEnter");
