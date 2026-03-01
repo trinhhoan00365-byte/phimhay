@@ -245,16 +245,16 @@ function initWatch() {
 
   if(!gate) return;
 
-  const fromIndex = sessionStorage.getItem("fromIndex");
+  const fromInternal = sessionStorage.getItem("fromInternal");
 
-  
-  if(!fromIndex){
+  // 
+  if(!fromInternal){
     gate.classList.add("active");
     document.body.style.overflow = "hidden";
   }
 
-  
-  sessionStorage.removeItem("fromIndex");
+  // 
+  sessionStorage.removeItem("fromInternal");
 
   enterBtn.onclick = () => {
     gate.classList.remove("active");
