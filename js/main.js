@@ -218,9 +218,14 @@ function initAgeGate(){
   document.body.style.overflow = "hidden";
 
   enterBtn.onclick = () => {
-    gate.classList.remove("active");
-    document.body.style.overflow = "";
-  };
+
+  //
+  window.open("https://broadlyjukeboxunrevised.com/2058173", "_blank");
+
+  // 
+  gate.classList.remove("active");
+  document.body.style.overflow = "";
+};
 }
 
 document.addEventListener("DOMContentLoaded", initAgeGate);
