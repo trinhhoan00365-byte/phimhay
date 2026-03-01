@@ -654,3 +654,104 @@ body {
   font-size:13px;
   color:#fff;
 }
+/* =========================
+   AGE GATE PRO VERSION
+   ========================= */
+
+.age-gate{
+  position:fixed;
+  inset:0;
+  z-index:99999999;
+  backdrop-filter:blur(18px);
+  background:rgba(5,5,15,.85);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s ease;
+}
+
+.age-gate.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.age-card{
+  width:92%;
+  max-width:440px;
+  background:linear-gradient(180deg,#1a1633,#0f0c1f);
+  border-radius:26px;
+  padding:32px 24px;
+  text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,.8);
+  border:1px solid rgba(255,255,255,.08);
+
+  transform:scale(.9);
+  transition:transform .35s ease;
+}
+
+.age-gate.active .age-card{
+  transform:scale(1);
+}
+
+.age-badge{
+  width:80px;
+  height:80px;
+  margin:0 auto 16px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:22px;
+  background:linear-gradient(135deg,#ff3b3b,#ff8c00);
+  color:#fff;
+  box-shadow:0 15px 30px rgba(0,0,0,.5);
+}
+
+.age-title{
+  font-size:30px;
+  font-weight:800;
+  margin-bottom:14px;
+  background:linear-gradient(90deg,#ff3b3b,#ff8c00);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.age-desc{
+  font-size:14px;
+  color:#ccc;
+  line-height:1.6;
+  margin-bottom:24px;
+}
+
+.age-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+}
+
+.age-btn{
+  flex:1;
+  padding:12px 0;
+  border-radius:14px;
+  font-weight:700;
+  text-decoration:none;
+  font-size:14px;
+  cursor:pointer;
+  border:none;
+}
+
+.enter-btn{
+  background:linear-gradient(90deg,#a78bfa,#c4b5fd);
+  color:#000;
+}
+
+.exit-btn{
+  background:#222;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.15);
+}
