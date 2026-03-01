@@ -242,9 +242,16 @@ function initWatch() {
 
   if(!gate) return;
 
+  const fromIndex = sessionStorage.getItem("fromIndex");
+
   
-  gate.classList.add("active");
-  document.body.style.overflow = "hidden";
+  if(!fromIndex){
+    gate.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  
+  sessionStorage.removeItem("fromIndex");
 
   enterBtn.onclick = () => {
     gate.classList.remove("active");
