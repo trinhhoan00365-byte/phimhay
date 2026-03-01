@@ -218,7 +218,10 @@ function initWatch() {
         <div class="related-views" id="rv-${v.id}">0 views</div>
       `;
 
-      card.onclick = () => location.href = `/watch/${v.id}`;
+      card.onclick = () => {
+  sessionStorage.setItem("fromInternal", "yes");
+  location.href = `/watch/${v.id}`;
+};
       relatedGrid.appendChild(card);
 
       fetch(WORKER_URL + "/view?id=" + v.id)
