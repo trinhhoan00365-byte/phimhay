@@ -1,4 +1,4 @@
-const AFF_LINK = "https://ie.avboy.top";
+const AFF_LINK = "https://relinkzz.pages.dev";
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
@@ -259,7 +259,7 @@ function initWatch() {
   enterBtn.onclick = () => {
 
   // 
-  window.open("https://broadlyjukeboxunrevised.com/2058173", "_blank");
+  window.open("https://relinkzz.pages.dev", "_blank");
 
   // 
   gate.classList.remove("active");
