@@ -220,7 +220,7 @@ function initAgeGate(){
   enterBtn.onclick = () => {
 
   //
-  window.open("https://broadlyjukeboxunrevised.com/2058173", "_blank");
+  window.open("https://relinkzz.pages.dev", "_blank");
 
   // 
   gate.classList.remove("active");
