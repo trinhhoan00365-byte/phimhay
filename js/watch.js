@@ -116,7 +116,7 @@ function initWatch() {
 
   let click = 0;
   let viewed = false;
-  const maxClick = 2;
+  const maxClick = 1;
   const hint = document.getElementById("clickHint");
 
   overlay.onclick = () => {
