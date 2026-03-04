@@ -36,6 +36,16 @@ fetch(WORKER_URL + "/videos")
   .then(data => {
     videos = data;
     filtered = [...videos];
+const params = new URLSearchParams(location.search);
+const tagFilter = params.get("tag");
+
+if (tagFilter) {
+  videos = videos.filter(v =>
+    v.tags && v.tags.includes(tagFilter)
+  );
+
+  document.title = tagFilter + " videos | avboy.top";
+}
     render();
   });
 
