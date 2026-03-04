@@ -38,6 +38,7 @@ fetch(WORKER_URL + "/videos")
 
     const params = new URLSearchParams(location.search);
     const tagFilter = params.get("tag");
+    const tagTitle = document.getElementById("tag-title");
 
     if (tagFilter) {
       videos = videos.filter(v =>
@@ -46,13 +47,17 @@ fetch(WORKER_URL + "/videos")
 
       document.title = tagFilter + " videos | avboy.top";
 
-      const tagTitle = document.getElementById("tag-title");
       if (tagTitle) {
         tagTitle.textContent = tagFilter.toUpperCase() + " Videos";
+        tagTitle.style.display = "block";
+      }
+    } else {
+      if (tagTitle) {
+        tagTitle.style.display = "none";
       }
     }
 
-    filtered = [...videos]; // 🔥 phải đặt sau filter
+    filtered = [...videos]; // 🔥 QUAN TRỌNG: phải đặt sau filter
 
     render();
   });
