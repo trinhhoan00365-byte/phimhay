@@ -755,52 +755,38 @@ body {
   color:#fff;
   border:1px solid rgba(255,255,255,.15);
 }
-.tag-box{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin:10px 0 14px;
-}
-
-.tag{
-  background:#15152a;
-  border:1px solid rgba(255,255,255,.1);
-  color:#f5c542;
-  padding:6px 12px;
-  border-radius:20px;
-  font-size:12px;
-  text-decoration:none;
-}
-
-.tag:hover{
-  background:#222;
-}
 .watch-meta {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 6px; /* giảm khoảng cách */
+  margin-top: 6px; /* sát title hơn */
 }
 
 .meta-row {
   display: flex;
-  gap: 20px;
-  color: #aaa;
-  font-size: 14px;
+  gap: 16px;
+  color: #8a8a9a; /* dịu hơn */
+  font-size: 13px;
 }
 
 .tag-box {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 6px; /* nhỏ lại */
 }
 
 .tag {
-  padding: 6px 14px;
-  border-radius: 20px;
-  background: rgba(255, 193, 7, 0.1);
-  border: 1px solid rgba(255, 193, 7, 0.4);
-  color: #ffc107;
+  padding: 4px 10px;   /* nhỏ lại */
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05); /* nền mờ */
+  border: 1px solid rgba(255,255,255,0.08); /* viền nhẹ */
+  color: #b8b8c8;  /* màu dịu hơn */
   text-decoration: none;
-  font-size: 14px;
+  font-size: 12px; /* nhỏ hơn */
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: rgba(255,255,255,0.08);
+  color: #ffffff;
 }
