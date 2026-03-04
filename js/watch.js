@@ -83,7 +83,7 @@ function initWatch() {
   titleEl.textContent = video.title;
    if(video.tags && tagBox){
   tagBox.innerHTML = video.tags.map(tag =>
-    `<a href="/?search=${tag}" class="tag">${tag}</a>`
+    `<a href="/tag/${encodeURIComponent(tag)}" class="tag">${tag}</a>`
   ).join("");
 };
   durationEl.textContent = "Duration: " + (video.duration || "");
