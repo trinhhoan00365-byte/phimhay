@@ -775,3 +775,32 @@ body {
 .tag:hover{
   background:#222;
 }
+.watch-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.meta-row {
+  display: flex;
+  gap: 20px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.tag-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  color: #ffc107;
+  text-decoration: none;
+  font-size: 14px;
+}
