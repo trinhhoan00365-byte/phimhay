@@ -35,17 +35,25 @@ fetch(WORKER_URL + "/videos")
   .then(r => r.json())
   .then(data => {
     videos = data;
-    filtered = [...videos];
-const params = new URLSearchParams(location.search);
-const tagFilter = params.get("tag");
 
-if (tagFilter) {
-  videos = videos.filter(v =>
-    v.tags && v.tags.includes(tagFilter)
-  );
+    const params = new URLSearchParams(location.search);
+    const tagFilter = params.get("tag");
 
-  document.title = tagFilter + " videos | avboy.top";
-}
+    if (tagFilter) {
+      videos = videos.filter(v =>
+        v.tags && v.tags.includes(tagFilter)
+      );
+
+      document.title = tagFilter + " videos | avboy.top";
+
+      const tagTitle = document.getElementById("tag-title");
+      if (tagTitle) {
+        tagTitle.textContent = tagFilter.toUpperCase() + " Videos";
+      }
+    }
+
+    filtered = [...videos]; // 🔥 phải đặt sau filter
+
     render();
   });
 
