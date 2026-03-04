@@ -69,6 +69,7 @@ function render(videos) {
       <input value="${v.embed}" id="e${v.id}">
       <input value="${v.duration}" id="d${v.id}">
       <input value="${v.download || ""}" id="dl${v.id}">
+      <input value="${(v.tags || []).join(", ")}" id="tg${v.id}" placeholder="Tags (vietnam, onlyfans)">
       <input value="${v.position ?? 0}" id="p${v.id}" placeholder="Position (smaller = top)">
       <div class="small">ID: ${v.id}</div>
       <div class="row">
@@ -109,6 +110,10 @@ function edit(id) {
       embed: document.getElementById("e"+id).value,
       duration: document.getElementById("d"+id).value,
       download: document.getElementById("dl"+id).value,
+      tags: document.getElementById("tg"+id).value
+  .split(",")
+  .map(t => t.trim())
+  .filter(t => t.length > 0),
       position: Number(document.getElementById("p"+id).value)
     }
   }).then(() => alert("✅ Saved"));
