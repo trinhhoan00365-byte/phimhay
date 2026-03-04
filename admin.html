@@ -30,6 +30,7 @@ button{background:#ff9800;color:#000;font-weight:600}
 <input id="embed" placeholder="Embed URL">
 <input id="duration" placeholder="Duration (mm:ss)">
 <input id="download" placeholder="Download URL">
+<input id="tags" placeholder="Tags (vd: vietnam, onlyfans, bareback)">
 <button onclick="add()">ADD VIDEO</button>
 
 <h3>📋 Video List</h3>
@@ -89,7 +90,8 @@ function add() {
       thumb: thumb.value,
       embed: embed.value,
       duration: duration.value,
-      download: download.value
+      download: download.value,
+      tags: tags.value.split(",").map(t => t.trim())
     }
   }).then(() => {
     title.value = thumb.value = embed.value = duration.value = download.value = "";
