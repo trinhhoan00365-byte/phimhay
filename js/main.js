@@ -252,3 +252,43 @@ function initAgeGate(){
 }
 
 document.addEventListener("DOMContentLoaded", initAgeGate);
+const tagBtn = document.querySelector(".tag-btn");
+const tagPopup = document.getElementById("tag-popup");
+const tagClose = document.getElementById("tag-close");
+const tagList = document.getElementById("tag-list");
+
+if(tagBtn){
+
+tagBtn.onclick = () => {
+
+tagPopup.classList.add("active");
+
+fetch(WORKER_URL + "/videos")
+.then(r=>r.json())
+.then(videos=>{
+
+const set = new Set();
+
+videos.forEach(v=>{
+if(v.tags){
+v.tags.forEach(t=>set.add(t));
+}
+});
+
+const tags = [...set].sort();
+
+tagList.innerHTML = tags.map(tag=>
+`<a href="/tag/${encodeURIComponent(tag)}" class="tag-item">${tag}</a>`
+).join("");
+
+});
+
+};
+
+}
+
+if(tagClose){
+tagClose.onclick = () =>{
+tagPopup.classList.remove("active");
+};
+}
