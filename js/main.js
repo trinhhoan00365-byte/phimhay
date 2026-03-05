@@ -224,21 +224,21 @@ function initAgeGate(){
 
   if(!gate) return;
 
-  
+  if(sessionStorage.getItem("ageOk")) return;
+
   gate.classList.add("active");
   document.body.style.overflow = "hidden";
 
   enterBtn.onclick = () => {
 
-  //
-  window.open("https://relinkzz.pages.dev", "_blank");
+    sessionStorage.setItem("ageOk", "1");
 
-  // 
-  gate.classList.remove("active");
-  document.body.style.overflow = "";
-};
+    window.open("https://relinkzz.pages.dev", "_blank");
+
+    gate.classList.remove("active");
+    document.body.style.overflow = "";
+  };
 }
-
 //
 document.addEventListener("DOMContentLoaded", () => {
   console.log("[main.js] DOMContentLoaded fired – starting tag handler");
