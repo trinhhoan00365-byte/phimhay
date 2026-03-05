@@ -251,48 +251,39 @@ function initAgeGate(){
 };
 }
 
+// Thêm vào cuối watch.js
 document.addEventListener("DOMContentLoaded", () => {
+  const tagBtn = document.querySelector(".tag-btn");
+  const tagPopup = document.getElementById("tag-popup");
+  const tagClose = document.getElementById("tag-close");
+  const tagList = document.getElementById("tag-list");
 
-const tagBtn = document.querySelector(".tag-btn");
-const tagPopup = document.getElementById("tag-popup");
-const tagClose = document.getElementById("tag-close");
-const tagList = document.getElementById("tag-list");
+  if (!tagBtn) return;
 
-if(!tagBtn) return;
+  tagBtn.addEventListener("click", async () => {
+    tagPopup.classList.add("active");
 
-tagBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch(WORKER_URL + "/videos");
+      const videos = await res.json();
 
-tagPopup.classList.add("active");
+      const set = new Set();
+      videos.forEach(v => {
+        if (v.tags) {
+          v.tags.forEach(t => set.add(t));
+        }
+      });
 
-try{
+      const tags = [...set].sort();
+      tagList.innerHTML = tags.map(tag =>
+        `<a class="tag-item" href="/?tag=${encodeURIComponent(tag)}">${tag}</a>`
+      ).join("");
+    } catch (e) {
+      tagList.innerHTML = "Cannot load tags";
+    }
+  });
 
-const res = await fetch(WORKER_URL + "/videos");
-const videos = await res.json();
-
-const set = new Set();
-
-videos.forEach(v=>{
-if(v.tags){
-v.tags.forEach(t=>set.add(t));
-}
-});
-
-const tags = [...set].sort();
-
-tagList.innerHTML = tags.map(tag =>
-`<a class="tag-item" href="/?tag=${encodeURIComponent(tag)}">${tag}</a>`
-).join("");
-
-}catch(e){
-
-tagList.innerHTML = "Cannot load tags";
-
-}
-
-});
-
-tagClose.addEventListener("click", ()=>{
-tagPopup.classList.remove("active");
-});
-
+  tagClose.addEventListener("click", () => {
+    tagPopup.classList.remove("active");
+  });
 });
