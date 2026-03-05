@@ -239,11 +239,7 @@ function initAgeGate(){
 };
 }
 
-// Thêm vào cuối watch.js
-// ... (các code khác ở trên vẫn giữ nguyên)
-
-// Thay phần tags cũ bằng đoạn này
-// Xử lý popup Tags – dùng code đã hoạt động ở watch.js + debug
+//
 document.addEventListener("DOMContentLoaded", () => {
   console.log("[main.js] DOMContentLoaded fired – starting tag handler");
 
@@ -299,3 +295,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("[main.js] Tag handler đã attach thành công");
 });
+document.addEventListener("DOMContentLoaded", initAgeGate);
