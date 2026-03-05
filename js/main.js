@@ -258,15 +258,16 @@ const tagPopup = document.getElementById("tag-popup");
 const tagClose = document.getElementById("tag-close");
 const tagList = document.getElementById("tag-list");
 
-if(tagBtn){
+if(!tagBtn) return;
 
-tagBtn.onclick = () => {
+tagBtn.addEventListener("click", async () => {
 
 tagPopup.classList.add("active");
 
-fetch(WORKER_URL + "/videos")
-.then(r=>r.json())
-.then(videos=>{
+try{
+
+const res = await fetch(WORKER_URL + "/videos");
+const videos = await res.json();
 
 const set = new Set();
 
@@ -278,21 +279,20 @@ v.tags.forEach(t=>set.add(t));
 
 const tags = [...set].sort();
 
-tagList.innerHTML = tags.map(tag=>
-`<a href="/?tag=${encodeURIComponent(tag)}" class="tag-item">${tag}</a>`
+tagList.innerHTML = tags.map(tag =>
+`<a class="tag-item" href="/?tag=${encodeURIComponent(tag)}">${tag}</a>`
 ).join("");
+
+}catch(e){
+
+tagList.innerHTML = "Cannot load tags";
+
+}
 
 });
 
-};
-
-}
-
-if(tagClose){
-tagClose.onclick = () =>{
+tagClose.addEventListener("click", ()=>{
 tagPopup.classList.remove("active");
-};
-
-}
+});
 
 });
