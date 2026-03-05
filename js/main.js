@@ -251,7 +251,8 @@ function initAgeGate(){
 };
 }
 
-document.addEventListener("DOMContentLoaded", initAgeGate);
+document.addEventListener("DOMContentLoaded", () => {
+
 const tagBtn = document.querySelector(".tag-btn");
 const tagPopup = document.getElementById("tag-popup");
 const tagClose = document.getElementById("tag-close");
@@ -278,7 +279,7 @@ v.tags.forEach(t=>set.add(t));
 const tags = [...set].sort();
 
 tagList.innerHTML = tags.map(tag=>
-`<a href="/tag/${encodeURIComponent(tag)}" class="tag-item">${tag}</a>`
+`<a href="/?tag=${encodeURIComponent(tag)}" class="tag-item">${tag}</a>`
 ).join("");
 
 });
@@ -291,4 +292,7 @@ if(tagClose){
 tagClose.onclick = () =>{
 tagPopup.classList.remove("active");
 };
+
 }
+
+});
