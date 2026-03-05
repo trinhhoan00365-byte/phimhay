@@ -207,11 +207,41 @@ function initWatch() {
      
      ========================= */
   relatedGrid.innerHTML = "";
-  videos
-    .filter(v => v.id !== id)
-    .sort((a, b) => (b.views || 0) - (a.views || 0))
-    .slice(0, 20)
-    .forEach(v => {
+
+
+let relatedVideos = videos
+  .filter(v => v.id !== id)
+  .map(v => {
+
+    let score = 0;
+
+    if (video.tags && v.tags) {
+
+      const match = v.tags.filter(tag =>
+        video.tags.includes(tag)
+      ).length;
+
+      score = match * 10;
+    }
+
+    return {
+      ...v,
+      score
+    };
+  });
+
+
+relatedVideos.sort((a, b) => {
+
+  if (b.score !== a.score) {
+    return b.score - a.score;
+  }
+
+  return (b.views || 0) - (a.views || 0);
+});
+
+
+relatedVideos.slice(0, 20).forEach(v => {
       const card = document.createElement("div");
       card.className = "card";
 
