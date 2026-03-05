@@ -255,49 +255,59 @@ function initAgeGate(){
 // ... (các code khác ở trên vẫn giữ nguyên)
 
 // Thay phần tags cũ bằng đoạn này
+// Xử lý popup Tags – dùng code đã hoạt động ở watch.js + debug
 document.addEventListener("DOMContentLoaded", () => {
-  const tagBtn = document.querySelector(".tag-btn");
+  console.log("[main.js] DOMContentLoaded fired – starting tag handler");
+
+  const tagBtn   = document.querySelector(".tag-btn");
   const tagPopup = document.getElementById("tag-popup");
   const tagClose = document.getElementById("tag-close");
-  const tagList = document.getElementById("tag-list");
+  const tagList  = document.getElementById("tag-list");
 
-  if (!tagBtn) {
-    console.warn("Tag button not found in index.html");
+  console.log("[main.js] tagBtn found:", !!tagBtn);
+  console.log("[main.js] tagPopup found:", !!tagPopup);
+
+  if (!tagBtn || !tagPopup || !tagClose || !tagList) {
+    console.warn("[main.js] Một hoặc nhiều element tags không tìm thấy → popup không attach");
     return;
   }
 
   tagBtn.addEventListener("click", async () => {
-    console.log("Tags button clicked in index.html"); // để debug
+    console.log("[main.js] Nút ☰ Tags được click!");
 
     tagPopup.classList.add("active");
+    tagList.innerHTML = "Đang tải tags..."; // hiển thị ngay để biết popup mở
 
     try {
       const res = await fetch(WORKER_URL + "/videos");
+      if (!res.ok) throw new Error("Fetch videos thất bại: " + res.status);
+
       const videos = await res.json();
 
       const set = new Set();
       videos.forEach(v => {
-        if (v.tags && Array.isArray(v.tags)) {  // thêm check Array.isArray để an toàn
-          v.tags.forEach(t => set.add(t));
+        if (v.tags && Array.isArray(v.tags)) {
+          v.tags.forEach(t => set.add(t.trim()));
         }
       });
 
-      const tags = [...set].sort();
+      const tags = [...set].sort((a, b) => a.localeCompare(b));
+
       tagList.innerHTML = tags.length > 0
-        ? tags.map(tag =>
+        ? tags.map(tag => 
             `<a class="tag-item" href="/?tag=${encodeURIComponent(tag)}">${tag}</a>`
           ).join("")
-        : "Chưa có tag nào trong video";
+        : "Chưa có tag nào trong dữ liệu video";
 
     } catch (e) {
-      console.error("Lỗi fetch tags:", e);
-      tagList.innerHTML = "Không tải được tags (kiểm tra console)";
+      console.error("[main.js] Lỗi khi tải tags:", e);
+      tagList.innerHTML = "Không tải được tags. Kiểm tra console.";
     }
   });
 
   tagClose.addEventListener("click", () => {
     tagPopup.classList.remove("active");
   });
-});
 
-// ... (nếu có code khác ở dưới thì giữ nguyên)
+  console.log("[main.js] Tag handler đã attach thành công");
+});
