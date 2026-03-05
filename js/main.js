@@ -252,15 +252,23 @@ function initAgeGate(){
 }
 
 // Thêm vào cuối watch.js
+// ... (các code khác ở trên vẫn giữ nguyên)
+
+// Thay phần tags cũ bằng đoạn này
 document.addEventListener("DOMContentLoaded", () => {
   const tagBtn = document.querySelector(".tag-btn");
   const tagPopup = document.getElementById("tag-popup");
   const tagClose = document.getElementById("tag-close");
   const tagList = document.getElementById("tag-list");
 
-  if (!tagBtn) return;
+  if (!tagBtn) {
+    console.warn("Tag button not found in index.html");
+    return;
+  }
 
   tagBtn.addEventListener("click", async () => {
+    console.log("Tags button clicked in index.html"); // để debug
+
     tagPopup.classList.add("active");
 
     try {
@@ -269,17 +277,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const set = new Set();
       videos.forEach(v => {
-        if (v.tags) {
+        if (v.tags && Array.isArray(v.tags)) {  // thêm check Array.isArray để an toàn
           v.tags.forEach(t => set.add(t));
         }
       });
 
       const tags = [...set].sort();
-      tagList.innerHTML = tags.map(tag =>
-        `<a class="tag-item" href="/?tag=${encodeURIComponent(tag)}">${tag}</a>`
-      ).join("");
+      tagList.innerHTML = tags.length > 0
+        ? tags.map(tag =>
+            `<a class="tag-item" href="/?tag=${encodeURIComponent(tag)}">${tag}</a>`
+          ).join("")
+        : "Chưa có tag nào trong video";
+
     } catch (e) {
-      tagList.innerHTML = "Cannot load tags";
+      console.error("Lỗi fetch tags:", e);
+      tagList.innerHTML = "Không tải được tags (kiểm tra console)";
     }
   });
 
@@ -287,3 +299,5 @@ document.addEventListener("DOMContentLoaded", () => {
     tagPopup.classList.remove("active");
   });
 });
+
+// ... (nếu có code khác ở dưới thì giữ nguyên)
