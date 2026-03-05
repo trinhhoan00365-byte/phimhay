@@ -35,34 +35,40 @@
 </div>
   <!-- ===== HEADER GLASS ===== -->
   <div class="top-panel glass">
-    <div class="header-row">
-      <a href="/" class="logo-link">
-        <div class="logo">AVBOY</div>
-      </a>
-    </div>
 
-    <div class="search-filter-box">
-      <input
-        type="text"
-        id="search"
-        class="search"
-        placeholder="Search Videos..."
-      >
+  <!-- LOGO + MENU -->
+  <div class="header-row">
 
-      <div class="filter-row">
-        <select id="filterView" class="filter-select">
-          <option value="view_desc"> High View</option>
-          <option value="view_asc"> Low view</option>
-        </select>
+    <a href="/" class="logo-link">
+      <div class="logo">AVBOY</div>
+    </a>
 
-        <select id="filterTime" class="filter-select">
-          <option value="all">All Time</option>
-          <option value="7">7 day</option>
-          <option value="30">30 day</option>
-        </select>
-      </div>
-    </div>
+    <nav class="menu">
+      <a class="menu-item active">Videos</a>
+      <a class="menu-item">Hots</a>
+      <a class="menu-item">Photos</a>
+      <a class="menu-item">Models</a>
+    </nav>
+
   </div>
+
+  <!-- SEARCH + TAG -->
+  <div class="search-row">
+
+    <input
+      type="text"
+      id="search"
+      class="search"
+      placeholder="Search for videos..."
+    >
+
+    <button class="tag-btn">
+      ☰ Tags
+    </button>
+
+  </div>
+
+</div>
 
   <!-- ===== MAIN ===== -->
   <main class="container">
