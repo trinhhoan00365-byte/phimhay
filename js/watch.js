@@ -274,3 +274,39 @@ function initWatch() {
 }
 
 document.addEventListener("DOMContentLoaded", initAgeGate);
+// Thêm vào cuối watch.js
+document.addEventListener("DOMContentLoaded", () => {
+  const tagBtn = document.querySelector(".tag-btn");
+  const tagPopup = document.getElementById("tag-popup");
+  const tagClose = document.getElementById("tag-close");
+  const tagList = document.getElementById("tag-list");
+
+  if (!tagBtn) return;
+
+  tagBtn.addEventListener("click", async () => {
+    tagPopup.classList.add("active");
+
+    try {
+      const res = await fetch(WORKER_URL + "/videos");
+      const videos = await res.json();
+
+      const set = new Set();
+      videos.forEach(v => {
+        if (v.tags) {
+          v.tags.forEach(t => set.add(t));
+        }
+      });
+
+      const tags = [...set].sort();
+      tagList.innerHTML = tags.map(tag =>
+        `<a class="tag-item" href="/?tag=${encodeURIComponent(tag)}">${tag}</a>`
+      ).join("");
+    } catch (e) {
+      tagList.innerHTML = "Cannot load tags";
+    }
+  });
+
+  tagClose.addEventListener("click", () => {
+    tagPopup.classList.remove("active");
+  });
+});
