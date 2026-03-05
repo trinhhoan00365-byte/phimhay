@@ -7,7 +7,7 @@ let currentPage = 1;
 let isLoading = false;
 
 let filterView = "view_desc";
-let filterTime = "all";
+
 
 let videos = [];
 let filtered = [];
@@ -214,18 +214,6 @@ searchInput.oninput = () => {
   render();
 };
 
-// FILTER
-document.getElementById("filterView").onchange = e => {
-  filterView = e.target.value;
-  currentPage = 1;
-  render();
-};
-
-document.getElementById("filterTime").onchange = e => {
-  filterTime = e.target.value;
-  currentPage = 1;
-  render();
-};
 /* =========================
    AGE GATE PRO
    ========================= */
