@@ -940,3 +940,10 @@ color:#ccc;
 background:#a78bfa;
 color:#000;
 }
+.tag-popup{
+display:none;
+}
+
+.tag-popup.active{
+display:flex;
+}
