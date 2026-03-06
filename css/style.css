@@ -947,3 +947,26 @@ display:none;
 .tag-popup.active{
 display:flex;
 }
+/* HOME BUTTON (WATCH PAGE) */
+
+.watch-home{
+  margin:10px 0 15px 0;
+}
+
+.home-btn{
+  display:inline-block;
+  padding:10px 18px;
+  border-radius:14px;
+  background:#111827;
+  color:#fff;
+  text-decoration:none;
+  font-weight:500;
+  font-size:15px;
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  transition:0.2s;
+}
+
+.home-btn:hover{
+  background:#1a2233;
+}
