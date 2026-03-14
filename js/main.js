@@ -252,19 +252,19 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("[main.js] tagPopup found:", !!tagPopup);
 
   if (!tagBtn || !tagPopup || !tagClose || !tagList) {
-    console.warn("[main.js] Một hoặc nhiều element tags không tìm thấy → popup không attach");
+    console.warn("[main.js] ");
     return;
   }
 
   tagBtn.addEventListener("click", async () => {
-    console.log("[main.js] Nút ☰ Tags được click!");
+    console.log("[main.js] !");
 
     tagPopup.classList.add("active");
-    tagList.innerHTML = "Đang tải tags..."; // hiển thị ngay để biết popup mở
+    tagList.innerHTML = "Loading tags..."; // hiển thị ngay để biết popup mở
 
     try {
       const res = await fetch(WORKER_URL + "/videos");
-      if (!res.ok) throw new Error("Fetch videos thất bại: " + res.status);
+      if (!res.ok) throw new Error("Fetch fail: " + res.status);
 
       const videos = await res.json();
 
@@ -281,11 +281,11 @@ document.addEventListener("DOMContentLoaded", () => {
         ? tags.map(tag => 
             `<a class="tag-item" href="/?tag=${encodeURIComponent(tag)}">${tag}</a>`
           ).join("")
-        : "Chưa có tag nào trong dữ liệu video";
+        : "none";
 
     } catch (e) {
-      console.error("[main.js] Lỗi khi tải tags:", e);
-      tagList.innerHTML = "Không tải được tags. Kiểm tra console.";
+      console.error("[main.js]", e);
+      tagList.innerHTML = "none";
     }
   });
 
@@ -293,6 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
     tagPopup.classList.remove("active");
   });
 
-  console.log("[main.js] Tag handler đã attach thành công");
+  console.log("[main.js] Tag handler");
 });
 document.addEventListener("DOMContentLoaded", initAgeGate);
