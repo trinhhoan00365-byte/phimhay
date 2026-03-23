@@ -1,5 +1,5 @@
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
-const AFF_ENABLED = true; 
+const AFF_ENABLED = false; 
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
