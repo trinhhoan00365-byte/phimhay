@@ -1,4 +1,5 @@
 const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
+const AFF_ENABLED = true; 
 const WORKER_URL = "https://go.avboy.top";
 
 /* =========================
@@ -129,7 +130,9 @@ function initWatch() {
     click++;
 
     
-    window.open(AFF_LINK, "_blank");
+    if (AFF_ENABLED) {
+  window.open(AFF_LINK, "_blank");
+}
 
     if (hint) {
       hint.textContent = ``;
