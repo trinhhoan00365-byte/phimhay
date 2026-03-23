@@ -970,3 +970,34 @@ display:flex;
 .home-btn:hover{
   background:#1a2233;
 }
+.download-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  padding:8px 18px;
+  font-size:14px;
+  font-weight:600;
+  color:#e5e5e5;
+  text-decoration:none;
+
+  border-radius:14px;
+
+  background:#0b0b14;
+
+  border:2px solid transparent;
+
+  background-image:
+    linear-gradient(#0b0b14,#0b0b14),
+    linear-gradient(90deg,#d946ef,#f97316);
+
+  background-origin:border-box;
+  background-clip:padding-box,border-box;
+
+  transition:0.25s;
+}
+
+.download-btn:hover{
+  color:#fff;
+  transform:translateY(-1px);
+}
