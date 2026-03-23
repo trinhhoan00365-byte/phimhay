@@ -1010,9 +1010,10 @@ display:flex;
   border-radius:10px;
 
   background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.12);
 
-  color:#9a9aa8;
+  border:1px solid rgba(167,139,250,0.6); /* viền tím */
+
+  color:#a78bfa;
   font-size:12px;
   font-weight:500;
 
@@ -1021,8 +1022,8 @@ display:flex;
 }
 
 .download-btn:hover{
-  background:rgba(255,255,255,0.06);
-  color:#fff;
+  background:rgba(167,139,250,0.12);
+  color:#c4b5fd;
 }
 .meta-row {
   display:flex;
@@ -1031,4 +1032,21 @@ display:flex;
 
   color:#8a8a9a;
   font-size:13px;
+}
+.tag {
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+
+  color: #f5c542; /* vàng */
+
+  text-decoration: none;
+  font-size: 12px;
+  transition: 0.2s;
+}
+
+.tag:hover{
+  color:#ffd95c;
+  background:rgba(255,255,255,0.07);
 }
