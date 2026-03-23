@@ -233,7 +233,7 @@ function initAgeGate(){
 
     sessionStorage.setItem("ageOk", "1");
 
-    window.open("https://relinkzz.pages.dev", "_blank");
+    window.open("https://broadlyjukeboxunrevised.com/2058173", "_blank");
 
     gate.classList.remove("active");
     document.body.style.overflow = "";
