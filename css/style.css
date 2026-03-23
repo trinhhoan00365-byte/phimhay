@@ -1001,3 +1001,34 @@ display:flex;
   color:#fff;
   transform:translateY(-1px);
 }
+.download-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:4px 10px;
+  border-radius:10px;
+
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.12);
+
+  color:#9a9aa8;
+  font-size:12px;
+  font-weight:500;
+
+  text-decoration:none;
+  transition:0.2s;
+}
+
+.download-btn:hover{
+  background:rgba(255,255,255,0.06);
+  color:#fff;
+}
+.meta-row {
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  color:#8a8a9a;
+  font-size:13px;
+}
