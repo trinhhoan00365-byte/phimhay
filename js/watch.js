@@ -93,7 +93,9 @@ function initWatch() {
     <div class="player-overlay" id="playerOverlay"
          style="background-image:url('${video.thumb}')">
 
-      <div class="play-btn"></div>
+      <div class="play-btn">
+  <div class="play-triangle"></div>
+</div>
 
       <!-- Thanh progress + thời gian giống hệt ảnh -->
       <div class="youtube-controls">
