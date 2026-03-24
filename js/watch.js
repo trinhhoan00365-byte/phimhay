@@ -95,11 +95,8 @@ function initWatch() {
       viewsEl.textContent = formatView(d.views) + " views";
     });
 
-  /* =========================
-     
-     ========================= */
-  /* ==================== CUSTOM PLAYER ==================== */
-  /* ==================== CUSTOM PLAYER (Giống YouTube) ==================== */
+  
+    /* ==================== CUSTOM PLAYER (Giống YouTube - Progress luôn hiện) ==================== */
   player.innerHTML = `
     <div class="player-overlay" id="playerOverlay" 
          style="background-image: url('${video.thumb}')">
@@ -108,10 +105,10 @@ function initWatch() {
 
     <video id="nativeVideo" class="player-video" preload="metadata" playsinline controlsList="nodownload"></video>
 
-    <!-- Controls Bar -->
-    <div class="controls-bar" id="controlsBar">
+    <!-- Controls Bar - Luôn hiển thị -->
+    <div class="controls-bar" id="controlsBar" style="opacity: 1;">
       <div class="progress-container" id="progressContainer">
-        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
       </div>
       
       <div class="controls-bottom">
@@ -152,7 +149,6 @@ function initWatch() {
     overlay.style.opacity = "0";
     setTimeout(() => overlay.style.display = "none", 400);
 
-    // Tăng view lần đầu tiên
     if (!viewed) {
       viewed = true;
       fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
@@ -179,6 +175,7 @@ function initWatch() {
     timeDisplay.textContent = `${cur} / ${dur}`;
   };
 
+  // Hàm format thời gian
   function formatTime(seconds) {
     if (!seconds || isNaN(seconds)) return "0:00";
     const min = Math.floor(seconds / 60);
@@ -186,17 +183,20 @@ function initWatch() {
     return `${min}:${sec < 10 ? '0' : ''}${sec}`;
   }
 
-  // Click thanh progress
+  // Click thanh progress (có thể kéo ngay cả khi chưa play)
   progressContainer.onclick = (e) => {
     const rect = progressContainer.getBoundingClientRect();
     const pos = (e.clientX - rect.left) / rect.width;
-    videoEl.currentTime = pos * videoEl.duration;
+    videoEl.currentTime = pos * (videoEl.duration || 0);
   };
 
   // Nút Play/Pause
   playPauseBtn.onclick = () => {
-    if (videoEl.paused) videoEl.play();
-    else videoEl.pause();
+    if (videoEl.paused) {
+      videoEl.play();
+    } else {
+      videoEl.pause();
+    }
   };
 
   // Fullscreen
@@ -208,7 +208,7 @@ function initWatch() {
     }
   };
 
-  // Double click vào player để fullscreen
+  // Double click player để fullscreen
   player.ondblclick = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
