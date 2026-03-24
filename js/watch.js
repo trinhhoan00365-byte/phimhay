@@ -34,9 +34,6 @@ const relatedGrid = document.getElementById("related-grid");
 const downloadBtn = document.getElementById("download-btn");
 const tagBox = document.getElementById("video-tags");
 
-const loadingEl = document.getElementById("watch-loading");
-const containerEl = document.getElementById("watch-container");
-
 function hidePageCover() {
   const cover = document.getElementById("page-cover");
   if (cover && !cover.classList.contains("hide")) {
@@ -90,7 +87,7 @@ function initWatch() {
     });
 
   /* =========================
-     PLAYER WITH PROGRESS + TIME
+     PLAYER - GIỐNG Y HỆT ẢNH
      ========================= */
   player.innerHTML = `
     <div class="player-overlay" id="playerOverlay"
@@ -98,14 +95,14 @@ function initWatch() {
 
       <div class="play-btn"></div>
 
-      <!-- Progress Bar -->
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-
-      <!-- Time Display -->
-      <div class="video-time-overlay" id="videoTime">
-        00:00 / ${video.duration || "00:00"}
+      <!-- Thanh progress + thời gian giống hệt ảnh -->
+      <div class="youtube-controls">
+        <div class="progress-wrapper">
+          <div class="fake-progress-bar"></div>
+        </div>
+        <div class="time-display">
+          00:00 / ${video.duration || "00:00"}
+        </div>
       </div>
 
       <div class="click-hint" id="clickHint"></div>
@@ -124,33 +121,13 @@ function initWatch() {
 
   const overlay = document.getElementById("playerOverlay");
   const videoEl = document.getElementById("nativeVideo");
-  const progressBar = document.getElementById("progressBar");
-  const videoTimeEl = document.getElementById("videoTime");
   const hint = document.getElementById("clickHint");
 
   let click = 0;
   let viewed = false;
   const maxClick = 1;
 
-  let progressInterval = null;
-
-  // Fake Progress Bar + Time
-  function startFakeProgress() {
-    if (!progressBar) return;
-    let width = 0;
-    progressBar.style.width = "0%";
-
-    progressInterval = setInterval(() => {
-      width += Math.random() * 3 + 1.2;
-      if (width > 98) width = 98;
-      progressBar.style.width = width + "%";
-    }, 110);
-  }
-
-  // Bắt đầu progress ngay khi load
-  startFakeProgress();
-
-  // Click để play
+  // Click để play video
   overlay.onclick = () => {
     click++;
 
@@ -158,19 +135,13 @@ function initWatch() {
       window.open(AFF_LINK, "_blank");
     }
 
-    if (hint) {
-      hint.textContent = ``;
-    }
+    if (hint) hint.textContent = ``;
 
     if (click >= maxClick) {
       if (!viewed) {
         viewed = true;
         fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
       }
-
-      // Dừng progress và time khi play thật
-      if (progressInterval) clearInterval(progressInterval);
-      if (videoTimeEl) videoTimeEl.style.display = "none";
 
       videoEl.src = video.video || video.embed;
       videoEl.play().catch(() => {});
@@ -219,7 +190,6 @@ function initWatch() {
       if (downloadClick === 3) {
         const url = WORKER_URL + "/download?url=" + encodeURIComponent(video.download);
         window.location.href = url;
-
         downloadClick = 0;
         clearTimeout(resetTimer);
         downloadBtn.textContent = "Download";
@@ -325,10 +295,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const res = await fetch(WORKER_URL + "/videos");
-      const videos = await res.json();
+      const videosData = await res.json();
 
       const set = new Set();
-      videos.forEach(v => {
+      videosData.forEach(v => {
         if (v.tags) v.tags.forEach(t => set.add(t));
       });
 
