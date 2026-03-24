@@ -1302,45 +1302,32 @@ display:flex;
   letter-spacing: 0.3px;
 }
 /* ====================== NÚT PLAY CÂN ĐỐI HOÀN HẢO ====================== */
+
+/* NÚT PLAY CÂN ĐỐI - PHIÊN BẢN HOÀN CHỈNH */
 .play-btn {
-  width: 80px;
-  height: 80px;
-  background: rgba(255,255,255,0.95);
+  width: 82px;
+  height: 82px;
+  background: rgba(255, 255, 255, 0.97);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-  transition: all 0.2s;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.65);
+  transition: all 0.25s ease;
   position: relative;
 }
 
 .play-btn:hover {
-  transform: scale(1.08);
-  background: #fff;
+  transform: scale(1.07);
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
 }
 
-/* Tam giác play - dùng clip-path hoặc SVG inline (cân đối tuyệt đối) */
-.play-btn::after {
-  content: "";
-  position: absolute;
+.play-triangle {
   width: 0;
   height: 0;
-  
-  /* Tam giác cân đối đẹp hơn */
-  border-left: 32px solid #000;
-  border-top: 20px solid transparent;
-  border-bottom: 20px solid transparent;
-  
-  /* Điều chỉnh vị trí để nằm giữa hoàn hảo */
-  margin-left: 4px;   /* có thể chỉnh nhỏ nếu vẫn hơi lệch */
-}
-
-/* Hoặc cách đẹp và dễ chỉnh hơn (khuyến nghị dùng cái này) */
-.play-btn .play-triangle {
-  width: 0;
-  height: 0;
-  border-left: 30px solid #000;
-  border-top: 19px solid transparent;
-  border-bottom: 19px solid transparent;
+  border-style: solid;
+  border-width: 0 28px 0 0;        /* tam giác to đẹp */
+  border-color: transparent transparent transparent #111;
+  margin-left: 6px;                /* chỉnh vị trí ngang */
 }
