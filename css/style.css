@@ -1196,3 +1196,20 @@ display:flex;
   opacity: 1;
   transform: scale(1.1);
 }
+/* ====================== FULLSCREEN FIX - VIDEO PHỦ KÍN TOÀN MÀN HÌNH ====================== */
+.player-wrapper:-webkit-full-screen video,
+.player-wrapper:-moz-full-screen video,
+.player-wrapper:-ms-fullscreen video,
+.player-wrapper:fullscreen video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;     /* Phủ kín toàn màn hình */
+  background: #000;
+}
+
+/* Hỗ trợ một số trình duyệt cũ */
+:fullscreen video,
+:-webkit-full-screen video,
+:-moz-full-screen video {
+  object-fit: cover !important;
+}
