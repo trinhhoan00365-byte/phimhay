@@ -1301,3 +1301,46 @@ display:flex;
   text-shadow: 0 1px 3px rgba(0,0,0,0.8);
   letter-spacing: 0.3px;
 }
+/* ====================== NÚT PLAY CÂN ĐỐI HOÀN HẢO ====================== */
+.play-btn {
+  width: 80px;
+  height: 80px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  transition: all 0.2s;
+  position: relative;
+}
+
+.play-btn:hover {
+  transform: scale(1.08);
+  background: #fff;
+}
+
+/* Tam giác play - dùng clip-path hoặc SVG inline (cân đối tuyệt đối) */
+.play-btn::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  
+  /* Tam giác cân đối đẹp hơn */
+  border-left: 32px solid #000;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  
+  /* Điều chỉnh vị trí để nằm giữa hoàn hảo */
+  margin-left: 4px;   /* có thể chỉnh nhỏ nếu vẫn hơi lệch */
+}
+
+/* Hoặc cách đẹp và dễ chỉnh hơn (khuyến nghị dùng cái này) */
+.play-btn .play-triangle {
+  width: 0;
+  height: 0;
+  border-left: 30px solid #000;
+  border-top: 19px solid transparent;
+  border-bottom: 19px solid transparent;
+}
