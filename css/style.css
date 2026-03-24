@@ -1270,3 +1270,34 @@ display:flex;
   transition: width 0.12s linear;
   box-shadow: 0 0 10px rgba(255, 60, 60, 0.9);
 }
+/* ====================== YOUTUBE-STYLE CONTROLS ON THUMBNAIL ====================== */
+.youtube-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 5;
+}
+
+.progress-wrapper {
+  height: 4px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 2px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.fake-progress-bar {
+  height: 100%;
+  width: 42%;                    /* Bạn có thể chỉnh % này (ví dụ: 35%, 50%, 65%...) */
+  background: linear-gradient(90deg, #ff3b3b, #ff8c00);
+  box-shadow: 0 0 8px rgba(255, 60, 60, 0.7);
+}
+
+.time-display {
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  letter-spacing: 0.3px;
+}
