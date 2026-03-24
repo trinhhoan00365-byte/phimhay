@@ -2,18 +2,14 @@ const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 const AFF_ENABLED = false; 
 const WORKER_URL = "https://go.avboy.top";
 
-/* =========================
-   
-   ========================= */
 let id = null;
 
-//
+// Lấy ID từ URL
 const pathMatch = location.pathname.match(/^\/watch\/(\d+)$/);
 if (pathMatch) {
   id = Number(pathMatch[1]);
 }
 
-// 
 if (!id) {
   const params = new URLSearchParams(location.search);
   const qid = params.get("id");
@@ -28,7 +24,7 @@ if (!id) {
 }
 
 /* =========================
-   
+   ELEMENTS
    ========================= */
 const player = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
@@ -41,9 +37,6 @@ const tagBox = document.getElementById("video-tags");
 const loadingEl = document.getElementById("watch-loading");
 const containerEl = document.getElementById("watch-container");
 
-/* =========================
-   
-   ========================= */
 function hidePageCover() {
   const cover = document.getElementById("page-cover");
   if (cover && !cover.classList.contains("hide")) {
@@ -78,15 +71,16 @@ function initWatch() {
     return;
   }
 
-  
   hidePageCover();
 
   titleEl.textContent = video.title;
-   if(video.tags && tagBox){
-  tagBox.innerHTML = video.tags.map(tag =>
-    `<a href="/tag/${encodeURIComponent(tag)}" class="tag">${tag}</a>`
-  ).join("");
-};
+  
+  if(video.tags && tagBox){
+    tagBox.innerHTML = video.tags.map(tag =>
+      `<a href="/tag/${encodeURIComponent(tag)}" class="tag">${tag}</a>`
+    ).join("");
+  }
+
   durationEl.textContent = "Duration: " + (video.duration || "");
 
   fetch(WORKER_URL + "/view?id=" + video.id)
@@ -96,18 +90,25 @@ function initWatch() {
     });
 
   /* =========================
-     
+     PLAYER WITH PROGRESS + TIME
      ========================= */
-    /* ==================== PLAYER VỚI THUMBNAIL + PROGRESS GIẢ ==================== */
   player.innerHTML = `
-    <div class="player-overlay" id="playerOverlay" 
-         style="background-image: url('${video.thumb}')">
+    <div class="player-overlay" id="playerOverlay"
+         style="background-image:url('${video.thumb}')">
+
       <div class="play-btn"></div>
-      
-      <!-- Thanh progress giả chỉ hiện khi chưa play -->
-      <div class="fake-progress-container" id="fakeProgress">
-        <div class="fake-progress-bar" id="fakeProgressBar"></div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
       </div>
+
+      <!-- Time Display -->
+      <div class="video-time-overlay" id="videoTime">
+        00:00 / ${video.duration || "00:00"}
+      </div>
+
+      <div class="click-hint" id="clickHint"></div>
     </div>
 
     <video
@@ -123,35 +124,62 @@ function initWatch() {
 
   const overlay = document.getElementById("playerOverlay");
   const videoEl = document.getElementById("nativeVideo");
-  const fakeProgress = document.getElementById("fakeProgress");
+  const progressBar = document.getElementById("progressBar");
+  const videoTimeEl = document.getElementById("videoTime");
+  const hint = document.getElementById("clickHint");
 
+  let click = 0;
   let viewed = false;
+  const maxClick = 1;
 
-  // Load thời lượng để hiển thị progress giả
-  videoEl.onloadedmetadata = () => {
-    // Có thể thêm text thời lượng nếu muốn, nhưng hiện tại chỉ cần progress giả
-  };
+  let progressInterval = null;
 
-  // Click overlay để play
+  // Fake Progress Bar + Time
+  function startFakeProgress() {
+    if (!progressBar) return;
+    let width = 0;
+    progressBar.style.width = "0%";
+
+    progressInterval = setInterval(() => {
+      width += Math.random() * 3 + 1.2;
+      if (width > 98) width = 98;
+      progressBar.style.width = width + "%";
+    }, 110);
+  }
+
+  // Bắt đầu progress ngay khi load
+  startFakeProgress();
+
+  // Click để play
   overlay.onclick = () => {
+    click++;
+
     if (AFF_ENABLED) {
       window.open(AFF_LINK, "_blank");
     }
 
-    if (!viewed) {
-      viewed = true;
-      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+    if (hint) {
+      hint.textContent = ``;
     }
 
-    videoEl.src = video.video || video.embed;
-    videoEl.play().catch(() => {});
+    if (click >= maxClick) {
+      if (!viewed) {
+        viewed = true;
+        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+      }
 
-    // Ẩn overlay + thanh progress giả khi bắt đầu play
-    overlay.style.display = "none";
+      // Dừng progress và time khi play thật
+      if (progressInterval) clearInterval(progressInterval);
+      if (videoTimeEl) videoTimeEl.style.display = "none";
+
+      videoEl.src = video.video || video.embed;
+      videoEl.play().catch(() => {});
+      overlay.style.display = "none";
+    }
   };
 
   /* =========================
-   
+     DOWNLOAD BUTTON
      ========================= */
   let downloadClick = 0;
   let resetTimer = null;
@@ -189,11 +217,7 @@ function initWatch() {
       }
 
       if (downloadClick === 3) {
-        const url =
-          WORKER_URL +
-          "/download?url=" +
-          encodeURIComponent(video.download);
-
+        const url = WORKER_URL + "/download?url=" + encodeURIComponent(video.download);
         window.location.href = url;
 
         downloadClick = 0;
@@ -207,78 +231,63 @@ function initWatch() {
   }
 
   /* =========================
-     
+     RELATED VIDEOS
      ========================= */
   relatedGrid.innerHTML = "";
 
-
-let relatedVideos = videos
-  .filter(v => v.id !== id)
-  .map(v => {
-
-    let score = 0;
-
-    if (video.tags && v.tags) {
-
-      const match = v.tags.filter(tag =>
-        video.tags.includes(tag)
-      ).length;
-
-      score = match * 10;
-    }
-
-    return {
-      ...v,
-      score
-    };
-  });
-
-
-relatedVideos.sort((a, b) => {
-
-  if (b.score !== a.score) {
-    return b.score - a.score;
-  }
-
-  return (b.views || 0) - (a.views || 0);
-});
-
-
-relatedVideos.slice(0, 20).forEach(v => {
-      const card = document.createElement("div");
-      card.className = "card";
-
-      card.innerHTML = `
-        <div class="thumb-wrap">
-          <img class="thumb" src="${v.thumb}">
-          <span class="duration">${v.duration || ""}</span>
-        </div>
-        <h3>${v.title}</h3>
-        <div class="related-views" id="rv-${v.id}">0 views</div>
-      `;
-
-      card.onclick = () => {
-  sessionStorage.setItem("fromInternal", "yes");
-  location.href = `/watch/${v.id}`;
-};
-      relatedGrid.appendChild(card);
-
-      fetch(WORKER_URL + "/view?id=" + v.id)
-        .then(r => r.json())
-        .then(d => {
-          const el = document.getElementById("rv-" + v.id);
-          if (el) el.textContent = formatView(d.views) + " views";
-        })
-        .catch(() => {});
+  let relatedVideos = videos
+    .filter(v => v.id !== id)
+    .map(v => {
+      let score = 0;
+      if (video.tags && v.tags) {
+        const match = v.tags.filter(tag => video.tags.includes(tag)).length;
+        score = match * 10;
+      }
+      return { ...v, score };
     });
 
-  // 
+  relatedVideos.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return (b.views || 0) - (a.views || 0);
+  });
+
+  relatedVideos.slice(0, 20).forEach(v => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="thumb-wrap">
+        <img class="thumb" src="${v.thumb}">
+        <span class="duration">${v.duration || ""}</span>
+      </div>
+      <h3>${v.title}</h3>
+      <div class="related-views" id="rv-${v.id}">0 views</div>
+    `;
+
+    card.onclick = () => {
+      sessionStorage.setItem("fromInternal", "yes");
+      location.href = `/watch/${v.id}`;
+    };
+
+    relatedGrid.appendChild(card);
+
+    fetch(WORKER_URL + "/view?id=" + v.id)
+      .then(r => r.json())
+      .then(d => {
+        const el = document.getElementById("rv-" + v.id);
+        if (el) el.textContent = formatView(d.views) + " views";
+      });
+  });
+
   if (typeof showContent === "function") {
     showContent();
   }
 }
-//
-   function initAgeGate(){
+
+/* =========================
+   AGE GATE & TAG POPUP
+   ========================= */
+function initAgeGate(){
   const gate = document.getElementById("ageGate");
   const enterBtn = document.getElementById("ageEnter");
 
@@ -286,28 +295,23 @@ relatedVideos.slice(0, 20).forEach(v => {
 
   const fromInternal = sessionStorage.getItem("fromInternal");
 
-  // 
   if(!fromInternal){
     gate.classList.add("active");
     document.body.style.overflow = "hidden";
   }
 
-  // 
   sessionStorage.removeItem("fromInternal");
 
   enterBtn.onclick = () => {
-
-  // 
-  window.open("https://broadlyjukeboxunrevised.com/2058173", "_blank");
-
-  // 
-  gate.classList.remove("active");
-  document.body.style.overflow = "";
-};
+    window.open("https://broadlyjukeboxunrevised.com/2058173", "_blank");
+    gate.classList.remove("active");
+    document.body.style.overflow = "";
+  };
 }
 
 document.addEventListener("DOMContentLoaded", initAgeGate);
-// Thêm vào cuối watch.js
+
+// Tag popup
 document.addEventListener("DOMContentLoaded", () => {
   const tagBtn = document.querySelector(".tag-btn");
   const tagPopup = document.getElementById("tag-popup");
@@ -325,9 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const set = new Set();
       videos.forEach(v => {
-        if (v.tags) {
-          v.tags.forEach(t => set.add(t));
-        }
+        if (v.tags) v.tags.forEach(t => set.add(t));
       });
 
       const tags = [...set].sort();
