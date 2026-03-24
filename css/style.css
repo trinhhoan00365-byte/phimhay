@@ -1213,3 +1213,22 @@ display:flex;
 :-moz-full-screen video {
   object-fit: cover !important;
 }
+/* Thanh progress giả trên thumbnail */
+.fake-progress-container {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 999px;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.fake-progress-bar {
+  height: 100%;
+  width: 35%;           /* Bạn có thể chỉnh % này (0% ~ 100%) */
+  background: linear-gradient(90deg, #a78bfa, #c4b5fd);
+  border-radius: 999px;
+}
