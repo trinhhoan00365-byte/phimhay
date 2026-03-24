@@ -97,15 +97,22 @@ function initWatch() {
 
   
     /* ==================== CUSTOM PLAYER (Giống YouTube - Progress luôn hiện) ==================== */
+    /* ==================== CUSTOM PLAYER - Fullscreen phủ kín ====================== */
   player.innerHTML = `
     <div class="player-overlay" id="playerOverlay" 
          style="background-image: url('${video.thumb}')">
       <div class="play-btn"></div>
     </div>
 
-    <video id="nativeVideo" class="player-video" preload="metadata" playsinline controlsList="nodownload"></video>
+    <video id="nativeVideo" 
+           class="player-video" 
+           preload="metadata" 
+           playsinline 
+           controlsList="nodownload"
+           style="object-fit: contain;">
+    </video>
 
-    <!-- Controls Bar - Luôn hiển thị -->
+    <!-- Controls Bar luôn hiển thị -->
     <div class="controls-bar" id="controlsBar" style="opacity: 1;">
       <div class="progress-container" id="progressContainer">
         <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
