@@ -98,12 +98,15 @@ function initWatch() {
   /* =========================
      
      ========================= */
+    /* ==================== PLAYER VỚI THUMBNAIL + PROGRESS GIẢ ==================== */
   player.innerHTML = `
-    <div class="player-overlay" id="playerOverlay"
-         style="background-image:url('${video.thumb}')">
+    <div class="player-overlay" id="playerOverlay" 
+         style="background-image: url('${video.thumb}')">
       <div class="play-btn"></div>
-      <div class="click-hint" id="clickHint">
-        
+      
+      <!-- Thanh progress giả chỉ hiện khi chưa play -->
+      <div class="fake-progress-container" id="fakeProgress">
+        <div class="fake-progress-bar" id="fakeProgressBar"></div>
       </div>
     </div>
 
@@ -120,34 +123,31 @@ function initWatch() {
 
   const overlay = document.getElementById("playerOverlay");
   const videoEl = document.getElementById("nativeVideo");
+  const fakeProgress = document.getElementById("fakeProgress");
 
-  let click = 0;
   let viewed = false;
-  const maxClick = 1;
-  const hint = document.getElementById("clickHint");
 
+  // Load thời lượng để hiển thị progress giả
+  videoEl.onloadedmetadata = () => {
+    // Có thể thêm text thời lượng nếu muốn, nhưng hiện tại chỉ cần progress giả
+  };
+
+  // Click overlay để play
   overlay.onclick = () => {
-    click++;
-
-    
     if (AFF_ENABLED) {
-  window.open(AFF_LINK, "_blank");
-}
-
-    if (hint) {
-      hint.textContent = ``;
+      window.open(AFF_LINK, "_blank");
     }
 
-    if (click >= maxClick) {
-      if (!viewed) {
-        viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
-      }
-
-      videoEl.src = video.video || video.embed;
-      videoEl.play().catch(() => {});
-      overlay.style.display = "none";
+    if (!viewed) {
+      viewed = true;
+      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
     }
+
+    videoEl.src = video.video || video.embed;
+    videoEl.play().catch(() => {});
+
+    // Ẩn overlay + thanh progress giả khi bắt đầu play
+    overlay.style.display = "none";
   };
 
   /* =========================
