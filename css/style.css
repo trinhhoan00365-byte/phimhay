@@ -1232,3 +1232,41 @@ display:flex;
   background: linear-gradient(90deg, #a78bfa, #c4b5fd);
   border-radius: 999px;
 }
+/* VIDEO TIME OVERLAY - giống ảnh bạn gửi */
+.video-time-overlay {
+  position: absolute;
+  bottom: 54px;           /* nằm ngay trên progress bar */
+  left: 12px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 4px;
+  z-index: 4;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+
+/* Progress bar (cập nhật lại cho đẹp hơn) */
+.progress-bar-container {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  height: 5px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+  overflow: hidden;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff3b3b, #ff8c00);
+  transition: width 0.12s linear;
+  box-shadow: 0 0 10px rgba(255, 60, 60, 0.9);
+}
