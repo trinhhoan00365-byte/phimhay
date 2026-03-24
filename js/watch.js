@@ -99,115 +99,123 @@ function initWatch() {
      
      ========================= */
   /* ==================== CUSTOM PLAYER ==================== */
-player.innerHTML = `
-  <div class="player-overlay" id="playerOverlay" 
-       style="background-image: url('${video.thumb}')">
-    <div class="play-btn"></div>
-  </div>
-
-  <video id="nativeVideo" class="player-video" preload="metadata" playsinline controlsList="nodownload"></video>
-
-  <!-- Controls Bar -->
-  <div class="controls-bar" id="controlsBar">
-    <div class="progress-container" id="progressContainer">
-      <div class="progress-bar" id="progressBar"></div>
+  /* ==================== CUSTOM PLAYER (Giống YouTube) ==================== */
+  player.innerHTML = `
+    <div class="player-overlay" id="playerOverlay" 
+         style="background-image: url('${video.thumb}')">
+      <div class="play-btn"></div>
     </div>
-    
-    <div class="controls-bottom">
-      <div class="left-controls">
-        <button class="control-btn" id="playPauseBtn">▶</button>
-        <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+
+    <video id="nativeVideo" class="player-video" preload="metadata" playsinline controlsList="nodownload"></video>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar" id="controlsBar">
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
       </div>
       
-      <div class="right-controls">
-        <button class="control-btn" id="volumeBtn">🔊</button>
-        <button class="control-btn" id="pipBtn">⛶</button>
-        <button class="control-btn" id="fullscreenBtn">⤢</button>
+      <div class="controls-bottom">
+        <div class="left-controls">
+          <button class="control-btn" id="playPauseBtn">▶</button>
+          <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+        </div>
+        
+        <div class="right-controls">
+          <button class="control-btn" id="volumeBtn">🔊</button>
+          <button class="control-btn" id="pipBtn">⛶</button>
+          <button class="control-btn" id="fullscreenBtn">⤢</button>
+        </div>
       </div>
     </div>
-  </div>
-`;
+  `;
 
-const overlay = document.getElementById("playerOverlay");
-const videoEl = document.getElementById("nativeVideo");
-const controlsBar = document.getElementById("controlsBar");
-const progressContainer = document.getElementById("progressContainer");
-const progressBar = document.getElementById("progressBar");
-const playPauseBtn = document.getElementById("playPauseBtn");
-const timeDisplay = document.getElementById("timeDisplay");
-const fullscreenBtn = document.getElementById("fullscreenBtn");
+  const overlay = document.getElementById("playerOverlay");
+  const videoEl = document.getElementById("nativeVideo");
+  const progressContainer = document.getElementById("progressContainer");
+  const progressBar = document.getElementById("progressBar");
+  const playPauseBtn = document.getElementById("playPauseBtn");
+  const timeDisplay = document.getElementById("timeDisplay");
+  const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-// Load video source
-videoEl.src = video.video || video.embed;
+  // Gán nguồn video
+  videoEl.src = video.video || video.embed;
 
-// Click overlay để play
-overlay.onclick = () => {
-  if (AFF_ENABLED) window.open(AFF_LINK, "_blank");
+  let viewed = false;
 
-  videoEl.play().catch(() => {});
-  overlay.style.opacity = "0";
-  setTimeout(() => overlay.style.display = "none", 400);
+  // Click overlay để play
+  overlay.onclick = () => {
+    if (AFF_ENABLED) {
+      window.open(AFF_LINK, "_blank");
+    }
 
-  // Tăng view
-  if (!viewed) {
-    viewed = true;
-    fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+    videoEl.play().catch(() => {});
+    overlay.style.opacity = "0";
+    setTimeout(() => overlay.style.display = "none", 400);
+
+    // Tăng view lần đầu tiên
+    if (!viewed) {
+      viewed = true;
+      fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+    }
+  };
+
+  // Video events
+  videoEl.onplay = () => {
+    playPauseBtn.textContent = "❚❚";
+    player.classList.add("playing");
+  };
+
+  videoEl.onpause = () => {
+    playPauseBtn.textContent = "▶";
+  };
+
+  videoEl.ontimeupdate = () => {
+    if (!videoEl.duration) return;
+    const percent = (videoEl.currentTime / videoEl.duration) * 100;
+    progressBar.style.width = percent + "%";
+
+    const cur = formatTime(videoEl.currentTime);
+    const dur = formatTime(videoEl.duration);
+    timeDisplay.textContent = `${cur} / ${dur}`;
+  };
+
+  function formatTime(seconds) {
+    if (!seconds || isNaN(seconds)) return "0:00";
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
   }
-};
 
-// Video controls logic
-videoEl.onplay = () => {
-  playPauseBtn.textContent = "❚❚";
-  document.querySelector(".player-wrapper").classList.add("playing");
-};
+  // Click thanh progress
+  progressContainer.onclick = (e) => {
+    const rect = progressContainer.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    videoEl.currentTime = pos * videoEl.duration;
+  };
 
-videoEl.onpause = () => {
-  playPauseBtn.textContent = "▶";
-};
+  // Nút Play/Pause
+  playPauseBtn.onclick = () => {
+    if (videoEl.paused) videoEl.play();
+    else videoEl.pause();
+  };
 
-videoEl.ontimeupdate = () => {
-  const percent = (videoEl.currentTime / videoEl.duration) * 100 || 0;
-  progressBar.style.width = percent + "%";
+  // Fullscreen
+  fullscreenBtn.onclick = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      player.requestFullscreen();
+    }
+  };
 
-  const cur = formatTime(videoEl.currentTime);
-  const dur = formatTime(videoEl.duration || 0);
-  timeDisplay.textContent = `${cur} / ${dur}`;
-};
-
-function formatTime(seconds) {
-  if (!seconds || isNaN(seconds)) return "0:00";
-  const min = Math.floor(seconds / 60);
-  const sec = Math.floor(seconds % 60);
-  return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-}
-
-// Progress click
-progressContainer.onclick = (e) => {
-  const rect = progressContainer.getBoundingClientRect();
-  const pos = (e.clientX - rect.left) / rect.width;
-  videoEl.currentTime = pos * videoEl.duration;
-};
-
-// Play/Pause button
-playPauseBtn.onclick = () => {
-  if (videoEl.paused) videoEl.play();
-  else videoEl.pause();
-};
-
-// Fullscreen
-fullscreenBtn.onclick = () => {
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  } else {
-    player.requestFullscreen();
-  }
-};
-
-// Double click to fullscreen
-player.ondblclick = () => {
-  if (document.fullscreenElement) document.exitFullscreen();
-  else player.requestFullscreen();
-};
+  // Double click vào player để fullscreen
+  player.ondblclick = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      player.requestFullscreen();
+    }
+  };
   /* =========================
    
      ========================= */
