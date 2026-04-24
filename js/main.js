@@ -63,18 +63,7 @@ fetch(WORKER_URL + "/videos")
   });
 
 // APPLY FILTER
-function applyFilter(list){
-  let result = [...list];
 
-  if(filterView === "view_desc"){
-    result.sort((a, b) => (b.views || 0) - (a.views || 0));
-  }
-  if(filterView === "view_asc"){
-    result.sort((a, b) => (a.views || 0) - (b.views || 0));
-  }
-
-  return result;
-}
 
 // MAIN RENDER (WITH LOADING EFFECT)
 function render(){
