@@ -1289,7 +1289,7 @@ display:flex;
 
 .fake-progress-bar {
   height: 100%;
-  width: 5%;                    /* Bạn có thể chỉnh % này (ví dụ: 35%, 50%, 65%...) */
+  width: 0%;                    /* Bạn có thể chỉnh % này (ví dụ: 35%, 50%, 65%...) */
   background: linear-gradient(90deg, #ff3b3b, #ff8c00);
   box-shadow: 0 0 8px rgba(255, 60, 60, 0.7);
 }
