@@ -1331,3 +1331,38 @@ display:flex;
   border-color: transparent transparent transparent #111;
   margin-left: 6px;                /* chỉnh vị trí ngang */
 }
+/* ===== PLAY BUTTON FIX PERFECT CENTER ===== */
+
+.play-btn {
+  width: 68px;          /* nhỏ lại cho gọn */
+  height: 68px;
+
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+
+  transition: all 0.2s ease;
+}
+
+/* hover nhẹ */
+.play-btn:hover {
+  transform: scale(1.05);
+  background: #fff;
+}
+
+/* TAM GIÁC CÂN CHUẨN */
+.play-triangle {
+  width: 0;
+  height: 0;
+
+  border-left: 20px solid #111;   /* chỉnh kích thước tam giác */
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+
+  margin-left: 3px; /* 🔥 fix lệch tâm */
+}
