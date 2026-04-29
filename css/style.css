@@ -1304,33 +1304,7 @@ display:flex;
 /* ====================== NÚT PLAY CÂN ĐỐI HOÀN HẢO ====================== */
 
 /* NÚT PLAY CÂN ĐỐI - PHIÊN BẢN HOÀN CHỈNH */
-.play-btn {
-  width: 82px;
-  height: 82px;
-  background: rgba(255, 255, 255, 0.97);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.65);
-  transition: all 0.25s ease;
-  position: relative;
-}
 
-.play-btn:hover {
-  transform: scale(1.07);
-  background: #ffffff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
-}
-
-.play-triangle {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 28px 0 0;        /* tam giác to đẹp */
-  border-color: transparent transparent transparent #111;
-  margin-left: 6px;                /* chỉnh vị trí ngang */
-}
 /* ===== PLAY BUTTON FIX PERFECT CENTER ===== */
 
 .play-btn {
