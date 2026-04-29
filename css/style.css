@@ -334,84 +334,7 @@ body {
 }
 
 /* nút play tròn */
-.play-btn {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
 
-  /* 🎨 MÀU CHÍNH (bạn đổi màu tại đây nếu muốn) */
-  background: linear-gradient(
-    145deg,
-    rgba(196,181,253,1),
-    rgba(139,92,246,1)
-  );
-
-  /* 💡 HIỆU ỨNG NỔI 3D */
-  box-shadow:
-    0 6px 0 rgba(90,60,160,.9),
-    0 18px 35px rgba(0,0,0,.55),
-    inset 0 2px 4px rgba(255,255,255,.35),
-    inset 0 -4px 6px rgba(0,0,0,.35);
-
-  position: relative;
-  transform: translateY(0);
-
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease,
-    filter .15s ease;
-}
-
-
-/* tam giác trắng */
-.play-btn::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-40%, -50%);
-  width: 0;
-  height: 0;
-  border-left: 26px solid #fff;
-  border-top: 16px solid transparent;
-  border-bottom: 16px solid transparent;
-}
-/* hover */
-.player-overlay:hover .play-btn {
-  transform: translateY(-3px) scale(1.05);
-
-  box-shadow:
-    0 8px 0 rgba(90,60,160,.95),
-    0 25px 45px rgba(0,0,0,.65),
-    inset 0 2px 5px rgba(255,255,255,.45),
-    inset 0 -5px 8px rgba(0,0,0,.4);
-
-  filter: brightness(1.1);
-}
-
-/* click – ấn xuống như nút thật */
-.player-overlay:active .play-btn {
-  transform: translateY(2px) scale(.98);
-
-  box-shadow:
-    0 2px 0 rgba(90,60,160,.9),
-    0 10px 18px rgba(0,0,0,.45),
-    inset 0 3px 6px rgba(0,0,0,.45);
-}
-
-/* mobile nhỏ hơn */
-@media (max-width: 480px) {
-  .play-btn {
-    width: 72px;
-    height: 72px;
-  }
-
-  .play-btn::before {
-    border-left: 20px solid #fff;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-  }
-}
 /* ===== PAGE COVER ===== */
 .page-cover {
   position: fixed;
@@ -1072,32 +995,6 @@ display:flex;
   transition: opacity 0.3s;
 }
 
-.play-btn {
-  width: 80px;
-  height: 80px;
-  background: rgba(255,255,255,0.95);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-  transition: all 0.2s;
-}
-
-.play-btn:hover {
-  transform: scale(1.08);
-  background: #fff;
-}
-
-.play-btn::before {
-  content: "";
-  width: 0;
-  height: 0;
-  border-left: 28px solid #000;
-  border-top: 18px solid transparent;
-  border-bottom: 18px solid transparent;
-  margin-left: 4px;
-}
 
 /* Video element */
 #nativeVideo {
