@@ -155,9 +155,9 @@ function initWatch() {
   overlay.onclick = () => {
     click++;
 
-    if (AFF_ENABLED) {
-      window.open(AFF_LINK, "_blank");
-    }
+    if (AFF_ENABLED && canRedirectAff()) {
+  window.open(AFF_LINK, "_blank");
+}
 
     if (hint) hint.textContent = ``;
 
@@ -198,14 +198,18 @@ function initWatch() {
       }, 15000);
 
       if (downloadClick === 1) {
-        window.open(AFF_LINK, "_blank");
+  if (canRedirectAff()) {
+    window.open(AFF_LINK, "_blank");
+  };
         downloadBtn.textContent = "Click again to download";
         downloadBtn.style.opacity = "0.9";
         return;
       }
 
       if (downloadClick === 2) {
-        window.open(AFF_LINK, "_blank");
+  if (canRedirectAff()) {
+    window.open(AFF_LINK, "_blank");
+  };
         downloadBtn.textContent = "Download now";
         downloadBtn.style.opacity = "1";
         return;
