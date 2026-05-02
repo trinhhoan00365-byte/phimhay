@@ -113,7 +113,7 @@ function renderContent(){
     card.className = "card";
 
     // 
-    const isHot = (v.views || 0) >= 20000;
+    const isHot = (v.views || 0) >= 1000;
     const hotBadge = isHot ? `<span class="hot-badge">🔥 HOT</span>` : "";
 
     card.innerHTML = `
