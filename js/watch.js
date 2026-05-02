@@ -164,7 +164,7 @@ function initWatch() {
     if (click >= maxClick) {
       if (!viewed) {
         viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=2").catch(() => {});
+        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
       }
 
       videoEl.src = video.video || video.embed;
