@@ -25,16 +25,21 @@ const AFF_ENABLED = true;
 const WORKER_URL = "https://go.avboy.top";
 
 // Lấy ID từ URL
-const params = new URLSearchParams(location.search);
+let id = null;
+let slug = null;
 
-let id = Number(params.get("id"));
-let slug = params.get("slug");
+// đọc từ URL đẹp
+const m = location.pathname.match(/\/videos\/(.+)-(\d+)/);
 
-
-if (!id) {
-  console.error("❌ Missing video ID");
+if (m) {
+  slug = m[1];
+  id = Number(m[2]);
+} else {
+  // fallback link cũ
+  const p = new URLSearchParams(location.search);
+  id = Number(p.get("id"));
+  slug = p.get("slug");
 }
-
 /* =========================
    ELEMENTS
    ========================= */
