@@ -27,19 +27,11 @@ const WORKER_URL = "https://go.avboy.top";
 let id = null;
 
 // Lấy ID từ URL
-const pathMatch = location.pathname.match(/^\/watch\/(\d+)$/);
-if (pathMatch) {
-  id = Number(pathMatch[1]);
-}
+const params = new URLSearchParams(location.search);
 
-if (!id) {
-  const params = new URLSearchParams(location.search);
-  const qid = params.get("id");
-  if (qid) {
-    id = Number(qid);
-    history.replaceState(null, "", `/watch/${qid}`);
-  }
-}
+let id = Number(params.get("id"));
+let slug = params.get("slug");
+
 
 if (!id) {
   console.error("❌ Missing video ID");
@@ -82,7 +74,12 @@ fetch(WORKER_URL + "/videos")
   });
 
 function initWatch() {
-  const video = videos.find(v => v.id === id);
+  let video = videos.find(v => v.id === id);
+
+// nếu slug sai → redirect về slug chuẩn (SEO)
+if (video && video.slug && video.slug !== slug) {
+  location.replace(`/videos/${video.slug}-${video.id}`);
+}
 
   if (!video) {
     titleEl.textContent = "Video Not Found";
@@ -264,7 +261,7 @@ function initWatch() {
 
     card.onclick = () => {
       sessionStorage.setItem("fromInternal", "yes");
-      location.href = `/watch/${v.id}`;
+      location.href = `/videos/${v.slug}-${v.id}`;
     };
 
     relatedGrid.appendChild(card);
