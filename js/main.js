@@ -128,7 +128,7 @@ function renderContent(){
 
     card.onclick = () => {
        sessionStorage.setItem("fromInternal", "yes");
-       location.href = `/watch/${v.id}`;
+       location.href = `/videos/${v.slug}-${v.id}`;
     };
 
     grid.appendChild(card);
