@@ -24,8 +24,6 @@ function canRedirectAff() {
 const AFF_ENABLED = true; 
 const WORKER_URL = "https://go.avboy.top";
 
-let id = null;
-
 // Lấy ID từ URL
 const params = new URLSearchParams(location.search);
 
