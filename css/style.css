@@ -1514,3 +1514,7 @@ body {
   gap: 6px;
   margin-bottom: 6px;
 }
+/* 🔥 ẨN NÚT HOME */
+.watch-home {
+  display: none;
+}
