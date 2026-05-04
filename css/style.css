@@ -1446,3 +1446,10 @@ body {
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+.watch-title {
+  font-weight: 600;
+}
+
+.meta-row {
+  font-weight: 400;
+}
