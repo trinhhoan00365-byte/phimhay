@@ -1367,3 +1367,10 @@ display:flex;
   font-weight: 600;
   margin-bottom: 14px;
 }
+/* 🔥 GIẢM KHOẢNG CÁCH HEADER → CONTENT */
+.container {
+  padding-top: 6px;   /* trước là 14px → giảm */
+}
+.watch-home {
+  margin: 6px 0 10px 0;   /* trước: 10px 0 15px → giảm */
+}
