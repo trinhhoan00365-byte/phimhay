@@ -1245,7 +1245,7 @@ display:flex;
   background: linear-gradient(180deg, #18142b, #0c0a18);
   border-radius: 22px;
   padding: 18px;
-  margin-bottom: 28px;
+  margin-bottom: 6px;
 
   box-shadow: 
     0 10px 40px rgba(0,0,0,0.6),
@@ -1359,7 +1359,7 @@ display:flex;
 
 /* ===== RELATED ===== */
 .related-panel {
-  margin-top: 24px;
+  margin-top: 0px;
 }
 
 .section-title {
