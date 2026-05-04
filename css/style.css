@@ -1443,3 +1443,6 @@ body {
     rgba(25,20,50,0.8)
   );
 }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
