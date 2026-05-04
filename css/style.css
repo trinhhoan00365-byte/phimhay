@@ -1551,3 +1551,12 @@ body {
 
   margin-left: 3px;
 }
+.related-panel {
+  margin-top: 2px;
+}
+.watch-info {
+  margin-bottom: 4px;  /* 🔥 ép sát xuống */
+}
+.watch-meta {
+  gap: 4px;
+}
