@@ -1453,3 +1453,64 @@ body {
 .meta-row {
   font-weight: 400;
 }
+/* ===== GVHOT TYPOGRAPHY BASE ===== */
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+
+  font-size: 15px;
+  line-height: 1.5;
+
+  letter-spacing: 0.2px;
+  color: #eaeaf5; /* trắng dịu */
+}
+.watch-title {
+  font-size: 17px;       /* GVHOT size */
+  font-weight: 600;      /* semi-bold */
+  line-height: 1.45;
+
+  letter-spacing: 0.2px;
+
+  margin: 8px 0 8px;
+}
+.tag {
+  font-size: 12px;
+  font-weight: 500;
+
+  padding: 5px 12px;
+  border-radius: 999px;
+
+  color: #ffd95c;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  letter-spacing: 0.2px;
+}
+.meta-row {
+  font-size: 13px;
+  font-weight: 400;
+
+  color: #b8b8c8;
+
+  letter-spacing: 0.2px;
+}
+.download-btn {
+  font-size: 13px;
+  font-weight: 600;
+
+  letter-spacing: 0.3px;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+
+  letter-spacing: 0.2px;
+}
+.watch-meta {
+  gap: 6px;
+}
+
+.tag-box {
+  gap: 6px;
+  margin-bottom: 6px;
+}
