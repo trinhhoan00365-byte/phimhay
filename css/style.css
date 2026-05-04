@@ -1237,3 +1237,133 @@ display:flex;
 
   margin-left: 3px; /* 🔥 fix lệch tâm */
 }
+/* =========================
+   WATCH PAGE – HIGH END UI
+   ========================= */
+
+.watch-panel {
+  background: linear-gradient(180deg, #18142b, #0c0a18);
+  border-radius: 22px;
+  padding: 18px;
+  margin-bottom: 28px;
+
+  box-shadow: 
+    0 10px 40px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* ===== TITLE ===== */
+.watch-title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+
+  margin-top: 14px;
+  margin-bottom: 16px;
+
+  letter-spacing: 0.3px;
+}
+
+/* ===== TAGS ===== */
+.tag-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-bottom: 12px;
+}
+
+.tag {
+  padding: 6px 14px;
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #ffd95c;
+
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(6px);
+
+  transition: all 0.25s ease;
+}
+
+.tag:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-1px);
+}
+
+/* ===== META ROW ===== */
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #cfcfe6;
+
+  margin-top: 6px;
+}
+
+/* view + duration spacing */
+.meta-row span {
+  opacity: 0.9;
+}
+
+/* ===== DOWNLOAD BUTTON ===== */
+.download-btn {
+  margin-left: auto;
+
+  padding: 8px 16px;
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #fff;
+
+  background: linear-gradient(90deg, #a78bfa, #f472b6);
+
+  border: none;
+
+  box-shadow: 
+    0 4px 15px rgba(167,139,250,0.35);
+
+  transition: all 0.25s ease;
+}
+
+.download-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 25px rgba(167,139,250,0.6);
+}
+
+/* ===== SPACING SYSTEM ===== */
+.watch-meta {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+/* ===== PLAYER ===== */
+.player-wrapper {
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+}
+
+/* ===== RELATED ===== */
+.related-panel {
+  margin-top: 24px;
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
