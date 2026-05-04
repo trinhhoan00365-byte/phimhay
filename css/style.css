@@ -1397,3 +1397,19 @@ display:flex;
   font-size: 13px;
   gap: 12px;      /* ↓ giảm */
 }
+/* 🔥 REMOVE CARD STYLE */
+.watch-panel {
+  background: none !important;
+  box-shadow: none !important;
+
+  padding: 0 !important;
+  margin-bottom: 12px;
+
+  border-radius: 0 !important;
+}
+.player-wrapper {
+  border-radius: 14px;  /* giữ nhẹ thôi */
+  overflow: hidden;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
