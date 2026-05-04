@@ -1413,3 +1413,33 @@ display:flex;
 
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
+body {
+  background: radial-gradient(
+    1200px 600px at top,
+    #1c1635,   /* 🔥 sáng hơn */
+    #0d0b1f
+  );
+}
+.watch-title {
+  color: #f5f5ff;   /* trắng nhẹ */
+}
+
+.meta-row {
+  color: #cfcfe6;   /* sáng hơn #8a8a9a */
+}
+.tag {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  color: #ffd95c; /* vàng nổi */
+}
+.player-wrapper {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+.top-panel.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(50,40,90,0.9),
+    rgba(25,20,50,0.8)
+  );
+}
