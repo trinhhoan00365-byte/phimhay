@@ -1518,3 +1518,36 @@ body {
 .watch-home {
   display: none;
 }
+/* ===== PLAY BUTTON GVHOT STYLE ===== */
+.play-btn {
+  width: 68px;
+  height: 68px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(135deg, #ff3b3b, #ff7a18);
+
+  box-shadow:
+    0 8px 25px rgba(255, 80, 80, 0.4),
+    0 0 15px rgba(255, 120, 50, 0.3);
+
+  transition: all 0.2s ease;
+}
+.play-btn:hover {
+  transform: scale(1.06);
+}
+
+.play-btn:active {
+  transform: scale(0.95);
+}
+.play-triangle {
+  border-left: 18px solid #fff;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+
+  margin-left: 3px;
+}
