@@ -1,4 +1,4 @@
-const AFF_LINK = "https://s.shopee.vn/8V4rrpzP2z";
+const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
 function canRedirectAff() {
   const today = new Date().toISOString().split('T')[0];
 
