@@ -1560,3 +1560,10 @@ body {
 .watch-meta {
   gap: 4px;
 }
+.play-btn {
+  background: linear-gradient(135deg, #a78bfa, #f472b6);
+
+  box-shadow:
+    0 8px 25px rgba(167,139,250,0.4),
+    0 0 15px rgba(244,114,182,0.3);
+}
