@@ -1374,3 +1374,26 @@ display:flex;
 .watch-home {
   margin: 6px 0 10px 0;   /* trước: 10px 0 15px → giảm */
 }
+.watch-title {
+  font-size: 16px;      /* ↓ từ 18-20 */
+  line-height: 1.4;
+  margin: 8px 0 8px;   /* ↓ giảm khoảng cách */
+}
+.tag-box {
+  gap: 6px;
+  margin-bottom: 6px;  /* ↓ giảm */
+}
+
+.tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  font-weight: 500;
+}
+.watch-meta {
+  gap: 6px;       /* ↓ từ 10-12 */
+}
+
+.meta-row {
+  font-size: 13px;
+  gap: 12px;      /* ↓ giảm */
+}
