@@ -301,7 +301,7 @@ function initAgeGate(){
   sessionStorage.removeItem("fromInternal");
 
   enterBtn.onclick = () => {
-    window.open("https://broadlyjukeboxunrevised.com/2058173", "_blank");
+    window.open("https://s.shopee.vn/AAE1JtLgRq", "_blank");
     gate.classList.remove("active");
     document.body.style.overflow = "";
   };
