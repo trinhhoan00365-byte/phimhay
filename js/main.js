@@ -233,7 +233,7 @@ function initAgeGate(){
 
     sessionStorage.setItem("ageOk", "1");
 
-    window.open("https://s.shopee.vn/AAE4asvQ7s", "_blank");
+    window.open("https://relinkzz.pages.dev", "_blank");
 
     gate.classList.remove("active");
     document.body.style.overflow = "";
