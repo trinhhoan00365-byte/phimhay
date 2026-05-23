@@ -1,4 +1,4 @@
-const AFF_LINK = "https://broadlyjukeboxunrevised.com/2058173";
+const AFF_LINK = "https://relinkzz.pages.dev";
 function canRedirectAff() {
   const today = new Date().toISOString().split('T')[0];
 
