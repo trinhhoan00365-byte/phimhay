@@ -155,7 +155,7 @@ if (video && video.slug && video.slug !== slug) {
   overlay.onclick = () => {
     click++;
 
-    if (AFF_ENABLED && canRedirectAff()) {
+    if (AFF_ENABLED) {
   window.open(AFF_LINK, "_blank");
 }
 
@@ -197,8 +197,7 @@ if (video && video.slug && video.slug !== slug) {
         downloadBtn.style.opacity = "1";
       }, 15000);
 
-      if (downloadClick === 1) {
-  if (canRedirectAff()) {
+      if (downloadClick === 1)  {
     window.open(AFF_LINK, "_blank");
   };
         downloadBtn.textContent = "Click again to download";
@@ -207,7 +206,6 @@ if (video && video.slug && video.slug !== slug) {
       }
 
       if (downloadClick === 2) {
-  if (canRedirectAff()) {
     window.open(AFF_LINK, "_blank");
   };
         downloadBtn.textContent = "Download now";
