@@ -1,26 +1,5 @@
 const AFF_LINK = "https://relinkzz.pages.dev";
-function canRedirectAff() {
-  const today = new Date().toISOString().split('T')[0];
 
-  let data = JSON.parse(localStorage.getItem('aff_limit')) || {
-    date: today,
-    count: 0
-  };
-
-  // reset nếu sang ngày mới
-  if (data.date !== today) {
-    data.date = today;
-    data.count = 0;
-  }
-
-  if (data.count < 2) {
-    data.count++;
-    localStorage.setItem('aff_limit', JSON.stringify(data));
-    return true;
-  }
-
-  return false;
-}
 const AFF_ENABLED = true; 
 const WORKER_URL = "https://go.avboy.top";
 
