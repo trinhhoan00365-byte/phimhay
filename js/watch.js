@@ -155,7 +155,7 @@ if (video && video.slug && video.slug !== slug) {
   overlay.onclick = () => {
     click++;
 
-    if (AFF_ENABLED && canRedirectAff()) {
+    if (AFF_ENABLED) {
   window.open(AFF_LINK, "_blank");
 }
 
