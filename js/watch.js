@@ -1,5 +1,26 @@
 const AFF_LINK = "https://relinkzz.pages.dev";
+function canRedirectAff() {
+  const today = new Date().toISOString().split('T')[0];
 
+  let data = JSON.parse(localStorage.getItem('aff_limit')) || {
+    date: today,
+    count: 0
+  };
+
+  // reset nếu sang ngày mới
+  if (data.date !== today) {
+    data.date = today;
+    data.count = 0;
+  }
+
+  if (data.count < 2) {
+    data.count++;
+    localStorage.setItem('aff_limit', JSON.stringify(data));
+    return true;
+  }
+
+  return false;
+}
 const AFF_ENABLED = true; 
 const WORKER_URL = "https://go.avboy.top";
 
@@ -134,7 +155,7 @@ if (video && video.slug && video.slug !== slug) {
   overlay.onclick = () => {
     click++;
 
-    if (AFF_ENABLED) {
+    if (AFF_ENABLED && canRedirectAff()) {
   window.open(AFF_LINK, "_blank");
 }
 
@@ -178,7 +199,7 @@ if (video && video.slug && video.slug !== slug) {
 
       if (downloadClick === 1)  {
     window.open(AFF_LINK, "_blank");
-  };
+  
         downloadBtn.textContent = "Click again to download";
         downloadBtn.style.opacity = "0.9";
         return;
@@ -186,7 +207,7 @@ if (video && video.slug && video.slug !== slug) {
 
       if (downloadClick === 2) {
     window.open(AFF_LINK, "_blank");
-  };
+  
         downloadBtn.textContent = "Download now";
         downloadBtn.style.opacity = "1";
         return;
