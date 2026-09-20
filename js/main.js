@@ -254,12 +254,17 @@ window.onpopstate = () => {
 
 // SEARCH
 searchInput.oninput = () => {
-  const key = searchInput.value.toLowerCase();
-  filtered = videos.filter(v => v.title.toLowerCase().includes(key));
+  const key = searchInput.value.toLowerCase().trim();
+
+  filtered = videos.filter(v =>
+    v.title.toLowerCase().includes(key)
+  );
+
   currentPage = 1;
 
   const url = new URL(window.location);
   url.searchParams.delete("page");
+
   window.history.pushState({}, "", url);
 
   render();
