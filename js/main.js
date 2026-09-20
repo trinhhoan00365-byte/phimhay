@@ -40,27 +40,75 @@ fetch(WORKER_URL + "/videos")
     videos = data;
 
     const params = new URLSearchParams(location.search);
-    const tagFilter = params.get("tag");
-    const tagTitle = document.getElementById("tag-title");
+const tagFilter = params.get("tag");
+const hotFilter = params.get("hot") === "1";
+const tagTitle = document.getElementById("tag-title");
+const pageTitle = document.querySelector(".page-title");
 
-    if (tagFilter) {
-      videos = videos.filter(v =>
-        v.tags && v.tags.includes(tagFilter)
-      );
+/* =========================
+   HOT FILTER
+   ========================= */
 
-      document.title = tagFilter + " videos | avboy.top";
+if (hotFilter) {
 
-      if (tagTitle) {
-        tagTitle.textContent = tagFilter.toUpperCase() + " Videos";
-        tagTitle.style.display = "block";
-      }
-    } else {
-      if (tagTitle) {
-        tagTitle.style.display = "none";
-      }
-    }
+  // Chỉ lấy video từ 1000 views trở lên
+  videos = videos.filter(v => (v.views || 0) >= 1000);
 
-    filtered = [...videos]; // 🔥 QUAN TRỌNG: phải đặt sau filter
+  // Sắp xếp nhiều view nhất trước
+  videos.sort((a, b) => (b.views || 0) - (a.views || 0));
+
+  document.title = "Hots | avboy.top";
+
+  if (pageTitle) {
+    pageTitle.textContent = "🔥 Hots";
+  }
+
+  if (tagTitle) {
+    tagTitle.style.display = "none";
+  }
+
+}
+
+/* =========================
+   TAG FILTER
+   ========================= */
+
+else if (tagFilter) {
+
+  videos = videos.filter(v =>
+    v.tags && v.tags.includes(tagFilter)
+  );
+
+  document.title = tagFilter + " videos | avboy.top";
+
+  if (pageTitle) {
+    pageTitle.textContent = "Gay Porn Videos";
+  }
+
+  if (tagTitle) {
+    tagTitle.textContent = tagFilter.toUpperCase() + " Videos";
+    tagTitle.style.display = "block";
+  }
+
+}
+
+/* =========================
+   NORMAL HOME
+   ========================= */
+
+else {
+
+  if (pageTitle) {
+    pageTitle.textContent = "Gay Porn Videos";
+  }
+
+  if (tagTitle) {
+    tagTitle.style.display = "none";
+  }
+
+}
+
+filtered = [...videos]; // 🔥 QUAN TRỌNG: phải đặt sau filter
 
     render();
   });
