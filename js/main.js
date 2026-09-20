@@ -172,13 +172,20 @@ fetch(WORKER_URL + "/videos")
 function applyFilter(list){
   let result = [...list];
 
+  // Chỉ sắp xếp khi thực sự chọn bộ lọc view
   if(filterView === "view_desc"){
-    result.sort((a, b) => (b.views || 0) - (a.views || 0));
-  }
-  if(filterView === "view_asc"){
-    result.sort((a, b) => (a.views || 0) - (b.views || 0));
+    result.sort((a, b) =>
+      (b.views || 0) - (a.views || 0)
+    );
   }
 
+  if(filterView === "view_asc"){
+    result.sort((a, b) =>
+      (a.views || 0) - (b.views || 0)
+    );
+  }
+
+  // original = giữ nguyên thứ tự từ Worker
   return result;
 }
 
