@@ -19,6 +19,9 @@ const WORKER_URL = "https://go.avboy.top";
    ========================= */
 const urlParams = new URLSearchParams(window.location.search);
 const pageParam = parseInt(urlParams.get("page"));
+
+const isHotPage = urlParams.get("hot") === "1";
+
 if (!isNaN(pageParam) && pageParam > 0) {
   currentPage = pageParam;
 }
