@@ -34,83 +34,138 @@ function formatView(n){
 }
 
 // LOAD VIDEO LIST
+// LOAD VIDEO LIST
 fetch(WORKER_URL + "/videos")
   .then(r => r.json())
-  .then(data => {
-    videos = data;
+  .then(async data => {
+
+    videos = Array.isArray(data) ? data : [];
 
     const params = new URLSearchParams(location.search);
-const tagFilter = params.get("tag");
-const hotFilter = params.get("hot") === "1";
-const tagTitle = document.getElementById("tag-title");
-const pageTitle = document.querySelector(".page-title");
+    const tagFilter = params.get("tag");
+    const hotFilter = params.get("hot") === "1";
 
-/* =========================
-   HOT FILTER
-   ========================= */
+    const tagTitle = document.getElementById("tag-title");
+    const pageTitle = document.querySelector(".page-title");
 
-if (hotFilter) {
+    /* =========================
+       LẤY VIEW THẬT
+       ========================= */
 
-  // Chỉ lấy video từ 1000 views trở lên
-  videos = videos.filter(v => (v.views || 0) >= 1000);
+    if (hotFilter) {
 
-  // Sắp xếp nhiều view nhất trước
-  videos.sort((a, b) => (b.views || 0) - (a.views || 0));
+      // Lấy views hiện tại của tất cả video
+      await Promise.all(
+        videos.map(async v => {
+          try {
+            const res = await fetch(
+              WORKER_URL + "/view?id=" + v.id
+            );
 
-  document.title = "Hots | avboy.top";
+            if (res.ok) {
+              const d = await res.json();
+              v.views = Number(d.views) || 0;
+            } else {
+              v.views = Number(v.views) || 0;
+            }
 
-  if (pageTitle) {
-    pageTitle.textContent = "🔥 Hots";
-  }
+          } catch (e) {
+            v.views = Number(v.views) || 0;
+          }
+        })
+      );
 
-  if (tagTitle) {
-    tagTitle.style.display = "none";
-  }
+      // Chỉ lấy video >= 1000 views
+      videos = videos.filter(v =>
+        (Number(v.views) || 0) >= 1000
+      );
 
-}
+      // Nhiều views nhất lên trước
+      videos.sort((a, b) =>
+        (Number(b.views) || 0) -
+        (Number(a.views) || 0)
+      );
 
-/* =========================
-   TAG FILTER
-   ========================= */
+      document.title = "Hots | avboy.top";
 
-else if (tagFilter) {
+      if (pageTitle) {
+        pageTitle.textContent = "🔥 Hots";
+      }
 
-  videos = videos.filter(v =>
-    v.tags && v.tags.includes(tagFilter)
-  );
+      if (tagTitle) {
+        tagTitle.style.display = "none";
+      }
 
-  document.title = tagFilter + " videos | avboy.top";
+    }
 
-  if (pageTitle) {
-    pageTitle.textContent = "Gay Porn Videos";
-  }
+    /* =========================
+       TAG FILTER
+       ========================= */
 
-  if (tagTitle) {
-    tagTitle.textContent = tagFilter.toUpperCase() + " Videos";
-    tagTitle.style.display = "block";
-  }
+    else if (tagFilter) {
 
-}
+      videos = videos.filter(v =>
+        Array.isArray(v.tags) &&
+        v.tags.includes(tagFilter)
+      );
 
-/* =========================
-   NORMAL HOME
-   ========================= */
+      document.title =
+        tagFilter + " videos | avboy.top";
 
-else {
+      if (pageTitle) {
+        pageTitle.textContent = "Gay Porn Videos";
+      }
 
-  if (pageTitle) {
-    pageTitle.textContent = "Gay Porn Videos";
-  }
+      if (tagTitle) {
+        tagTitle.textContent =
+          tagFilter.toUpperCase() + " Videos";
 
-  if (tagTitle) {
-    tagTitle.style.display = "none";
-  }
+        tagTitle.style.display = "block";
+      }
 
-}
+    }
 
-filtered = [...videos]; // 🔥 QUAN TRỌNG: phải đặt sau filter
+    /* =========================
+       NORMAL HOME
+       ========================= */
+
+    else {
+
+      document.title = "avboy.top";
+
+      if (pageTitle) {
+        pageTitle.textContent = "Gay Porn Videos";
+      }
+
+      if (tagTitle) {
+        tagTitle.style.display = "none";
+      }
+
+    }
+
+    // Sau khi filter xong mới render
+    filtered = [...videos];
+
+    currentPage = 1;
 
     render();
+
+  })
+  .catch(err => {
+    console.error("[main.js] Failed to load videos:", err);
+
+    if (grid) {
+      grid.innerHTML = `
+        <div style="
+          grid-column:1/-1;
+          text-align:center;
+          color:#aaa;
+          padding:40px 20px;
+        ">
+          Cannot load videos
+        </div>
+      `;
+    }
   });
 
 // APPLY FILTER
