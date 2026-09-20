@@ -6,7 +6,7 @@ const perPage = 20;
 let currentPage = 1;
 let isLoading = false;
 
-let filterView = "view_desc";
+let filterView = "original";
 
 
 let videos = [];
