@@ -251,7 +251,7 @@ function renderContent(){
         }
 
         // 
-        if(d.views >= 20000){
+        if(d.views >= 1000){
           const wrap = card.querySelector(".thumb-wrap");
           if(wrap && !wrap.querySelector(".hot-badge")){
             wrap.insertAdjacentHTML(
