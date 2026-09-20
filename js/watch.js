@@ -1,4 +1,4 @@
-const AFF_LINK = "https://relinkzz.pages.dev";
+const AFF_LINK = "https://s.shopee.vn/9KiCanHXcH";
 function canRedirectAff() {
   const today = new Date().toISOString().split('T')[0];
 
