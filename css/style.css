@@ -1589,3 +1589,11 @@ body {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.08);
 }
+/* Đổi màu view thành xám nhẹ */
+.card-views {
+  color: #8a8a94 !important;
+}
+
+.related-views {
+  color: #8a8a94 !important;
+}
