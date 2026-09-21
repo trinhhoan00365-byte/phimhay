@@ -147,7 +147,23 @@ if (video && video.slug && video.slug !== slug) {
   const overlay = document.getElementById("playerOverlay");
   const videoEl = document.getElementById("nativeVideo");
   const hint = document.getElementById("clickHint");
+// Reset trạng thái nút Play khi quay lại từ tab AFF
+window.addEventListener("pageshow", () => {
+  const playBtn = document.querySelector(".play-btn");
 
+  if (playBtn) {
+    playBtn.style.background = "rgba(255,255,255,0.95)";
+    playBtn.style.opacity = "1";
+    playBtn.style.transform = "none";
+  }
+
+  const triangle = document.querySelector(".play-triangle");
+
+  if (triangle) {
+    triangle.style.display = "block";
+    triangle.style.opacity = "1";
+  }
+});
     // =========================================
   // AFF CLICK SYSTEM
   // Lần 1 -> AFF 1
