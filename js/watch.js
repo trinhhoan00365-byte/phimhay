@@ -1,4 +1,5 @@
-const AFF_LINK = "https://s.shopee.vn/9KiCanHXcH";
+const AFF_LINK_1 = "https://s.shopee.vn/9KiCanHXcH";
+const AFF_LINK_2 = "https://vt.tiktok.com/ZS9AAoSxCUCsB";
 function canRedirectAff() {
   const today = new Date().toISOString().split('T')[0];
 
@@ -147,29 +148,75 @@ if (video && video.slug && video.slug !== slug) {
   const videoEl = document.getElementById("nativeVideo");
   const hint = document.getElementById("clickHint");
 
-  let click = 0;
-  let viewed = false;
-  const maxClick = 1;
+    // =========================================
+  // AFF CLICK SYSTEM
+  // Lần 1 -> AFF 1
+  // Lần 2 -> AFF 2
+  // Lần 3 -> PLAY VIDEO
+  // =========================================
 
-  // Click để play video
+  const clickKey = "video_aff_click_" + video.id;
+
+  let click = Number(sessionStorage.getItem(clickKey)) || 0;
+  let viewed = false;
+
   overlay.onclick = () => {
+
     click++;
 
-    if (AFF_ENABLED) {
-  window.open(AFF_LINK, "_blank");
-}
+    // LƯU LẠI SỐ LẦN CLICK
+    sessionStorage.setItem(clickKey, click);
 
-    if (hint) hint.textContent = ``;
+    // =========================
+    // CLICK LẦN 1
+    // =========================
+    if (click === 1) {
 
-    if (click >= maxClick) {
+      window.open(AFF_LINK_1, "_blank");
+
+      if (hint) {
+        hint.textContent = "";
+      }
+
+      return;
+    }
+
+    // =========================
+    // CLICK LẦN 2
+    // =========================
+    if (click === 2) {
+
+      window.open(AFF_LINK_2, "_blank");
+
+      if (hint) {
+        hint.textContent = "";
+      }
+
+      return;
+    }
+
+    // =========================
+    // CLICK LẦN 3 -> PLAY
+    // =========================
+    if (click >= 3) {
+
       if (!viewed) {
         viewed = true;
-        fetch(WORKER_URL + "/view?id=" + video.id + "&inc=1").catch(() => {});
+
+        fetch(
+          WORKER_URL + "/view?id=" + video.id + "&inc=1"
+        ).catch(() => {});
       }
 
       videoEl.src = video.video || video.embed;
+
       videoEl.play().catch(() => {});
+
       overlay.style.display = "none";
+
+      // Reset lại để lần sau video này
+      // có thể bắt đầu chu kỳ mới
+      sessionStorage.removeItem(clickKey);
     }
   };
 
