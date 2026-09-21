@@ -1690,3 +1690,43 @@ body {
   text-decoration: none !important;
   white-space: nowrap !important;
 }
+/* ===== FIX PLAY BUTTON AFTER RETURN FROM AFF ===== */
+
+.play-btn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Tam giác Play */
+.play-triangle {
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 17px solid #111;
+  margin-left: 4px;
+}
+
+/* Không cho trạng thái tap/active làm đổi nút */
+.play-btn:active,
+.play-btn:focus,
+.play-btn:focus-visible {
+  background: rgba(255,255,255,0.95);
+  transform: none;
+  opacity: 1;
+}
+
+/* Đảm bảo tam giác vẫn hiện */
+.play-btn:active .play-triangle,
+.play-btn:focus .play-triangle,
+.play-btn:focus-visible .play-triangle {
+  display: block;
+  opacity: 1;
+}
