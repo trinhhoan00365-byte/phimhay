@@ -1772,3 +1772,44 @@ body {
   color: #777783 !important;
   font-weight: 400;
 }
+.play-btn {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      rgba(167,139,250,0.35),
+      transparent 42%
+    ),
+    linear-gradient(
+      135deg,
+      #34235f 0%,
+      #51358a 45%,
+      #38245f 75%,
+      #24183f 100%
+    );
+
+  box-shadow: none;
+
+  transition: transform 0.2s ease;
+}
+
+.play-btn:hover {
+  transform: scale(1.04);
+  box-shadow: none;
+}
+
+.play-btn:active {
+  transform: scale(0.96);
+  box-shadow: none;
+}
+
+.play-triangle {
+  border-left: 15px solid #f4f1ff;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  margin-left: 3px;
+}
