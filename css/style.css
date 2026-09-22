@@ -1748,3 +1748,27 @@ body {
 .tag-btn:active{
   transform:scale(0.97);
 }
+/* ===== VIEWS - NHỎ & DỊU HƠN ===== */
+
+/* Trang INDEX */
+.card-views {
+  font-size: 11px !important;
+  color: #777783 !important;
+  margin: 0 10px 8px;
+  font-weight: 400;
+}
+
+/* Related videos */
+.related-views {
+  font-size: 11px !important;
+  color: #777783 !important;
+  margin: 0 10px 8px;
+  font-weight: 400;
+}
+
+/* Trang WATCH - số views dưới tiêu đề */
+.meta-row {
+  font-size: 11px !important;
+  color: #777783 !important;
+  font-weight: 400;
+}
