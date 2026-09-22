@@ -260,21 +260,21 @@ window.addEventListener("pageshow", () => {
         downloadBtn.style.opacity = "1";
       }, 15000);
 
-      if (downloadClick === 1)  {
-    window.open(AFF_LINK, "_blank");
-  
-        downloadBtn.textContent = "Click again to download";
-        downloadBtn.style.opacity = "0.9";
-        return;
-      }
+      if (downloadClick === 1) {
+  window.open(AFF_LINK_1, "_blank");
 
-      if (downloadClick === 2) {
-    window.open(AFF_LINK, "_blank");
-  
-        downloadBtn.textContent = "Download now";
-        downloadBtn.style.opacity = "1";
-        return;
-      }
+  downloadBtn.textContent = "Click again to download";
+  downloadBtn.style.opacity = "0.9";
+  return;
+}
+
+if (downloadClick === 2) {
+  window.open(AFF_LINK_2, "_blank");
+
+  downloadBtn.textContent = "Download now";
+  downloadBtn.style.opacity = "1";
+  return;
+}
 
       if (downloadClick === 3) {
         const url = WORKER_URL + "/download?url=" + encodeURIComponent(video.download);
