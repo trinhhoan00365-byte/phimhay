@@ -1813,3 +1813,19 @@ body {
   border-bottom: 9px solid transparent;
   margin-left: 3px;
 }
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 10px 8px;
+  font-size: 11px;
+  color: #777783;
+  white-space: nowrap;
+}
+
+.card-meta .card-views {
+  margin: 0;
+  font-size: inherit;
+  color: inherit !important;
+}
