@@ -246,13 +246,7 @@ function renderContent(){
         <span class="duration">${v.duration || ""}</span>
       </div>
       <h3>${v.title}</h3>
-<div class="card-meta">
-  <span class="card-views" id="view-${v.id}">0 views</span>
-  <span>•</span>
-  <span>${v.duration || ""}</span>
-  <span>•</span>
-  <span>${formatDate(v.id)}</span>
-</div>
+<div class="card-views" id="view-${v.id}">0 views</div>
     `;
 
     card.onclick = () => {
