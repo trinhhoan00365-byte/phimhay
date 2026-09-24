@@ -48,6 +48,7 @@ const player = document.getElementById("player");
 const titleEl = document.getElementById("video-title");
 const viewsEl = document.getElementById("video-view");
 const durationEl = document.getElementById("video-duration");
+const dateEl = document.getElementById("video-date");
 const relatedGrid = document.getElementById("related-grid");
 const downloadBtn = document.getElementById("download-btn");
 const tagBox = document.getElementById("video-tags");
