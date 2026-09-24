@@ -32,7 +32,17 @@ function formatView(n){
   if(n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
+function formatDate(timestamp){
+  const d = new Date(Number(timestamp));
 
+  if (isNaN(d.getTime())) return "";
+
+  return d.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
+}
 // LOAD VIDEO LIST
 // LOAD VIDEO LIST
 fetch(WORKER_URL + "/videos")
@@ -236,7 +246,13 @@ function renderContent(){
         <span class="duration">${v.duration || ""}</span>
       </div>
       <h3>${v.title}</h3>
-      <div class="card-views" id="view-${v.id}">0 views</div>
+<div class="card-meta">
+  <span class="card-views" id="view-${v.id}">0 views</span>
+  <span>•</span>
+  <span>${v.duration || ""}</span>
+  <span>•</span>
+  <span>${formatDate(v.id)}</span>
+</div>
     `;
 
     card.onclick = () => {
