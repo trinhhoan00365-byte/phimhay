@@ -67,7 +67,17 @@ function formatView(n) {
   if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
   return n;
 }
+function formatDate(timestamp){
+  const d = new Date(Number(timestamp));
 
+  if (isNaN(d.getTime())) return "";
+
+  return d.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
+}
 /* =========================
    LOAD VIDEOS
    ========================= */
