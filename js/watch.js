@@ -104,6 +104,9 @@ if (video && video.slug && video.slug !== slug) {
 
   durationEl.textContent = "Duration: " + (video.duration || "");
 
+  if (dateEl) {
+  dateEl.textContent = "Posted: " + formatDate(video.id);
+}
   fetch(WORKER_URL + "/view?id=" + video.id)
     .then(r => r.json())
     .then(d => {
