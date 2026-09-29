@@ -1,4 +1,4 @@
-const AFF_LINK_1 = "https://ie.avboy.top";
+const AFF_LINK_1 = "https://broadlyjukeboxunrevised.com/2058173";
 const AFF_LINK_2 = "https://broadlyjukeboxunrevised.com/2058173";
 function canRedirectAff() {
   const today = new Date().toISOString().split('T')[0];
