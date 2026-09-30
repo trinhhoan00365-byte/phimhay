@@ -25,7 +25,7 @@ function randomAffClick() {
   const lastAff = Number(localStorage.getItem("random_aff_last")) || 0;
 
   // Cooldown 8 giây
-  if (now - lastAff < 8000) {
+  if (now - lastAff < 1000) {
     return;
   }
 
