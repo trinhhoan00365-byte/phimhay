@@ -1,5 +1,31 @@
 const AFF_LINK_1 = "https://broadlyjukeboxunrevised.com/2058173";
 const AFF_LINK_2 = "https://broadlyjukeboxunrevised.com/2058173";
+// =========================================
+// RANDOM AFF SYSTEM
+// 50% chance + cooldown 8 giây
+// =========================================
+function randomAffClick() {
+  const now = Date.now();
+  const lastAff = Number(localStorage.getItem("random_aff_last")) || 0;
+
+  // Cooldown 8 giây
+  if (now - lastAff < 8000) {
+    return;
+  }
+
+  // 50% xác suất
+  if (Math.random() < 0.5) {
+    localStorage.setItem("random_aff_last", now);
+
+    // Random AFF 1 hoặc AFF 2
+    const aff =
+      Math.random() < 0.5
+        ? AFF_LINK_1
+        : AFF_LINK_2;
+
+    window.open(aff, "_blank");
+  }
+}
 function canRedirectAff() {
   const today = new Date().toISOString().split('T')[0];
 
@@ -338,9 +364,13 @@ if (downloadClick === 2) {
     `;
 
     card.onclick = () => {
-      sessionStorage.setItem("fromInternal", "yes");
-      location.href = `/videos/${v.slug}-${v.id}`;
-    };
+
+  // 50% cơ hội mở AFF
+  randomAffClick();
+
+  sessionStorage.setItem("fromInternal", "yes");
+  location.href = `/videos/${v.slug}-${v.id}`;
+};
 
     relatedGrid.appendChild(card);
 
@@ -417,4 +447,18 @@ document.addEventListener("DOMContentLoaded", () => {
   tagClose.addEventListener("click", () => {
     tagPopup.classList.remove("active");
   });
+});
+// =========================================
+// RANDOM AFF - LOGO
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+
+  const logo = document.querySelector(".logo-link");
+
+  if (!logo) return;
+
+  logo.addEventListener("click", () => {
+    randomAffClick();
+  });
+
 });
