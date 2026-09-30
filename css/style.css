@@ -1829,3 +1829,14 @@ body {
   font-size: inherit;
   color: inherit !important;
 }
+.logo {
+  font-size: 29px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  color: #b197fc;
+
+  -webkit-text-stroke: 0.6px #b197fc;
+
+  text-shadow:
+    0 0 8px rgba(167,139,250,0.25);
+}
