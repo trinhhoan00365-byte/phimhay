@@ -456,3 +456,17 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("[main.js] Tag handler");
 });
 document.addEventListener("DOMContentLoaded", initAgeGate);
+// =========================================
+// RANDOM AFF - LOGO
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+
+  const logo = document.querySelector(".logo-link");
+
+  if (!logo) return;
+
+  logo.addEventListener("click", () => {
+    randomAffClick();
+  });
+
+});
