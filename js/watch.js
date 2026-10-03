@@ -4,27 +4,155 @@ const AFF_LINK_2 = "https://broadlyjukeboxunrevised.com/2058173";
 // RANDOM AFF SYSTEM
 // 50% chance + cooldown 8 giây
 // =========================================
-function randomAffClick() {
-  const now = Date.now();
-  const lastAff = Number(localStorage.getItem("random_aff_last")) || 0;
+// =========================================
+// SMART RANDOM AFF
+// Recommended Videos
+// Cooldown: 1 giây
+// Không AFF 2 lần liên tiếp
+// Không hụt quá 2 click liên tiếp
+// =========================================
 
-  // Cooldown 8 giây
+function randomAffClick() {
+
+  const now = Date.now();
+
+  const lastAff =
+    Number(localStorage.getItem("random_aff_last")) || 0;
+
+  // Cooldown 1 giây
   if (now - lastAff < 1000) {
-    return;
+    return false;
   }
 
-  // 50% xác suất
-  if (Math.random() < 0.5) {
-    localStorage.setItem("random_aff_last", now);
+  let misses =
+    Number(localStorage.getItem("random_aff_misses")) || 0;
 
-    // Random AFF 1 hoặc AFF 2
+  const lastResult =
+    localStorage.getItem("random_aff_result") || "none";
+
+
+  // Không AFF 2 lần liên tiếp
+  if (lastResult === "aff") {
+
+    localStorage.setItem(
+      "random_aff_result",
+      "miss"
+    );
+
+    localStorage.setItem(
+      "random_aff_misses",
+      "1"
+    );
+
+    return false;
+  }
+
+
+  // Click đầu tiên -> AFF
+  const hasHistory =
+    localStorage.getItem("random_aff_result") !== null;
+
+  if (!hasHistory) {
+
     const aff =
       Math.random() < 0.5
         ? AFF_LINK_1
         : AFF_LINK_2;
 
+    localStorage.setItem(
+      "random_aff_last",
+      String(now)
+    );
+
+    localStorage.setItem(
+      "random_aff_result",
+      "aff"
+    );
+
+    localStorage.setItem(
+      "random_aff_misses",
+      "0"
+    );
+
     window.open(aff, "_blank");
+
+    return true;
   }
+
+
+  // Hụt 2 lần -> bắt buộc AFF
+  if (misses >= 2) {
+
+    const aff =
+      Math.random() < 0.5
+        ? AFF_LINK_1
+        : AFF_LINK_2;
+
+    localStorage.setItem(
+      "random_aff_last",
+      String(now)
+    );
+
+    localStorage.setItem(
+      "random_aff_result",
+      "aff"
+    );
+
+    localStorage.setItem(
+      "random_aff_misses",
+      "0"
+    );
+
+    window.open(aff, "_blank");
+
+    return true;
+  }
+
+
+  // Random nhẹ: 70% AFF / 30% không AFF
+  if (Math.random() < 0.70) {
+
+    const aff =
+      Math.random() < 0.5
+        ? AFF_LINK_1
+        : AFF_LINK_2;
+
+    localStorage.setItem(
+      "random_aff_last",
+      String(now)
+    );
+
+    localStorage.setItem(
+      "random_aff_result",
+      "aff"
+    );
+
+    localStorage.setItem(
+      "random_aff_misses",
+      "0"
+    );
+
+    window.open(aff, "_blank");
+
+    return true;
+  }
+
+
+  // Không AFF
+  misses++;
+
+  localStorage.setItem(
+    "random_aff_result",
+    "miss"
+  );
+
+  localStorage.setItem(
+    "random_aff_misses",
+    String(misses)
+  );
+
+  return false;
+}
 }
 function canRedirectAff() {
   const today = new Date().toISOString().split('T')[0];
