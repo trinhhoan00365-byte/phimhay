@@ -153,7 +153,6 @@ function randomAffClick() {
 
   return false;
 }
-}
 function canRedirectAff() {
   const today = new Date().toISOString().split('T')[0];
 
