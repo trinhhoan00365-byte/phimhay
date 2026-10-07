@@ -522,26 +522,50 @@ searchInput.oninput = () => {
    ========================= */
 
 function initAgeGate(){
+
   const gate = document.getElementById("ageGate");
   const enterBtn = document.getElementById("ageEnter");
 
-  if(!gate) return;
+  if(!gate || !enterBtn) return;
 
-  if(sessionStorage.getItem("ageOk")) return;
+  // Đã xác nhận 18+ trong session này
+  if(sessionStorage.getItem("ageOk") === "1"){
+    return;
+  }
 
+  // Hiện banner
   gate.classList.add("active");
   document.body.style.overflow = "hidden";
 
   enterBtn.onclick = () => {
 
+    // Chỉ cho Enter 1 lần
+    if(sessionStorage.getItem("ageOk") === "1"){
+      return;
+    }
+
+    // Đánh dấu đã xác nhận
     sessionStorage.setItem("ageOk", "1");
 
-    window.open("https://relinkzz.pages.dev", "_blank");
+    // ===== AFF 1 LẦN =====
+    window.open(
+      "https://relinkzz.pages.dev",
+      "_blank"
+    );
 
+    // Đóng banner
     gate.classList.remove("active");
+
+    // Cho phép dùng website
     document.body.style.overflow = "";
+
   };
 }
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initAgeGate
+);
 //
 document.addEventListener("DOMContentLoaded", () => {
   console.log("[main.js] DOMContentLoaded fired – starting tag handler");
