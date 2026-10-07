@@ -1840,3 +1840,252 @@ body {
   text-shadow:
     0 0 8px rgba(167,139,250,0.25);
 }
+/* =========================================
+   AVBOY 18+ WARNING BANNER
+   ========================================= */
+
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 999999999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(7, 6, 14, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .3s ease;
+}
+
+.age-gate.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* CARD */
+
+.age-card {
+  width: min(1150px, 100%);
+  min-height: 650px;
+
+  padding: 70px 60px;
+
+  border-radius: 48px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(25, 24, 34, .96),
+      rgba(12, 11, 20, .98)
+    );
+
+  border: 2px solid rgba(255,255,255,.12);
+
+  box-shadow:
+    0 40px 100px rgba(0,0,0,.75);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  transform: scale(.94);
+  transition: transform .3s ease;
+}
+
+.age-gate.active .age-card {
+  transform: scale(1);
+}
+
+/* TOP */
+
+.age-top {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+
+  margin-bottom: 55px;
+}
+
+/* 18+ CIRCLE */
+
+.age-badge {
+  width: 120px;
+  height: 120px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 38px;
+  font-weight: 700;
+
+  color: #fff;
+
+  background:
+    linear-gradient(
+      145deg,
+      #d71936,
+      #c90048
+    );
+
+  border: 2px solid rgba(255,255,255,.12);
+
+  box-shadow:
+    inset 0 0 20px rgba(255,255,255,.08),
+    0 15px 35px rgba(0,0,0,.45);
+}
+
+/* WARNING */
+
+.age-title {
+  font-size: clamp(42px, 6vw, 76px);
+
+  line-height: 1;
+
+  font-weight: 800;
+  letter-spacing: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #d94c52,
+      #e99b25
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* MAIN TITLE */
+
+.age-main-title {
+  font-size: clamp(26px, 4vw, 46px);
+
+  font-weight: 600;
+
+  color: #f3f3f5;
+
+  margin-bottom: 25px;
+}
+
+/* DESCRIPTION */
+
+.age-desc {
+  max-width: 1000px;
+
+  font-size: clamp(18px, 2.4vw, 30px);
+
+  line-height: 1.7;
+
+  color: #9b9ba9;
+
+  margin-bottom: 45px;
+}
+
+/* ENTER BUTTON */
+
+.age-enter {
+  width: 175px;
+  height: 68px;
+
+  border: 0;
+  border-radius: 24px;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  color: #08080d;
+
+  cursor: pointer;
+
+  background:
+    linear-gradient(
+      100deg,
+      #df6498,
+      #a949b6
+    );
+
+  box-shadow:
+    0 12px 30px rgba(180,70,170,.25);
+
+  transition:
+    transform .2s ease,
+    filter .2s ease;
+}
+
+.age-enter:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.age-enter:active {
+  transform: scale(.97);
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 700px) {
+
+  .age-gate {
+    padding: 12px;
+  }
+
+  .age-card {
+    min-height: auto;
+
+    padding: 38px 24px;
+
+    border-radius: 30px;
+  }
+
+  .age-top {
+    gap: 18px;
+
+    margin-bottom: 35px;
+  }
+
+  .age-badge {
+    width: 76px;
+    height: 76px;
+
+    font-size: 24px;
+  }
+
+  .age-title {
+    font-size: 42px;
+    letter-spacing: 1px;
+  }
+
+  .age-main-title {
+    font-size: 25px;
+    line-height: 1.3;
+  }
+
+  .age-desc {
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  .age-enter {
+    width: 145px;
+    height: 58px;
+
+    border-radius: 20px;
+
+    font-size: 20px;
+  }
+}
