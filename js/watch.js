@@ -1,5 +1,5 @@
-const AFF_LINK_1 = "https://broadlyjukeboxunrevised.com/2058173";
-const AFF_LINK_2 = "https://broadlyjukeboxunrevised.com/2058173";
+const AFF_LINK_1 = "ie.avboy.top";
+const AFF_LINK_2 = "ie.avboy.top";
 // =========================================
 // RANDOM AFF SYSTEM
 // 50% chance + cooldown 8 giây
