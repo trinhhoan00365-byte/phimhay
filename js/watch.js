@@ -1,15 +1,6 @@
-const AFF_LINK_1 = "https://ie.avboy.top";
+const AFF_LINK_1 = "https://broadlyjukeboxunrevised.com/2058173";
 const AFF_LINK_2 = "https://broadlyjukeboxunrevised.com/2058173";
 // =========================================
-// RANDOM AFF SYSTEM
-// 50% chance + cooldown 8 giây
-// =========================================
-// =========================================
-// SMART RANDOM AFF
-// Recommended Videos
-// Cooldown: 1 giây
-// Không AFF 2 lần liên tiếp
-// Không hụt quá 2 click liên tiếp
 // =========================================
 
 function randomAffClick() {
@@ -31,7 +22,7 @@ function randomAffClick() {
     localStorage.getItem("random_aff_result") || "none";
 
 
-  // Không AFF 2 lần liên tiếp
+  // 
   if (lastResult === "aff") {
 
     localStorage.setItem(
@@ -48,7 +39,7 @@ function randomAffClick() {
   }
 
 
-  // Click đầu tiên -> AFF
+  // 
   const hasHistory =
     localStorage.getItem("random_aff_result") !== null;
 
@@ -80,7 +71,7 @@ function randomAffClick() {
   }
 
 
-  // Hụt 2 lần -> bắt buộc AFF
+  // 
   if (misses >= 2) {
 
     const aff =
@@ -109,7 +100,7 @@ function randomAffClick() {
   }
 
 
-  // Random nhẹ: 70% AFF / 30% không AFF
+  // 
   if (Math.random() < 0.70) {
 
     const aff =
