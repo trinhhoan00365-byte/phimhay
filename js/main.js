@@ -14,15 +14,7 @@ let filtered = [];
 
 const WORKER_URL = "https://go.avboy.top";
 // =========================================
-// RANDOM AFF SYSTEM
-// 50% chance + cooldown 8 giây
-// =========================================
-// =========================================
-// SMART RANDOM AFF
-// Index + Logo
-// Cooldown: 1 giây
-// Không AFF 2 lần liên tiếp
-// Không hụt quá 2 click liên tiếp
+
 // =========================================
 
 const RANDOM_AFF_LINK_1 = "https://broadlyjukeboxunrevised.com/2058173";
@@ -549,7 +541,7 @@ function initAgeGate(){
 
     // ===== AFF 1 LẦN =====
     window.open(
-      "https://relinkzz.pages.dev",
+      "https://broadlyjukeboxunrevised.com/2058173",
       "_blank"
     );
 
@@ -587,7 +579,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("[main.js] !");
 
     tagPopup.classList.add("active");
-    tagList.innerHTML = "Loading tags..."; // hiển thị ngay để biết popup mở
+    tagList.innerHTML = "Loading tags..."; //
 
     try {
       const res = await fetch(WORKER_URL + "/videos");
