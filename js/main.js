@@ -17,8 +17,8 @@ const WORKER_URL = "https://go.avboy.top";
 
 // =========================================
 
-const RANDOM_AFF_LINK_1 = "https://broadlyjukeboxunrevised.com/2058173";
-const RANDOM_AFF_LINK_2 = "https://broadlyjukeboxunrevised.com/2058173";
+const RANDOM_AFF_LINK_1 = "https://vt.tiktok.com/ZS9UbmtsChb54-xqWVm/";
+const RANDOM_AFF_LINK_2 = "https://ie.avboy.top";
 
 function randomAffClick() {
 
@@ -541,7 +541,7 @@ function initAgeGate(){
 
     // ===== AFF 1 LẦN =====
     window.open(
-      "https://broadlyjukeboxunrevised.com/2058173",
+      "https://ie.avboy.top",
       "_blank"
     );
 
